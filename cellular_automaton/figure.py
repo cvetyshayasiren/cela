@@ -4,17 +4,9 @@ import numpy as np
 
 class Figure:
 
-    def __init__(
-            self, 
-            delay: float = 0.1, 
-            width: int = 20, 
-            height: int = 20, 
-            rule: Rule = Rule.from_string("B2/S0345/10")
-            ):
-        self.delay = delay
+    def __init__(self, width: int = 20, height: int = 20):
         self.width = width
         self.height = height
-        self.rule = rule
         self.generation: np.ndarray = self.buld_frame()
 
     def buld_frame(self):
@@ -34,13 +26,25 @@ class Figure:
         self.generation[y_start:y_start+height, x_start:x_start+width] = 1
 
     def next(self, rule: Rule) -> Figure:
+        newGenerations = self.buld_frame()
         for i, j in np.ndindex(self.generation):
             value = self.generation[i, j]
+            neighbors = self.get_neighbors(i, j)
+            match value:
+                case 0:
+                    if neighbors in rule.born:
+                        newGenerations[i, j] = 1
+                case 1:
+                    pass
+                case _:
+                    pass
 
-    def get_neighbors(self, i: int, j: int) -> np.ndarray:
+
+    def get_neighbors(self, i: int, j: int) -> int:
         arr = self.generation
         h, w = arr.shape
         rows = [(i - 1) % h, i, (i + 1) % h]
         cols = [(j - 1) % w, j, (j + 1) % w]
-        result = arr[rows, :][:, cols].flatten()
-        return np.delete(result, 4)
+        area = arr[rows, :][:, cols].flatten()
+        neighbors = np.delete(area, 4)
+        return np.count_nonzero(neighbors)
