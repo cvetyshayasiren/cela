@@ -74,6 +74,10 @@ class Player:
             self.render.init_colors()
             self.draw_if_paused()
 
+        elif key == ord('i'):
+            self.render.toogle_tips()
+            self.draw_if_paused()
+
     def draw(self):
         self.render.draw(paused=self.paused)
         

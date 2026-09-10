@@ -14,6 +14,7 @@ class Render():
         self.aging = aging
         self.symbols = self.init_symbols(symbols=symbols)
         self.init_colors()
+        self.show_tips = False
 
     def init_symbols(self, symbols: str = random_symbols()):
         symbols = list(symbols) or [" ", "■"]
@@ -32,6 +33,8 @@ class Render():
         for i, color in enumerate(picked_colors, start=0):
             curses.init_pair(i, color, -1)
 
+    def toogle_tips(self): self.show_tips = not self.show_tips
+
     def draw(self, paused: bool):
         self.stdscr.erase()
         generation = self.figure.generation
@@ -42,10 +45,21 @@ class Render():
             value = generation[i, j]
             self.stdscr.addstr(i, j, self.symbols[value], curses.color_pair(value))
 
-        size = f"{self.figure.width}x{self.figure.height}"
-        played_string = f"{size} | q - exit | p - pause | r - randomise | (1-9) - add block"
-        paused_string = f"{size} | q - exit | p - resume | → step | r - randomise | (1-9) - add block"
-        output_string = paused_string if paused else played_string
-        self.stdscr.addstr(h - 1, 0, output_string[:w - 1])
+        size_string = f"{self.figure.width}x{self.figure.height}"
+        pause_state_string = "paused" if paused else ""
+        state_string = f"{size_string} | {pause_state_string} | i - show tips"
+        tips_string = (
+            f"q - exit\n"
+            "p - pause/resume\n"
+            "r - randomise field\n"
+            "c - randomise color\n"
+            "s - randomise symbols\n"
+            "(1-9) - add square in center\n"
+            "b - blank field"
+        )
+        number_tips_cols = tips_string.count("\n") + 1
+        if(self.show_tips):
+            self.stdscr.addstr(h - number_tips_cols, 0, tips_string)
+        self.stdscr.addstr(h - 1, 0, state_string[:w - 1])
         self.stdscr.refresh()
         
