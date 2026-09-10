@@ -37,10 +37,11 @@ class Figure:
                 case 1:
                     if neighbors in rule.survive:
                         newGeneration[i, j] = 1
+                    
                     elif rule.aging > 1:
                         newGeneration[i, j] = 2
                 case _:
-                    if rule.aging > value:
+                    if value < rule.aging:
                         newGeneration[i, j] = value + 1
         self.generation = newGeneration
 
@@ -51,4 +52,4 @@ class Figure:
         cols = [(j - 1) % w, j, (j + 1) % w]
         area = arr[rows, :][:, cols].flatten()
         neighbors = np.delete(area, 4)
-        return np.count_nonzero(neighbors)
+        return np.count_nonzero(neighbors == 1)
