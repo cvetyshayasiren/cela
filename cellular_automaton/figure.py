@@ -12,18 +12,27 @@ class Figure:
     def buld_frame(self):
         return np.zeros((self.height, self.width), dtype=int)
 
+    def blank_field(self):
+        self.generation = self.buld_frame()
+
     def fill_random(self, fraction: float = 0.5):
         field_size = self.generation.size
         num_ones = int(field_size * fraction)
         idx = np.random.choice(field_size, num_ones, replace=False)
         np.put(self.generation, idx, 1)
 
-    def contain_rect(self, width: int, height: int):
+    def contain_rect(self, x: int, y: int, width: int = 1, height: int = 1):
+        y_start, x_start = y, x
+        self.generation[y_start:y_start+height, x_start:x_start+width] = 1
+
+    def contain_rect_in_center(self, width: int, height: int):
         field_heigth = self.generation.shape[0]
         field_width = self.generation.shape[1]
         y_start = (field_heigth - height) // 2
         x_start = (field_width - width) // 2
         self.generation[y_start:y_start+height, x_start:x_start+width] = 1
+
+    
 
     def next(self, rule: Rule):
         newGeneration = self.buld_frame()

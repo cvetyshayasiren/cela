@@ -15,7 +15,7 @@ class Render():
         self.symbols = self.init_symbols(symbols=symbols)
         self.init_colors()
 
-    def init_symbols(self, symbols: str):
+    def init_symbols(self, symbols: str = random_symbols()):
         symbols = list(symbols) or [" ", "■"]
         shape = self.aging + 1
         arr = np.full(shape=shape, fill_value=symbols[-1], dtype="<U1")
@@ -32,7 +32,7 @@ class Render():
         for i, color in enumerate(picked_colors, start=0):
             curses.init_pair(i, color, -1)
 
-    def draw(self):
+    def draw(self, paused: bool):
         self.stdscr.erase()
         generation = self.figure.generation
         h, w = self.stdscr.getmaxyx()
@@ -41,6 +41,11 @@ class Render():
             if i >= h - 1 or j >= w - 1: continue
             value = generation[i, j]
             self.stdscr.addstr(i, j, self.symbols[value], curses.color_pair(value))
-        self.stdscr.addstr(h - 1, 0, f"{self.figure.width}x{self.figure.height}")
+
+        size = f"{self.figure.width}x{self.figure.height}"
+        played_string = f"{size} | q - exit | p - pause | r - randomise | (1-9) - add block"
+        paused_string = f"{size} | q - exit | p - resume | → step | r - randomise | (1-9) - add block"
+        output_string = paused_string if paused else played_string
+        self.stdscr.addstr(h - 1, 0, output_string[:w - 1])
         self.stdscr.refresh()
         
