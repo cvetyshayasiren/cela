@@ -3,7 +3,11 @@ from typing import Set
 
 class Rule:
 
-    def __init__(self, born: Set[int], survive: Set[int], aging: int):
+    def __init__(self, 
+                 born: Set[int] = {3}, 
+                 survive: Set[int] = {2,3}, 
+                 aging: int = 1
+                 ):
         self.born: Set[int] = born
         self.survive: Set[int] = survive
         self.aging: int = aging

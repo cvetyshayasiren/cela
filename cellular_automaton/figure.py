@@ -10,7 +10,7 @@ class Figure:
         self.generation: np.ndarray = self.buld_frame()
 
     def buld_frame(self):
-        return np.zeros((self.height, self.width))
+        return np.zeros((self.height, self.width), dtype=int)
 
     def fill_random(self, fraction: float = 0.5):
         field_size = self.generation.size
@@ -25,20 +25,24 @@ class Figure:
         x_start = (field_width - width) // 2
         self.generation[y_start:y_start+height, x_start:x_start+width] = 1
 
-    def next(self, rule: Rule) -> Figure:
-        newGenerations = self.buld_frame()
-        for i, j in np.ndindex(self.generation):
+    def next(self, rule: Rule):
+        newGeneration = self.buld_frame()
+        for i, j in np.ndindex(self.generation.shape):
             value = self.generation[i, j]
             neighbors = self.get_neighbors(i, j)
             match value:
                 case 0:
                     if neighbors in rule.born:
-                        newGenerations[i, j] = 1
+                        newGeneration[i, j] = 1
                 case 1:
-                    pass
+                    if neighbors in rule.survive:
+                        newGeneration[i, j] = 1
+                    elif rule.aging > 1:
+                        newGeneration[i, j] = 2
                 case _:
-                    pass
-
+                    if rule.aging > value:
+                        newGeneration[i, j] = value + 1
+        self.generation = newGeneration
 
     def get_neighbors(self, i: int, j: int) -> int:
         arr = self.generation
