@@ -14,8 +14,6 @@ def main(stdscr):
     player = Player(stdscr = stdscr, figure=fig, rule=rule)
     player.play()
 
-
-
 if __name__ == "__main__":
     curses.wrapper(main)
 

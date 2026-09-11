@@ -2,9 +2,12 @@ import curses
 import random
 
 import numpy as np
+from enum import Enum, auto
 
 from cellular_automaton.figure import Figure
 from utils.randoms import random_symbols
+
+
 
 
 class Render():
@@ -14,7 +17,7 @@ class Render():
         self.aging = aging
         self.symbols = self.init_symbols(symbols=symbols)
         self.init_colors()
-        self.show_tips = False
+        self.tips_mode: TipsMode = TipsMode.MINI
 
     def init_symbols(self, symbols: str = random_symbols()):
         symbols = list(symbols) or [" ", "■"]
@@ -33,7 +36,7 @@ class Render():
         for i, color in enumerate(picked_colors, start=0):
             curses.init_pair(i, color, -1)
 
-    def toogle_tips(self): self.show_tips = not self.show_tips
+    def toogle_tips(self): self.tips_mode = TipsMode.next(self.tips_mode)
 
     def draw(self, paused: bool):
         self.stdscr.erase()
@@ -44,10 +47,16 @@ class Render():
             if i >= h - 1 or j >= w - 1: continue
             value = generation[i, j]
             self.stdscr.addstr(i, j, self.symbols[value], curses.color_pair(value))
+        self.draw_tips(paused = paused, h = h, w = w)
+
+        self.stdscr.refresh()
+
+    def draw_tips(self, paused: bool, h: int, w: int):
+        if(self.tips_mode == TipsMode.HIDDEN): return
 
         size_string = f"{self.figure.width}x{self.figure.height}"
         pause_state_string = "paused" if paused else ""
-        state_string = f"{size_string} | {pause_state_string} | i - show tips"
+        state_string = f"{size_string} | {pause_state_string} | i - show tips and very long string for test, it here lol kek lal hehe haha"
         tips_string = (
             f"q - exit\n"
             "p - pause/resume\n"
@@ -58,8 +67,20 @@ class Render():
             "b - blank field"
         )
         number_tips_cols = tips_string.count("\n") + 1
-        if(self.show_tips):
+
+        if(self.tips_mode == TipsMode.FULL):
             self.stdscr.addstr(h - number_tips_cols, 0, tips_string)
-        self.stdscr.addstr(h - 1, 0, state_string[:w - 1])
-        self.stdscr.refresh()
-        
+            self.stdscr.addstr(h - 1, 0, state_string[:w - 1])
+        else:
+            self.stdscr.addstr(h - 1, 0, state_string[:w - 1])
+
+
+class TipsMode(Enum):
+    HIDDEN = auto()
+    MINI = auto()
+    FULL = auto()
+
+    @classmethod
+    def next(cls, mode: TipsMode) -> TipsMode:
+        members = list(cls)
+        return members[(members.index(mode) + 1) % len(members)]
