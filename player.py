@@ -28,7 +28,8 @@ class Player:
         while(self.is_playing == True):
             self.button_handler()
             if self.paused: continue
-            self.figure.next(rule=self.rule)
+            next = self.figure.next(rule=self.rule)
+            if not next: self.figure.fill_full_random()
             self.draw()
 
     def stop(self):
@@ -71,12 +72,16 @@ class Player:
             self.draw_if_paused()
 
         elif key == ord('c'):
-            self.render.init_colors()
+            self.render.init_colors(background=False)
             self.draw_if_paused()
 
         elif key == ord('i'):
             self.render.toogle_tips()
             self.draw_if_paused()
+
+        elif key == ord('/'):
+            self.render.init_colors(background=True)
+            self.stdscr.bkgd(" ", curses.color_pair(4))
 
     def draw(self):
         self.render.draw(paused=self.paused)

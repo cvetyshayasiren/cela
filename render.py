@@ -27,14 +27,21 @@ class Render():
             arr[i] = ch
         return arr
 
-    def init_colors(self) -> list[int]:
+    def init_colors(self, background: bool = False) -> list[int]:
         curses.start_color()
         curses.use_default_colors()
         num_colors = self.aging + 1
         available_colors = list(range(1, curses.COLORS))
         picked_colors = random.sample(available_colors, min(num_colors, len(available_colors)))
+        back = random.choice(available_colors)
         for i, color in enumerate(picked_colors, start=0):
-            curses.init_pair(i, color, -1)
+            if(background): curses.init_pair(i, color, back)
+            else: curses.init_pair(i, color, -1)
+
+    def random_background(self):
+        available_colors = list(range(1, curses.COLORS))
+        back = random.choice(available_colors)
+        self.stdscr.bkgd(" ", curses.color_pair(back))  
 
     def toogle_tips(self): self.tips_mode = TipsMode.next(self.tips_mode)
 

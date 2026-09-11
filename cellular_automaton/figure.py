@@ -21,6 +21,8 @@ class Figure:
         idx = np.random.choice(field_size, num_ones, replace=False)
         np.put(self.generation, idx, 1)
 
+    def fill_full_random(self): self.fill_random(np.random.random())
+
     def contain_rect(self, x: int, y: int, width: int = 1, height: int = 1):
         y_start, x_start = y, x
         self.generation[y_start:y_start+height, x_start:x_start+width] = 1
@@ -34,7 +36,7 @@ class Figure:
 
     
 
-    def next(self, rule: Rule):
+    def next(self, rule: Rule) -> bool:
         newGeneration = self.buld_frame()
         for i, j in np.ndindex(self.generation.shape):
             value = self.generation[i, j]
@@ -52,7 +54,9 @@ class Figure:
                 case _:
                     if value < rule.aging:
                         newGeneration[i, j] = value + 1
+        equal = np.array_equal(self.generation, newGeneration)
         self.generation = newGeneration
+        return not equal
 
     def get_neighbors(self, i: int, j: int) -> int:
         arr = self.generation
