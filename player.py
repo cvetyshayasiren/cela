@@ -2,6 +2,7 @@ import curses
 from enum import Enum, auto
 import time
 
+from ca_params import Caparams
 from cellular_automaton.figure import Figure
 from cellular_automaton.rule import Rule
 from render import Render
@@ -9,15 +10,8 @@ from utils.randoms import random_symbols
 
 class Player:
 
-    def __init__(self, stdscr,
-                 figure: Figure = Figure(), 
-                 rule: Rule = Rule(),
-                 delay: float = 0.1
-                 ):
-        self.stdscr = stdscr
-        self.figure = figure
-        self.rule = rule
-        self.delay = delay
+    def __init__(self, caparams: Caparams):
+        self.caparams = caparams
         self.render = Render(stdscr, figure, rule.aging)
         self.is_playing: bool = False
         self.paused = False

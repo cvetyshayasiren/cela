@@ -4,17 +4,15 @@ import random
 import numpy as np
 from enum import Enum, auto
 
-from cellular_automaton.figure import Figure
+from ca_params import Caparams
 from utils.randoms import random_symbols
 
 
 
 
 class Render():
-    def __init__(self, stdscr, figure: Figure, aging: int, symbols: str = random_symbols()):
-        self.stdscr = stdscr
-        self.figure = figure
-        self.aging = aging
+    def __init__(self, caparams: Caparams, symbols: str = random_symbols()):
+        self.caparams = caparams
         self.symbols = self.init_symbols(symbols=symbols)
         self.init_colors()
         self.tips_mode: TipsMode = TipsMode.MINI

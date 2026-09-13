@@ -1,5 +1,9 @@
 import argparse
 
+from ca_params import Caparams
+from cellular_automaton.figure import Figure
+from cellular_automaton.rule import Rule
+
 def arg_parser(stdscr):
     parser = argparse.ArgumentParser(
         description="Cellular automaton in the terminal"
@@ -45,3 +49,11 @@ def complete_namespace(stdscr, args: argparse.Namespace):
         args.height = h
 
     return args
+
+def args_to_params(stdscr, args: argparse.Namespace) -> Caparams:
+    return Caparams(
+        stdscr= stdscr,
+        figure = Figure(width= args.width, height= args.height),
+        rule = Rule(),
+        delay= args.delay
+    )
