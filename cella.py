@@ -10,8 +10,7 @@ from player import Player
 def main(stdscr):
     args = arg_parser(stdscr)
     caparams = args_to_params(stdscr= stdscr, args= args)
-
-    player = Player(stdscr = stdscr, figure=figure, rule=rule)
+    player = Player(stdscr = stdscr, caparams=caparams)
     player.play()
 
     

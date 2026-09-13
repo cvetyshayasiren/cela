@@ -11,19 +11,10 @@ from utils.randoms import random_symbols
 
 
 class Render():
-    def __init__(self, caparams: Caparams, symbols: str = random_symbols()):
+    def __init__(self, caparams: Caparams):
         self.caparams = caparams
-        self.symbols = self.init_symbols(symbols=symbols)
         self.init_colors()
         self.tips_mode: TipsMode = TipsMode.MINI
-
-    def init_symbols(self, symbols: str = random_symbols()):
-        symbols = list(symbols) or [" ", "■"]
-        shape = self.aging + 1
-        arr = np.full(shape=shape, fill_value=symbols[-1], dtype="<U1")
-        for i, ch in enumerate(symbols[:shape]):
-            arr[i] = ch
-        return arr
 
     def init_colors(self, background: bool = False) -> list[int]:
         curses.start_color()

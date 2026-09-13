@@ -12,24 +12,23 @@ class Player:
 
     def __init__(self, caparams: Caparams):
         self.caparams = caparams
-        self.render = Render(stdscr, figure, rule.aging)
+        self.render = Render(caparams=caparams)
         self.is_playing: bool = False
         self.paused = False
 
     def play(self):
         self.is_playing = True
-        self.stdscr.timeout(int(self.delay * 1000))
+        self.caparams.stdscr.timeout(int(self.delay * 1000))
 
         while(self.is_playing == True):
             self.button_handler()
             if self.paused: continue
-            next = self.figure.next(rule=self.rule)
+            next = self.caparams.figure.next(rule=self.rule)
             if not next: self.stuck_behaviour()
             self.draw()
 
     def stop(self):
         self.is_playing = False
-        print("lal")
 
     def pause_toogle(self):
         self.paused = not self.paused
@@ -85,11 +84,5 @@ class Player:
         if(self.paused): self.draw()
 
     def stuck_behaviour(self):
-        self.figure.fill_full_random()
-
-
-class StuckBehaviour(Enum):
-    PAUSE = auto()
-    FILL = auto()
-    STOP = auto()
+        self.caparams.figure.fill_full_random()
     
