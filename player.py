@@ -1,4 +1,5 @@
 import curses
+from enum import Enum, auto
 import time
 
 from cellular_automaton.figure import Figure
@@ -29,7 +30,7 @@ class Player:
             self.button_handler()
             if self.paused: continue
             next = self.figure.next(rule=self.rule)
-            if not next: self.figure.fill_full_random()
+            if not next: self.stuck_behaviour()
             self.draw()
 
     def stop(self):
@@ -89,5 +90,12 @@ class Player:
     def draw_if_paused(self):
         if(self.paused): self.draw()
 
+    def stuck_behaviour(self):
+        self.figure.fill_full_random()
 
+
+class StuckBehaviour(Enum):
+    PAUSE = auto()
+    FILL = auto()
+    STOP = auto()
     
