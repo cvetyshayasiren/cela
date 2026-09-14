@@ -36,6 +36,13 @@ class Caparams():
             arr[i] = ch
         return arr
 
+    def increase_delay(self, by: float = 2): self.set_delay(self.delay * by)
+
+    def decrease_delay(self, by: float = 2): self.set_delay(self.delay / by)
+
+    def set_delay(self, candidate: float) -> float:
+        self.delay = (0 if candidate < 0.01 else round(min(max(candidate, 0.01), 3600), 2)) if candidate > 0 else 0.01
+
 class StuckBehaviour(Enum):
     PAUSE = auto()
     FILL = auto()

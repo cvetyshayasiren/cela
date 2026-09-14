@@ -50,12 +50,9 @@ class Player:
                 self.caparams.figure.next(self.caparams.rule)
                 self.draw_if_paused()
 
-        elif key == curses.KEY_UP:
-            
-            self.caparams.delay = self.caparams.delay * 2
+        elif key == curses.KEY_UP: self.caparams.increase_delay(by=2)
 
-        elif key == curses.KEY_DOWN:
-            self.caparams.delay = self.caparams.delay / 2
+        elif key == curses.KEY_DOWN: self.caparams.decrease_delay(by=2)
 
         elif key == ord('r'):
             self.caparams.figure.fill_random()
@@ -91,7 +88,7 @@ class Player:
         try:
             _, x, y, _, bstate = curses.getmouse()
             if bstate & curses.BUTTON1_CLICKED:
-                self.caparams.figure.contain_rect(x = x, y = y)
+                self.caparams.figure.contain_dot(x = x, y = y)
                 self.draw_if_paused()
 
             elif bstate & curses.BUTTON1_PRESSED and not self.dragging:

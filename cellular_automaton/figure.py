@@ -24,17 +24,18 @@ class Figure:
     def fill_full_random(self): self.fill_random(np.random.random())
 
     def contain_rect(self, x: int, y: int, width: int = 1, height: int = 1):
-        y_start, x_start = y, x
+        y_start = max(0, y); x_start = max(0, x)
         self.generation[y_start:y_start+height, x_start:x_start+width] = 1
 
     def contain_rect_in_center(self, width: int, height: int):
-        field_heigth = self.generation.shape[0]
-        field_width = self.generation.shape[1]
-        y_start = (field_heigth - height) // 2
-        x_start = (field_width - width) // 2
-        self.generation[y_start:y_start+height, x_start:x_start+width] = 1
+        y_start = (self.height - height) // 2
+        x_start = (self.width - width) // 2
+        self.contain_rect(x=x_start, y=y_start, width=width, height=height)
 
-    
+    def contain_dot(self, x: int, y: int):
+        if(x > self.width or y > self.height): return
+        value = self.generation[y, x]
+        self.generation[y, x] = 0 if value else 1
 
     def next(self, rule: Rule) -> bool:
         newGeneration = self.buld_frame()

@@ -45,7 +45,7 @@ def complete_namespace(stdscr, args: argparse.Namespace) -> argparse.Namespace:
     if args.width is None:
         args.width = w
     if args.height is None:
-        args.height = h - 1
+        args.height = h if args.fullscreen else h - 1
     if args.symbols is None:
         args.symbols = random_symbols()
 
