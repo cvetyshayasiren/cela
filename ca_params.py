@@ -1,3 +1,4 @@
+import curses
 from enum import Enum, auto
 
 import numpy as np
@@ -8,7 +9,7 @@ from utils.randoms import random_symbols
 
 
 class Caparams():
-    def __init__(self, stdscr, 
+    def __init__(self, stdscr: curses.window, 
                  figure: Figure = Figure(),
                  rule: Rule = Rule(),
                  delay: float = 0.1,
@@ -29,7 +30,7 @@ class Caparams():
 
     def build_symbols_array(self, symbols: str = random_symbols()):
         symbols = list(symbols) or [" ", "■"]
-        shape = self.aging + 1
+        shape = self.rule.aging + 1
         arr = np.full(shape=shape, fill_value=symbols[-1], dtype="<U1")
         for i, ch in enumerate(symbols[:shape]):
             arr[i] = ch
