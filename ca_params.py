@@ -18,7 +18,7 @@ class Caparams():
         self.stdscr = stdscr
         self.figure = figure
         self.rule = rule
-        self.delay = delay
+        self.delay = self.fix_delay(delay)
         self.stuck_behaviour: StuckBehaviour = StuckBehaviour.PAUSE
         self.symbols_array = self.build_symbols_array(symbols)
 
@@ -40,8 +40,10 @@ class Caparams():
 
     def decrease_delay(self, by: float = 2): self.set_delay(self.delay / by)
 
-    def set_delay(self, candidate: float) -> float:
-        self.delay = (0 if candidate < 0.01 else round(min(max(candidate, 0.01), 3600), 2)) if candidate > 0 else 0.01
+    def set_delay(self, candidate: float): self.delay = self.fix_delay(candidate=candidate)
+
+    def fix_delay(self, candidate: float) -> float:
+        return (0 if candidate < 0.01 else round(min(max(candidate, 0.01), 3600), 2)) if candidate > 0 else 0.01
 
 class StuckBehaviour(Enum):
     PAUSE = auto()

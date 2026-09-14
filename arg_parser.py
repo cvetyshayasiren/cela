@@ -46,9 +46,6 @@ def complete_namespace(stdscr, args: argparse.Namespace) -> argparse.Namespace:
         args.width = w
     if args.height is None:
         args.height = h if args.fullscreen else h - 1
-    if args.symbols is None:
-        args.symbols = random_symbols()
-
     if args.rule is None:
         args.rule = Rule.game_of_fly
     else:
@@ -56,6 +53,8 @@ def complete_namespace(stdscr, args: argparse.Namespace) -> argparse.Namespace:
             args.rule = Rule.from_string(args.rule).to_string()
         except ValueError as e:
             raise argparse.ArgumentTypeError(f"invalid rule {args.rule!r}: {e}")
+    if args.symbols is None:
+        args.symbols = random_symbols()
 
     return args
 

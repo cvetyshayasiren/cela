@@ -71,17 +71,23 @@ class Player:
             self.caparams.init_symbols(symbols=random_symbols())
             self.draw_if_paused()
 
-        elif key == ord('c'):
-            self.render.init_colors(background=False)
+        elif key == ord('.'):
+            self.render.randomise_colors()
+            self.draw_if_paused()
+
+        elif key == ord(','):
+            self.render.random_background()
+            self.draw_if_paused()
+
+        elif key == ord('/'):
+            self.render.reset_colors()
             self.draw_if_paused()
 
         elif key == ord('i'):
             self.render.toogle_tips()
             self.draw_if_paused()
 
-        elif key == ord('/'):
-            self.render.init_colors(background=True)
-            self.caparams.stdscr.bkgd(" ", curses.color_pair(4))
+
 
     def mouse_handler(self, key):
         if key != curses.KEY_MOUSE: return
