@@ -1,8 +1,9 @@
 import curses
 
-from ca_params import Caparams
+from main.ca_params import Caparams
 from debug import printd, printl
-from render import Render
+from main.colors import ColorManager
+from main.render import Render
 from utils.randoms import random_symbols
 
 class Player:
@@ -72,15 +73,15 @@ class Player:
             self.draw_if_paused()
 
         elif key == ord('.'):
-            self.render.randomise_colors()
+            ColorManager.randomise_colors()
             self.draw_if_paused()
 
         elif key == ord(','):
-            self.render.random_background()
+            ColorManager.random_background()
             self.draw_if_paused()
 
         elif key == ord('/'):
-            self.render.reset_colors()
+            ColorManager.reset_colors()
             self.draw_if_paused()
 
         elif key == ord('i'):

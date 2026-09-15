@@ -1,7 +1,7 @@
 import curses
 
-from arg_parser import arg_parser, args_to_params
-from player import Player
+from main.arg_parser import arg_parser, args_to_params
+from main.player import Player
 
 
 def main(stdscr: curses.window):

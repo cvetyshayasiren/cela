@@ -5,6 +5,7 @@ import numpy as np
 
 from cellular_automaton.figure import Figure
 from cellular_automaton.rule import Rule
+from config import Config
 from utils.randoms import random_symbols
 
 
@@ -43,7 +44,7 @@ class Caparams():
     def set_delay(self, candidate: float): self.delay = self.fix_delay(candidate=candidate)
 
     def fix_delay(self, candidate: float) -> float:
-        return (0 if candidate < 0.01 else round(min(max(candidate, 0.01), 3600), 2)) if candidate > 0 else 0.01
+        return (0 if candidate < Config.MIN_DELAY else round(min(max(candidate, 0.01), Config.MAX_DELAY), 2)) if candidate > 0 else Config.MIN_DELAY
 
 class StuckBehaviour(Enum):
     PAUSE = auto()

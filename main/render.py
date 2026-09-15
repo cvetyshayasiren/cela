@@ -4,7 +4,8 @@ import random
 import numpy as np
 from enum import Enum, auto
 
-from ca_params import Caparams
+from main.ca_params import Caparams
+from main.colors import ColorManager
 from utils.randoms import random_symbols
 
 
@@ -14,30 +15,7 @@ class Render():
     def __init__(self, caparams: Caparams):
         self.caparams = caparams
         self.tips_mode: TipsMode = TipsMode.MINI
-        self.randomise_colors()
-
-    def randomise_colors(self, fill: bool = False) -> list[int]:
-        curses.start_color()
-        curses.use_default_colors()
-        num_colors = self.caparams.rule.aging + 1
-        available_colors = list(range(1, curses.COLORS))
-        picked_colors = random.sample(available_colors, min(num_colors, len(available_colors)))
-        filling = random.choice(available_colors)
-        for i, color in enumerate(picked_colors, start=0):
-            if(fill): curses.init_pair(i, color, filling)
-            else: curses.init_pair(i, color, -1)
-
-    def random_background(self):
-        back = random.randint(1, curses.COLORS)
-
-        for i in list(range(1, curses.COLORS)):
-            curses.init_pair(i, curses.COLOR_WHITE, back)
-        # self.caparams.stdscr.bkgd(self.caparams.symbols_array[0], curses.color_pair(back))
-
-    def reset_colors(self):
-        for i in list(range(1, curses.COLORS)):
-            curses.init_pair(i, curses.COLOR_WHITE, -1)
-        
+        ColorManager.initialise_random_colors()
 
     def toogle_tips(self): self.tips_mode = TipsMode.next(self.tips_mode)
 

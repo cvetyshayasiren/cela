@@ -1,7 +1,7 @@
 import argparse
 import curses
 
-from ca_params import Caparams
+from main.ca_params import Caparams
 from cellular_automaton.figure import Figure
 from cellular_automaton.rule import Rule
 from utils.randoms import random_symbols
