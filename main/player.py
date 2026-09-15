@@ -77,7 +77,7 @@ class Player:
             self.draw_if_paused()
 
         elif key == ord(','):
-            ColorManager.random_background()
+            ColorManager.random_background(caparams=self.caparams)
             self.draw_if_paused()
 
         elif key == ord('/'):

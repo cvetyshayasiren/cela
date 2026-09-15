@@ -2,40 +2,54 @@ import curses
 import random
 
 from config import Config
+from main.ca_params import Caparams
 
 
 class ColorManager:
-    curses.start_color()
-    curses.use_default_colors()
+    _instance = None
     num_colors = Config.MAX_AGING
-    num_available_colors = curses.COLORS - 1
-    list_available_colors = list(range(1, curses.COLORS))
-    num_necessary_colors = min(num_colors, num_available_colors)
+
+    def __new__(cls, *args, **kwargs):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+        return cls._instance
+
+    @classmethod
+    def num_available_colors(cls):
+        return curses.COLORS - 1
+
+    @classmethod
+    def list_available_colors(cls):
+        return list(range(1, curses.COLORS))
+
+    @classmethod
+    def num_necessary_colors(cls):
+        return min(cls.num_colors, cls.num_available_colors())
 
     @classmethod
     def initialise_random_colors(cls):
         curses.start_color()
         curses.use_default_colors()
-        picked_colors = random.sample(cls.list_available_colors, cls.num_necessary_colors)
-        for i, color in enumerate(picked_colors, start=0):
+        picked_colors = random.sample(cls.list_available_colors(), cls.num_necessary_colors())
+        for i, color in enumerate(picked_colors, start=1):
             curses.init_pair(i, color, -1)
 
     @classmethod
     def randomise_colors(cls):
-        picked_colors = picked_colors = random.sample(cls.list_available_colors, cls.num_necessary_colors)
-        for i, color in enumerate(picked_colors, start=0):
+        picked_colors = picked_colors = random.sample(cls.list_available_colors(), cls.num_necessary_colors())
+        for i, color in enumerate(picked_colors, start=1):
             _, bg = curses.pair_content(i)
             curses.init_pair(i, color, bg)
 
     @classmethod
-    def random_background(cls, stdscr: curses.window, blank_symbol: str):
-        back = random.randint(1, curses.COLORS)
-        for i in range(0, cls.num_necessary_colors):
+    def random_background(cls, caparams: Caparams):
+        back = random.randint(1, cls.num_available_colors())
+        for i in range(0, cls.num_necessary_colors()):
             fg, _ = curses.pair_content(i)
             curses.init_pair(i, fg, back)
-        stdscr.bkgd(blank_symbol, curses.color_pair(1))
+        caparams.stdscr.bkgd(caparams.get_blank_symbol(), curses.color_pair(1))
 
     @classmethod
     def reset_colors(cls):
-        for i in list(range(1, cls.num_necessary_colors)):
+        for i in range(1, cls.num_necessary_colors()):
             curses.init_pair(i, curses.COLOR_WHITE, -1)

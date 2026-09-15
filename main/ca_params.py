@@ -46,6 +46,9 @@ class Caparams():
     def fix_delay(self, candidate: float) -> float:
         return (0 if candidate < Config.MIN_DELAY else round(min(max(candidate, 0.01), Config.MAX_DELAY), 2)) if candidate > 0 else Config.MIN_DELAY
 
+    def get_blank_symbol(self):
+        return self.symbols_array[0] if len(self.symbols_array) else " "
+
 class StuckBehaviour(Enum):
     PAUSE = auto()
     FILL = auto()
