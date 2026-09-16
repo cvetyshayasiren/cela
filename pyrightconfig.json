@@ -1,0 +1,13 @@
+{
+  "venvPath": ".",
+  "venv": ".pythonlibs",
+  "include": [
+    "cela.py",
+    "config.py",
+    "initialise.py",
+    "main",
+    "cellular_automaton",
+    "randomisation",
+    "test.py"
+  ]
+}
