@@ -11,11 +11,11 @@ from randomisation.randoms import random_symbols
 
 class Caparams():
     def __init__(self, stdscr: curses.window, 
-                 figure: Figure = Figure(),
-                 rule: Rule = Rule(),
-                 delay: float = 0.1,
-                 symbols: str = random_symbols(),
-                 seed: int = 0
+                 figure: Figure,
+                 rule: Rule,
+                 delay: float,
+                 symbols: str,
+                 seed: int
                  ):
         self.stdscr = stdscr
         self.figure = figure
@@ -28,10 +28,10 @@ class Caparams():
     def toogle_stuck_behaviour(self):
         self.stuck_behaviour = StuckBehaviour.next(self.stuck_behaviour)
 
-    def init_symbols(self, symbols: str = random_symbols()):
+    def init_symbols(self, symbols: str):
         self.symbols_array = self.build_symbols_array(symbols=symbols)
 
-    def build_symbols_array(self, symbols: str = random_symbols()):
+    def build_symbols_array(self, symbols: str):
         symbols = list(symbols) or [" ", "■"]
         shape = self.rule.aging + 1
         arr = np.full(shape=shape, fill_value=symbols[-1], dtype="<U1")

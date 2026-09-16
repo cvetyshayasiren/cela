@@ -19,7 +19,7 @@ class Figure:
     def fill_random(self, fraction: float = 0.5):
         field_size = self.generation.size
         num_ones = int(field_size * fraction)
-        idx = RandomSeed.rng.random.choice(field_size, num_ones, replace=False)
+        idx = RandomSeed.rng.choice(field_size, num_ones, replace=False)
         np.put(self.generation, idx, 1)
 
     def fill_full_random(self): self.fill_random(RandomSeed.rng.random())
