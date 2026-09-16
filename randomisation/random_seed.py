@@ -6,5 +6,7 @@ class RandomSeed:
 
     @classmethod
     def init(cls, seed):
+        if seed is None:
+            seed = np.random.SeedSequence().entropy
         cls.rng = np.random.default_rng(seed)
         cls.seed = seed

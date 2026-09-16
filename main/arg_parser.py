@@ -1,12 +1,11 @@
 import argparse
 import curses
 
-import numpy as np
-
 from main.ca_params import Caparams
 from cellular_automaton.figure import Figure
 from cellular_automaton.rule import Rule
 from randomisation.randoms import random_symbols
+from randomisation.random_seed import RandomSeed
 
 def arg_parser(stdscr: curses.window):
     parser = argparse.ArgumentParser(
@@ -42,6 +41,7 @@ def arg_parser(stdscr: curses.window):
     )
 
     args = parser.parse_args()
+    RandomSeed.init(seed = args.seed)
     complete_args = complete_namespace(stdscr=stdscr, args=args)
     return complete_args
 
@@ -62,7 +62,7 @@ def complete_namespace(stdscr, args: argparse.Namespace) -> argparse.Namespace:
     if args.symbols is None:
         args.symbols = random_symbols()
     if args.seed is None:
-        args.seed = np.random.SeedSequence().entropy
+        args.seed = RandomSeed.seed
 
     return args
 

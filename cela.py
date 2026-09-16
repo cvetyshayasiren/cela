@@ -7,7 +7,7 @@ from main.player import Player
 
 def main(stdscr: curses.window):
     args = arg_parser(stdscr)
-    initialise(args.seed)
+    initialise()
     caparams = args_to_params(stdscr = stdscr, args = args)
     player = Player(caparams = caparams)
     player.play()
