@@ -14,15 +14,16 @@ class Figure:
         return np.zeros((self.height, self.width), dtype=int)
 
     def blank_field(self):
-        self.generation = self.buld_frame()
+        self.generation[:] = 0
 
     def fill_random(self, fraction: float = 0.5):
-        field_size = self.generation.size
-        num_ones = int(field_size * fraction)
-        idx = RandomSeed.rng.choice(field_size, num_ones, replace=False)
-        np.put(self.generation, idx, 1)
+        num_ones = int(self.generation.size * fraction)
+        flat = self.generation.ravel()
+        flat[:] = 0
+        idx = RandomSeed.rng.choice(flat.size, num_ones, replace=False)
+        flat[idx] = 1
 
-    def fill_full_random(self): self.fill_random(RandomSeed.rng.random())
+    def fill_full_random(self): self.fill_random(fraction = RandomSeed.rng.random())
 
     def contain_rect(self, x: int, y: int, width: int = 1, height: int = 1):
         y_start = max(0, y); x_start = max(0, x)

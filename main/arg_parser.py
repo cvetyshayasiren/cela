@@ -1,7 +1,7 @@
 import argparse
 import curses
 
-from main.ca_params import Caparams
+from main.ca_params import Caparams, StuckBehaviour
 from cellular_automaton.figure import Figure
 from cellular_automaton.rule import Rule
 from randomisation.randoms import random_symbols
@@ -39,6 +39,20 @@ def arg_parser(stdscr: curses.window):
         "-S", "--seed", type=int, default=None, dest = "seed",
         help="random seed for reproducibility, default: random"
     )
+
+    parser.add_argument(
+        "-b", "--behaviour",
+        type=lambda v: StuckBehaviour[v.upper()],
+        choices=list(StuckBehaviour),
+        default=StuckBehaviour.CONTINUE,
+        dest = "behaviour",
+        metavar="{pause,continue,stop}",
+        help="action when two consecutive frames are identical "
+            "(deeper cycles are not detected): "
+            "pause, continue (restart with random field), or stop. "
+            "Default: continue"
+    )
+
     args = parser.parse_args()
     complete_args = complete_namespace(stdscr=stdscr, args=args)
     return complete_args
@@ -66,11 +80,14 @@ def complete_namespace(stdscr, args: argparse.Namespace) -> argparse.Namespace:
     return args
 
 def args_to_params(stdscr, args: argparse.Namespace) -> Caparams:
+    figure = Figure(width = args.width, height = args.height)
+    figure.fill_full_random()
     return Caparams(
         stdscr = stdscr,
-        figure = Figure(width = args.width, height = args.height),
+        figure = figure,
         rule = Rule.from_string(args.rule),
         delay = args.delay,
+        stuck_behaviour=args.behaviour,
         symbols = args.symbols,
         seed = args.seed
     )

@@ -34,7 +34,7 @@ class Render():
         if(self.tips_mode == TipsMode.HIDDEN): return
 
         size_string = f"{self.caparams.figure.width}x{self.caparams.figure.height}"
-        pause_state_string = "paused" if paused else ""
+        pause_state_string = "paused" if paused else "playing"
         state_string = f"{size_string} | {pause_state_string} | i - show tips | delay {self.caparams.delay} | seed {self.caparams.seed}"
         tips_string = (
             f"q - exit\n"

@@ -1,6 +1,6 @@
 import curses
 
-from main.ca_params import Caparams
+from main.ca_params import Caparams, StuckBehaviour
 from debug import printd, printl
 from main.colors import ColorManager
 from main.render import Render
@@ -56,7 +56,7 @@ class Player:
         elif key == curses.KEY_DOWN: self.caparams.decrease_delay(by=2)
 
         elif key == ord('r'):
-            self.caparams.figure.fill_random()
+            self.caparams.figure.fill_full_random()
             self.draw_if_paused()
 
         elif ord('1') <= key <= ord('9'): 
@@ -117,7 +117,13 @@ class Player:
         if(self.paused): self.draw()
 
     def stuck_behaviour(self):
-        self.caparams.figure.fill_full_random()
+        match self.caparams.stuck_behaviour:
+            case StuckBehaviour.PAUSE:
+                self.paused = True
+            case StuckBehaviour.CONTINUE:
+                self.caparams.figure.fill_full_random()
+            case StuckBehaviour.STOP:
+                self.stop()
 
     def init_mouse(self):
         curses.mousemask(curses.ALL_MOUSE_EVENTS)

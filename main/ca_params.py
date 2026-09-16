@@ -14,6 +14,7 @@ class Caparams():
                  figure: Figure,
                  rule: Rule,
                  delay: float,
+                 stuck_behaviour: StuckBehaviour,
                  symbols: str,
                  seed: int
                  ):
@@ -21,7 +22,7 @@ class Caparams():
         self.figure = figure
         self.rule = rule
         self.delay = self.fix_delay(delay)
-        self.stuck_behaviour: StuckBehaviour = StuckBehaviour.PAUSE
+        self.stuck_behaviour: StuckBehaviour = stuck_behaviour
         self.symbols_array = self.build_symbols_array(symbols)
         self.seed = seed
 
@@ -53,7 +54,7 @@ class Caparams():
 
 class StuckBehaviour(Enum):
     PAUSE = auto()
-    FILL = auto()
+    CONTINUE = auto()
     STOP = auto()
 
     @classmethod
