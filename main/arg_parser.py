@@ -1,10 +1,12 @@
 import argparse
 import curses
 
+import numpy as np
+
 from main.ca_params import Caparams
 from cellular_automaton.figure import Figure
 from cellular_automaton.rule import Rule
-from utils.randoms import random_symbols
+from randomisation.randoms import random_symbols
 
 def arg_parser(stdscr: curses.window):
     parser = argparse.ArgumentParser(
@@ -34,6 +36,10 @@ def arg_parser(stdscr: curses.window):
         "-s", "--symbols", type=str, dest = "symbols",
         help="symbols used to render cells (e.g. ' .oO'), default: random"
     )
+    parser.add_argument(
+        "-S", "--seed", type=int, default=None, dest = "seed",
+        help="random seed for reproducibility, default: random"
+    )
 
     args = parser.parse_args()
     complete_args = complete_namespace(stdscr=stdscr, args=args)
@@ -55,6 +61,8 @@ def complete_namespace(stdscr, args: argparse.Namespace) -> argparse.Namespace:
             raise argparse.ArgumentTypeError(f"invalid rule {args.rule!r}: {e}")
     if args.symbols is None:
         args.symbols = random_symbols()
+    if args.seed is None:
+        args.seed = np.random.SeedSequence().entropy
 
     return args
 
@@ -64,5 +72,6 @@ def args_to_params(stdscr, args: argparse.Namespace) -> Caparams:
         figure = Figure(width = args.width, height = args.height),
         rule = Rule.from_string(args.rule),
         delay = args.delay,
-        symbols = args.symbols
+        symbols = args.symbols,
+        seed = args.seed
     )

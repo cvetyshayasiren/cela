@@ -4,7 +4,7 @@ from main.ca_params import Caparams
 from debug import printd, printl
 from main.colors import ColorManager
 from main.render import Render
-from utils.randoms import random_symbols
+from randomisation.randoms import random_symbols
 
 class Player:
 

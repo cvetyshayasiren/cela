@@ -1,5 +1,6 @@
 from cellular_automaton.rule import Rule
 import numpy as np
+from randomisation.random_seed import RandomSeed
 
 
 class Figure:
@@ -18,10 +19,10 @@ class Figure:
     def fill_random(self, fraction: float = 0.5):
         field_size = self.generation.size
         num_ones = int(field_size * fraction)
-        idx = np.random.choice(field_size, num_ones, replace=False)
+        idx = RandomSeed.rng.random.choice(field_size, num_ones, replace=False)
         np.put(self.generation, idx, 1)
 
-    def fill_full_random(self): self.fill_random(np.random.random())
+    def fill_full_random(self): self.fill_random(RandomSeed.rng.random())
 
     def contain_rect(self, x: int, y: int, width: int = 1, height: int = 1):
         y_start = max(0, y); x_start = max(0, x)

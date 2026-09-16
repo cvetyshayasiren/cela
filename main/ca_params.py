@@ -6,7 +6,7 @@ import numpy as np
 from cellular_automaton.figure import Figure
 from cellular_automaton.rule import Rule
 from config import Config
-from utils.randoms import random_symbols
+from randomisation.randoms import random_symbols
 
 
 class Caparams():
@@ -14,7 +14,8 @@ class Caparams():
                  figure: Figure = Figure(),
                  rule: Rule = Rule(),
                  delay: float = 0.1,
-                 symbols: str = random_symbols()
+                 symbols: str = random_symbols(),
+                 seed: int = 0
                  ):
         self.stdscr = stdscr
         self.figure = figure
@@ -22,6 +23,7 @@ class Caparams():
         self.delay = self.fix_delay(delay)
         self.stuck_behaviour: StuckBehaviour = StuckBehaviour.PAUSE
         self.symbols_array = self.build_symbols_array(symbols)
+        self.seed = seed
 
     def toogle_stuck_behaviour(self):
         self.stuck_behaviour = StuckBehaviour.next(self.stuck_behaviour)

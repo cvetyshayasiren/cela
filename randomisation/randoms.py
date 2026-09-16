@@ -1,8 +1,7 @@
-import random
-
 import numpy as np
 
 from cellular_automaton.rule import Rule
+from randomisation.random_seed import RandomSeed
 
 def random_symbols() -> str:
     symbols = np.array([
@@ -15,13 +14,15 @@ def random_symbols() -> str:
         " █▓▒░"
         ])
 
-    return np.random.choice(symbols)
+    return RandomSeed.rng.choice(symbols)
 
 
 def random_rule() -> Rule:
-    born = set(random.sample(range(9), random.randint(0, 8)))
-    survive = set(random.sample(range(9), random.randint(0, 8)))
-    aging = random.randint(0, 8)
+    b = int(RandomSeed.rng.integers(0, 9))
+    born = set(RandomSeed.rng.choice(9, b, replace=False)) if b > 0 else set()
+    s = int(RandomSeed.rng.integers(0, 9))
+    survive = set(RandomSeed.rng.choice(9, s, replace=False)) if s > 0 else set()
+    aging = RandomSeed.rng.integers(0, 11)
     return Rule(born=born, survive=survive, aging=aging)
 
 def random_prepared_rule() -> Rule:

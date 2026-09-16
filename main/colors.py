@@ -1,5 +1,5 @@
 import curses
-import random
+from randomisation.random_seed import RandomSeed
 
 from config import Config
 from main.ca_params import Caparams
@@ -30,20 +30,20 @@ class ColorManager:
     def initialise_random_colors(cls):
         curses.start_color()
         curses.use_default_colors()
-        picked_colors = random.sample(cls.list_available_colors(), cls.num_necessary_colors())
+        picked_colors = RandomSeed.rng.choice(cls.list_available_colors(), cls.num_necessary_colors(), replace=False)
         for i, color in enumerate(picked_colors, start=1):
             curses.init_pair(i, color, -1)
 
     @classmethod
     def randomise_colors(cls):
-        picked_colors = picked_colors = random.sample(cls.list_available_colors(), cls.num_necessary_colors())
+        picked_colors = RandomSeed.rng.choice(cls.list_available_colors(), cls.num_necessary_colors(), replace=False)
         for i, color in enumerate(picked_colors, start=1):
             _, bg = curses.pair_content(i)
             curses.init_pair(i, color, bg)
 
     @classmethod
     def random_background(cls, caparams: Caparams):
-        back = random.randint(1, cls.num_available_colors())
+        back = RandomSeed.rng.integers(1, cls.num_available_colors() + 1)
         for i in range(0, cls.num_necessary_colors()):
             fg, _ = curses.pair_content(i)
             curses.init_pair(i, fg, back)

@@ -1,12 +1,9 @@
 import curses
-import random
 
 import numpy as np
 from enum import Enum, auto
 
 from main.ca_params import Caparams
-from main.colors import ColorManager
-from utils.randoms import random_symbols
 
 
 
@@ -15,7 +12,6 @@ class Render():
     def __init__(self, caparams: Caparams):
         self.caparams = caparams
         self.tips_mode: TipsMode = TipsMode.MINI
-        ColorManager.initialise_random_colors()
 
     def toogle_tips(self): self.tips_mode = TipsMode.next(self.tips_mode)
 
@@ -39,7 +35,7 @@ class Render():
 
         size_string = f"{self.caparams.figure.width}x{self.caparams.figure.height}"
         pause_state_string = "paused" if paused else ""
-        state_string = f"{size_string} | {pause_state_string} | i - show tips | delay {self.caparams.delay}"
+        state_string = f"{size_string} | {pause_state_string} | i - show tips | delay {self.caparams.delay} | seed {self.caparams.seed}"
         tips_string = (
             f"q - exit\n"
             "p - pause/resume\n"
