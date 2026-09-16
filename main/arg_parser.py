@@ -39,14 +39,13 @@ def arg_parser(stdscr: curses.window):
         "-S", "--seed", type=int, default=None, dest = "seed",
         help="random seed for reproducibility, default: random"
     )
-
     args = parser.parse_args()
-    RandomSeed.init(seed = args.seed)
     complete_args = complete_namespace(stdscr=stdscr, args=args)
     return complete_args
 
 
 def complete_namespace(stdscr, args: argparse.Namespace) -> argparse.Namespace:
+    RandomSeed.init(seed = args.seed)
     h, w = stdscr.getmaxyx()
     if args.width is None:
         args.width = w
