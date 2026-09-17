@@ -51,22 +51,24 @@ Linux and macOS are the primary supported platforms at the moment. 🐧 🍎 Win
 
 ## 📦 Installation
 
-Clone the repository and create an isolated Python environment:
+The recommended installation method is [`pipx`](https://pipx.pypa.io/). It installs `cela` in an isolated environment and makes the command available globally:
+
+```bash
+pipx install git+https://github.com/cvetyshayasiren/cela.git
+```
+
+For local development, install the current checkout instead:
 
 ```bash
 git clone https://github.com/cvetyshayasiren/cela.git
 cd cela
-
-python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install --upgrade pip
-python -m pip install numpy
+pipx install .
 ```
 
-On Windows PowerShell, activate the environment with: 🪟
+After installation, start the application with:
 
-```powershell
-.venv\Scripts\Activate.ps1
+```bash
+cela
 ```
 
 ## 🚀 Running
@@ -74,32 +76,32 @@ On Windows PowerShell, activate the environment with: 🪟
 Start the simulation with:
 
 ```bash
-python cela.py
+cela
 ```
 
 Show all command-line options:
 
 ```bash
-python cela.py --help
+cela --help
 ```
 
 Examples: 💡
 
 ```bash
 # Start a fixed-size simulation
-python cela.py --width 80 --height 30
+cela --width 80 --height 30
 
 # Run Conway's Game of Life
-python cela.py --rule B3/S23
+cela --rule B3/S23
 
 # Use a custom symbol palette and a reproducible seed
-python cela.py --symbols " .oO" --seed 42
+cela --symbols " .oO" --seed 42
 
 # Start in fullscreen mode with a slower frame rate
-python cela.py --fullscreen --delay 0.25
+cela --fullscreen --delay 0.25
 
 # Stop when the field reaches a stable state
-python cela.py --behaviour stop
+cela --behaviour stop
 ```
 
 ## ⚙️ Command-line options
