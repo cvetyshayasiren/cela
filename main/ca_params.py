@@ -39,7 +39,6 @@ class Caparams():
         symbols_list = list(symbols) or [" ", "■"]
         shape = self.rule.aging + 1
         arr = np.full(shape=shape, fill_value=symbols_list[-1], dtype="<U1")
-        printl(arr)
         for i, ch in enumerate(symbols_list[:shape]):
             arr[i] = ch
         return arr

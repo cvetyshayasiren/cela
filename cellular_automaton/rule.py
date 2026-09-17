@@ -1,3 +1,4 @@
+from config import Config
 import re
 from typing import Set
 
@@ -39,7 +40,7 @@ class Rule:
                 raise ValueError("invalid digits")
             return {int(c) for c in digits}
 
-        if not aging_part.isdigit() or int(aging_part) < 1:
+        if not aging_part.isdigit() or int(aging_part) < 1 or int(aging_part) > Config.MAX_AGING:
             raise ValueError("invalid aging")
 
         return Rule(

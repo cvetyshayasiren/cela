@@ -7,7 +7,12 @@ from main.colors import ColorManager
 from randomisation.random_seed import RandomSeed
 
 
-def main(stdscr: curses.window, args: argparse.Namespace):
+def main():
+    args = arg_parser()
+    RandomSeed.init(seed = args.seed)
+    curses.wrapper(run, args)
+
+def run(stdscr: curses.window, args: argparse.Namespace):
     curses.curs_set(0)
     ColorManager.initialise_random_colors()
     args = complete_namespace(stdscr=stdscr, args=args)
@@ -15,11 +20,5 @@ def main(stdscr: curses.window, args: argparse.Namespace):
     player = Player(caparams = caparams)
     player.play()
 
-def initialiseo():
-  args = arg_parser()
-  RandomSeed.init(seed = args.seed)
-  curses.wrapper(main, args)
-
-    
 if __name__ == "__main__":
-    initialiseo()
+    main()

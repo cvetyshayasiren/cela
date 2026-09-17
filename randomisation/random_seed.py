@@ -1,7 +1,7 @@
 import numpy as np
 
 class RandomSeed:
-    rng: np.random.Generator | None = None
+    rng: np.random.Generator
     seed: int | None = None
 
     @classmethod
