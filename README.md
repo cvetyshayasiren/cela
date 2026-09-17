@@ -32,6 +32,10 @@
 
 `cela` is designed for a terminal, so it works best in a reasonably large window with color support.
 
+<p align="center">
+  <img src="assets/ca.gif" alt="cela cellular automaton demo" width="720">
+</p>
+
 ## Requirements
 
 - Python 3.11 or newer
