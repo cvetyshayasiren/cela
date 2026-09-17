@@ -1,4 +1,5 @@
 from __future__ import annotations
+from debug import printl
 
 import curses
 from enum import Enum, auto
@@ -35,10 +36,11 @@ class Caparams():
         self.symbols_array = self.build_symbols_array(symbols=symbols)
 
     def build_symbols_array(self, symbols: str):
-        symbols = list(symbols) or [" ", "■"]
+        symbols_list = list(symbols) or [" ", "■"]
         shape = self.rule.aging + 1
-        arr = np.full(shape=shape, fill_value=symbols[-1], dtype="<U1")
-        for i, ch in enumerate(symbols[:shape]):
+        arr = np.full(shape=shape, fill_value=symbols_list[-1], dtype="<U1")
+        printl(arr)
+        for i, ch in enumerate(symbols_list[:shape]):
             arr[i] = ch
         return arr
 

@@ -7,7 +7,7 @@ from cellular_automaton.rule import Rule
 from randomisation.randoms import random_symbols
 from randomisation.random_seed import RandomSeed
 
-def arg_parser(stdscr: curses.window):
+def arg_parser() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Cellular automaton in the terminal"
     )
@@ -54,12 +54,10 @@ def arg_parser(stdscr: curses.window):
     )
 
     args = parser.parse_args()
-    complete_args = complete_namespace(stdscr=stdscr, args=args)
-    return complete_args
+    return args
 
 
 def complete_namespace(stdscr, args: argparse.Namespace) -> argparse.Namespace:
-    RandomSeed.init(seed = args.seed)
     h, w = stdscr.getmaxyx()
     if args.width is None:
         args.width = w

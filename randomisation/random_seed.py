@@ -1,11 +1,11 @@
 import numpy as np
 
 class RandomSeed:
-    rng: np.random.Generator = None
-    seed: int = None
+    rng: np.random.Generator | None = None
+    seed: int | None = None
 
     @classmethod
-    def init(cls, seed):
+    def init(cls, seed: int):
         if seed is None:
             seed = np.random.SeedSequence().entropy
         cls.rng = np.random.default_rng(seed)
