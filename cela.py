@@ -8,6 +8,7 @@ from randomisation.random_seed import RandomSeed
 
 
 def main(stdscr: curses.window, args: argparse.Namespace):
+    curses.curs_set(0)
     ColorManager.initialise_random_colors()
     args = complete_namespace(stdscr=stdscr, args=args)
     caparams = args_to_params(stdscr = stdscr, args = args)
