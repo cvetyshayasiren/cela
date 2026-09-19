@@ -1,3 +1,5 @@
+from parsing.arg_parser import args_to_params
+from parsing.arg_builder import ArgBuilder
 import curses
 
 from main.ca_params import Caparams, StuckBehaviour
@@ -15,6 +17,7 @@ class Player:
         self.paused = False
         self.dragging = False
         self.init_mouse()
+        self.output: str = ""
 
     def play(self):
         if self.is_playing: return
@@ -63,9 +66,9 @@ class Player:
             self.caparams.figure.fill_full_random()
             self.draw_if_paused()
 
-        elif ord('1') <= key <= ord('9'): 
+        elif ord('0') <= key <= ord('9'): 
             digit = key - ord('0')
-            self.caparams.figure.contain_rect_in_center(digit, digit)
+            self.caparams.figure.fill_random_range(low=digit/10, high=(digit+1)/10)
             self.draw_if_paused()
 
         elif key == ord('b'):
@@ -91,6 +94,13 @@ class Player:
         elif key == ord('i'):
             self.render.toogle_tips()
             self.draw_if_paused()
+
+        elif key == ord('`'):
+            self.pause()
+            self.output = ArgBuilder.build_args_string(caparams=self.caparams)
+            self.stop()
+            
+            
 
 
 

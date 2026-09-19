@@ -1,7 +1,6 @@
 from __future__ import annotations
 import statistics
 from cellular_automaton.figure import Figure
-from ty_extensions import Unknown
 from numpy import e
 
 import ast
@@ -55,7 +54,7 @@ class CellCalculations():
   }
 
   @classmethod
-  def _eval(cls: Unknown, node: ast.AST, env: dict[str, float]) -> float:
+  def _eval(cls: type["CellCalculations"], node: ast.AST, env: dict[str, float]) -> float:
     if isinstance(node, ast.Constant) and isinstance(node.value, (int, float)):
         return node.value
     if isinstance(node, ast.Name):
@@ -69,6 +68,6 @@ class CellCalculations():
     raise ValueError("invalid expression")
 
   @classmethod
-  def eval_expr(cls: Unknown, expr: str, env: dict[str, float]) -> float:
+  def eval_expr(cls: type["CellCalculations"], expr: str, env: dict[str, float]) -> float:
     tree = ast.parse(expr.strip(), mode="eval").body
     return cls._eval(node=tree, env=env)

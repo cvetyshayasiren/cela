@@ -10,7 +10,9 @@ from randomisation.random_seed import RandomSeed
 def main():
     args = arg_parser()
     RandomSeed.init(seed = args.seed)
-    curses.wrapper(run, args)
+    output = curses.wrapper(run, args)
+    if(output): print(output)
+    
 
 def run(stdscr: curses.window, args: argparse.Namespace):
     curses.curs_set(0)
@@ -19,6 +21,7 @@ def run(stdscr: curses.window, args: argparse.Namespace):
     player = Player(caparams = caparams)
     if args.pause: player.pause()
     player.play()
+    return player.output
 
 if __name__ == "__main__":
     main()

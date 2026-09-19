@@ -26,7 +26,7 @@ class Render():
             if i >= h or j >= w - 1: continue
             value = generation[i, j]
             self.caparams.stdscr.addstr(i, j, 
-                                        self.caparams.symbols_array[value], 
+                                        self.caparams.get_symbol(age=value),
                                         curses.color_pair(ColorManager.pair_for_aging(value))
                                        )
         self.draw_tips(paused = paused, h = h, w = w)

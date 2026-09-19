@@ -16,13 +16,16 @@ class Figure:
 
     def blank_field(self):
         self.generation[:] = 0
-
+    
     def fill_random(self, fraction: float = 0.5):
         num_ones = int(self.generation.size * fraction)
         flat = self.generation.ravel()
         flat[:] = 0
         idx = RandomSeed.rng.choice(flat.size, num_ones, replace=False)
         flat[idx] = 1
+
+    def fill_random_range(self, low: float = 0, high: float = 1): 
+        self.fill_random(fraction=RandomSeed.rng.uniform(low, high))
 
     def fill_full_random(self): self.fill_random(fraction = RandomSeed.rng.random())
 

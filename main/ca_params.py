@@ -36,12 +36,15 @@ class Caparams():
         self.symbols_array = self.build_symbols_array(symbols=symbols)
 
     def build_symbols_array(self, symbols: str):
-        symbols_list = list(symbols) or [" ", "■"]
-        shape = Config.MAX_AGING + 1
-        arr = np.full(shape=shape, fill_value=symbols_list[-1], dtype="<U1")
-        for i, ch in enumerate(symbols_list[:shape]):
-            arr[i] = ch
-        return arr
+        return np.array(list(symbols) or [" ", "■"], dtype="<U1")
+
+    def get_symbol(self, age: int): 
+        return self.symbols_array[min(age, len(self.symbols_array) - 1)]
+
+    def get_blank_symbol(self):
+        return self.symbols_array[0] if len(self.symbols_array) else " "
+
+    def get_symbols_string(self) -> str: return "".join(self.symbols_array)
 
     def increase_delay(self, by: float = 2): self.set_delay(self.delay * by)
 
@@ -51,9 +54,6 @@ class Caparams():
 
     def fix_delay(self, candidate: float) -> float:
         return (0 if candidate < Config.MIN_DELAY else round(min(max(candidate, 0.01), Config.MAX_DELAY), 2)) if candidate > 0 else Config.MIN_DELAY
-
-    def get_blank_symbol(self):
-        return self.symbols_array[0] if len(self.symbols_array) else " "
 
 class StuckBehaviour(Enum):
     PAUSE = auto()

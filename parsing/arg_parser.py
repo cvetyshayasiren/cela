@@ -64,7 +64,7 @@ def arg_parser() -> argparse.Namespace:
     )
 
     parser.add_argument(
-        "-c", "--contain", type=str, dest="contain", nargs="+",
+        "-c", "--contain", type=str, dest="contain", nargs="*",
         help="cells to set: 'x:y[:a]', space-separated. "
          "x/y/a are numbers or expressions with w, h, a "
          "(e.g. '3:2:4 w/2:h/3 5:w/2'). Default: random"
