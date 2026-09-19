@@ -37,7 +37,7 @@ class Caparams():
 
     def build_symbols_array(self, symbols: str):
         symbols_list = list(symbols) or [" ", "■"]
-        shape = self.rule.aging + 1
+        shape = Config.MAX_AGING + 1
         arr = np.full(shape=shape, fill_value=symbols_list[-1], dtype="<U1")
         for i, ch in enumerate(symbols_list[:shape]):
             arr[i] = ch

@@ -1,3 +1,4 @@
+from config import Config
 from cellular_automaton.rule import Rule
 import numpy as np
 from randomisation.random_seed import RandomSeed
@@ -35,7 +36,8 @@ class Figure:
         self.contain_rect(x=x_start, y=y_start, width=width, height=height)
 
     def contain_cell(self, x: int, y: int, age: int):
-        if(x > self.width or y > self.height): return
+        if(x > self.width or y > self.height or age > Config.MAX_AGING): return
+        self.generation[y, x] = age
     
     def toogle_cell(self, x: int, y: int):
         if(x > self.width or y > self.height): return

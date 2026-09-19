@@ -19,12 +19,16 @@ class ColorManager:
         return curses.COLORS - 1
 
     @classmethod
+    def num_available_pair(cls):
+        return curses.COLOR_PAIRS - 1
+
+    @classmethod
     def list_available_colors(cls):
         return list(range(1, curses.COLORS))
 
     @classmethod
     def num_necessary_colors(cls):
-        return min(cls.num_colors, cls.num_available_colors())
+        return min(cls.num_colors, cls.num_available_colors(), cls.num_available_pair())
 
     @classmethod
     def initialise_random_colors(cls):
@@ -44,12 +48,16 @@ class ColorManager:
     @classmethod
     def random_background(cls, caparams: Caparams):
         back = RandomSeed.rng.integers(1, cls.num_available_colors() + 1)
-        for i in range(0, cls.num_necessary_colors()):
+        for i in range(1, cls.num_necessary_colors() + 1):
             fg, _ = curses.pair_content(i)
             curses.init_pair(i, fg, back)
         caparams.stdscr.bkgd(caparams.get_blank_symbol(), curses.color_pair(1))
 
     @classmethod
     def reset_colors(cls):
-        for i in range(1, cls.num_necessary_colors()):
+        for i in range(1, cls.num_necessary_colors() + 1):
             curses.init_pair(i, curses.COLOR_WHITE, -1)
+
+    @classmethod
+    def pair_for_aging(cls, aging: int) -> int:
+        return min(aging, cls.num_necessary_colors())

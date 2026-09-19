@@ -16,7 +16,6 @@ class Player:
         self.dragging = False
         self.init_mouse()
 
-
     def play(self):
         if self.is_playing: return
         self.is_playing = True
@@ -32,8 +31,13 @@ class Player:
     def stop(self):
         self.is_playing = False
 
-    def pause_toogle(self):
-        self.paused = not self.paused
+    def pause(self): self.pause_toogle(True)
+    def unpause(self): self.pause_toogle(False)
+    def pause_toogle(self, value: bool | None = None):
+        if value is not None:
+            self.paused = value
+        else:
+            self.paused = not self.paused
         self.draw_if_paused()
 
     def button_handler(self):

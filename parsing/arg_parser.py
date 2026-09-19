@@ -41,9 +41,17 @@ def arg_parser() -> argparse.Namespace:
         "-S", "--seed", type=int, default=None, dest = "seed",
         help="random seed for reproducibility, default: random"
     )
+    parser.add_argument(
+        "-b", "--blank", action="store_true", dest = "blank",
+        help="clear the field before starting"
+    )
+    parser.add_argument(
+        "-p", "--pause", action="store_true", dest = "pause",
+        help="start paused"
+    )
 
     parser.add_argument(
-        "-b", "--behaviour",
+        "-B", "--behaviour",
         type=lambda v: StuckBehaviour[v.upper()],
         choices=list(StuckBehaviour),
         default=StuckBehaviour.CONTINUE,
@@ -65,39 +73,29 @@ def arg_parser() -> argparse.Namespace:
     args = parser.parse_args()
     return args
 
-
-def complete_namespace(stdscr, args: argparse.Namespace) -> argparse.Namespace:
-    h, w = stdscr.getmaxyx()
-    if args.width is None:
-        args.width = w
-    if args.height is None:
-        args.height = h if args.fullscreen else h - 1
-    if args.rule is None:
-        args.rule = Rule.game_of_fly
-    else:
-        try:
-            args.rule = RuleParse.from_string(args.rule).to_string()
-        except ValueError as e:
-            raise argparse.ArgumentTypeError(f"invalid rule {args.rule!r}: {e}")
-    if args.symbols is None:
-        args.symbols = random_symbols()
-    if args.seed is None:
-        args.seed = RandomSeed.seed
-    return args
-
 def args_to_params(stdscr, args: argparse.Namespace) -> Caparams:
-    h, w = stdscr.getmaxyx()
-    
-    
-    figure = Figure(width = args.width, height = args.height)
-    figure.fill_full_random()
+    height, width = stdscr.getmaxyx()
+    if args.fullscreen is None: height-=1
+    if args.width: width = args.width
+    if args.height: height = args.height
+
+    rule: Rule = parse_or_raise("Rule", RuleParse.from_string, Rule.game_of_fly if args.rule is None else args.rule)
+    figure = Figure(width = width, height = height)
+    if args.blank is None: figure.fill_full_random()
+    if(args.contain): parse_or_raise("contain", FigureParse.contain_cells, figure, rule.aging, args.contain)
     
     return Caparams(
         stdscr = stdscr,
         figure = figure,
-        rule = RuleParse.from_string(args.rule),
+        rule = rule,
         delay = args.delay,
         stuck_behaviour=args.behaviour,
-        symbols = args.symbols,
-        seed = args.seed
+        symbols = random_symbols() if args.symbols is None else args.symbols,
+        seed = RandomSeed.seed if args.seed is None else args.seed
     )
+
+def parse_or_raise(label: str, fn, *args, **kwargs):
+    try:
+        return fn(*args, **kwargs)
+    except ValueError as e:
+        raise argparse.ArgumentTypeError(f"invalid {label}: {e}")

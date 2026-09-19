@@ -1,4 +1,5 @@
 from __future__ import annotations
+from main.colors import ColorManager
 import curses
 
 import numpy as np
@@ -26,7 +27,8 @@ class Render():
             value = generation[i, j]
             self.caparams.stdscr.addstr(i, j, 
                                         self.caparams.symbols_array[value], 
-                                        curses.color_pair(value))
+                                        curses.color_pair(ColorManager.pair_for_aging(value))
+                                       )
         self.draw_tips(paused = paused, h = h, w = w)
 
         self.caparams.stdscr.refresh()

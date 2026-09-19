@@ -8,35 +8,32 @@ import ast
 import operator
 
 class FigureParse:
-
   @staticmethod
   def contain_cells(figure: Figure, aging: int, cells: list[str]):
     cells_list = FigureParse.cell_parse(cells=cells, w=figure.width, h=figure.height, aging=aging)
     for cell in cells_list:
-      pass
+      figure.contain_cell(x=cell.x, y=cell.y, age=cell.a)
   
-    
   @staticmethod
   def cell_parse(cells: list[str], w: int, h: int, aging: int) -> list[Cell]:
     return [ Cell.cell_parse(c, w, h, aging) for c in cells ]
-
+    
 
 class Cell():
-
-  def __init__(self, x: int, y: int, aging: int):
+  def __init__(self, x: int, y: int, a: int):
     self.x = x
     self.y = y
-    self.aging = aging
+    self.a = a
 
   @staticmethod
-  def cell_parse(cell: str, w: int, h: int, aging: int) -> Cell:
+  def cell_parse(cell: str, w: int, h: int, max_age: int) -> Cell:
     parts = cell.split(":")
     if len(parts) not in (2, 3):
         raise ValueError(f"expected 'x:y[:a]', got {cell!r}")
     x, y = parts[0], parts[1]
     a = parts[2] if len(parts) == 3 else 1
 
-    env: dict[str, int | float] = {"w": w, "h": h, "a": aging}
+    env: dict[str, int | float] = {"w": w, "h": h, "a": max_age}
     x = int(CellCalculations.eval_expr(parts[0], env))
     y = int(CellCalculations.eval_expr(parts[1], env))
     a = int(CellCalculations.eval_expr(parts[2], env)) if len(parts) == 3 else 1
