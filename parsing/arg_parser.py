@@ -1,3 +1,5 @@
+from parsing.rule_parse import RuleParse
+from parsing.figure_parse import FigureParse
 import argparse
 import curses
 
@@ -54,10 +56,10 @@ def arg_parser() -> argparse.Namespace:
     )
 
     parser.add_argument(
-        "-c", "--contain", type=str, dest= "contain",
-        metavar="EXPR;EXPR;...",
-        help="cells to set to 1: numbers, w/h/cw/ch, or math like w/3,h*0.5. "
-             "e.g. -c 11,12;cw/ch;w/4,h/3"
+        "-c", "--contain", type=str, dest="contain", nargs="+",
+        help="cells to set: 'x:y[:a]', space-separated. "
+         "x/y/a are numbers or expressions with w, h, a "
+         "(e.g. '3:2:4 w/2:h/3 5:w/2'). Default: random"
     )
 
     args = parser.parse_args()
@@ -74,23 +76,26 @@ def complete_namespace(stdscr, args: argparse.Namespace) -> argparse.Namespace:
         args.rule = Rule.game_of_fly
     else:
         try:
-            args.rule = Rule.from_string(args.rule).to_string()
+            args.rule = RuleParse.from_string(args.rule).to_string()
         except ValueError as e:
             raise argparse.ArgumentTypeError(f"invalid rule {args.rule!r}: {e}")
     if args.symbols is None:
         args.symbols = random_symbols()
     if args.seed is None:
         args.seed = RandomSeed.seed
-
     return args
 
 def args_to_params(stdscr, args: argparse.Namespace) -> Caparams:
+    h, w = stdscr.getmaxyx()
+    
+    
     figure = Figure(width = args.width, height = args.height)
     figure.fill_full_random()
+    
     return Caparams(
         stdscr = stdscr,
         figure = figure,
-        rule = Rule.from_string(args.rule),
+        rule = RuleParse.from_string(args.rule),
         delay = args.delay,
         stuck_behaviour=args.behaviour,
         symbols = args.symbols,

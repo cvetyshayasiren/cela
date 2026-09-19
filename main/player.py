@@ -95,7 +95,7 @@ class Player:
         try:
             _, x, y, _, bstate = curses.getmouse()
             if bstate & curses.BUTTON1_CLICKED:
-                self.caparams.figure.contain_dot(x = x, y = y)
+                self.caparams.figure.toogle_cell(x = x, y = y)
                 self.draw_if_paused()
 
             elif bstate & curses.BUTTON1_PRESSED and not self.dragging:

@@ -1,7 +1,7 @@
 import argparse
 import curses
 
-from main.arg_parser import arg_parser, args_to_params, complete_namespace
+from parsing.arg_parser import arg_parser, args_to_params, complete_namespace
 from main.player import Player
 from main.colors import ColorManager
 from randomisation.random_seed import RandomSeed

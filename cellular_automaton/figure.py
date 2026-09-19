@@ -34,7 +34,10 @@ class Figure:
         x_start = (self.width - width) // 2
         self.contain_rect(x=x_start, y=y_start, width=width, height=height)
 
-    def contain_dot(self, x: int, y: int):
+    def contain_cell(self, x: int, y: int, age: int):
+        if(x > self.width or y > self.height): return
+    
+    def toogle_cell(self, x: int, y: int):
         if(x > self.width or y > self.height): return
         value = self.generation[y, x]
         self.generation[y, x] = 0 if value else 1
