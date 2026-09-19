@@ -44,9 +44,10 @@ class Render():
             "c - randomise color\n"
             "s - randomise symbols\n"
             "(1-9) - add square in center\n"
-            "b - blank field"
+            "b - blank field\n"
+            f"rule {self.caparams.rule.string}"
         )
-        number_tips_cols = tips_string.count("\n") + 1
+        number_tips_cols = tips_string.count("\n") + 2
 
         if(self.tips_mode == TipsMode.FULL):
             self.caparams.stdscr.addstr(h - number_tips_cols, 0, tips_string)

@@ -53,6 +53,13 @@ def arg_parser() -> argparse.Namespace:
             "Default: continue"
     )
 
+    parser.add_argument(
+        "-c", "--contain", type=str, dest= "contain",
+        metavar="EXPR;EXPR;...",
+        help="cells to set to 1: numbers, w/h/cw/ch, or math like w/3,h*0.5. "
+             "e.g. -c 11,12;cw/ch;w/4,h/3"
+    )
+
     args = parser.parse_args()
     return args
 
