@@ -6,7 +6,7 @@ import curses
 from main.ca_params import Caparams, StuckBehaviour
 from cellular_automaton.figure import Figure
 from cellular_automaton.rule import Rule
-from randomisation.randoms import random_symbols
+from randomisation.randoms import random_symbols, random_rule, random_prepared_rule
 from randomisation.random_seed import RandomSeed
 
 def arg_parser() -> argparse.Namespace:
@@ -79,7 +79,7 @@ def args_to_params(stdscr, args: argparse.Namespace) -> Caparams:
     if args.width: width = args.width
     if args.height: height = args.height
 
-    rule: Rule = parse_or_raise("Rule", RuleParse.from_string, Rule.game_of_fly if args.rule is None else args.rule)
+    rule: Rule = parse_or_raise("Rule", RuleParse.from_string, random_prepared_rule() if args.rule is None else args.rule)
     figure = Figure(width = width, height = height)
     if args.blank is None: figure.fill_full_random()
     if(args.contain): parse_or_raise("contain", FigureParse.contain_cells, figure, rule.aging, args.contain)

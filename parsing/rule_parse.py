@@ -19,7 +19,8 @@ class RuleParse:
 
       def parse_digits(part: str) -> set[int]:
           digits = part[1:]
-          if not digits or not digits.isdigit():
+          if not digits: return set()
+          if not digits.isdigit(): 
               raise ValueError("invalid digits")
           return {int(c) for c in digits}
 
