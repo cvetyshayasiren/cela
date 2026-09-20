@@ -18,6 +18,7 @@ class Figure:
         self.generation[:] = 0
     
     def fill_random(self, fraction: float = 0.5):
+        fraction = max(min(fraction, 1), 0)
         num_ones = int(self.generation.size * fraction)
         flat = self.generation.ravel()
         flat[:] = 0

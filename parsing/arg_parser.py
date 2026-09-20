@@ -23,12 +23,16 @@ def arg_parser() -> argparse.Namespace:
         help="field height (cells vertically), default: fit to screen (status bar excluded)"
     )
     parser.add_argument(
-        "-f", "--fullscreen", dest="fullscreen", action="store_true",
+        "-F", "--fullscreen", dest="fullscreen", action="store_true",
         help="field fills the screen; ignored for dimensions set via -W/-H"
     )
     parser.add_argument(
         "-b", "--blank", action="store_true", dest = "blank",
         help="clear the field before starting"
+    )
+    parser.add_argument(
+        "-f", "--fill", type=float, default=None, dest = "fill", metavar="FRACTION",
+        help="randomly fill the field with 1s at given fraction (0.0..1.0), default: random"
     )
     parser.add_argument(
         "-c", "--contain", type=str, dest="contain", nargs="*",
@@ -62,16 +66,6 @@ def arg_parser() -> argparse.Namespace:
         "-d", "--delay", type=float, dest="delay", default=0.1,
         help="delay between frames in seconds, default 0.1"
     )
-
-    #other
-    parser.add_argument(
-        "-S", "--seed", type=int, default=None, dest = "seed",
-        help="random seed for reproducibility, default: random"
-    )
-    parser.add_argument(
-        "-s", "--symbols", type=str, dest = "symbols",
-        help="symbols used to render cells (e.g. ' .oO'), default: random"
-    )
     parser.add_argument(
         "-B", "--behaviour",
         type=lambda v: StuckBehaviour[v.upper()],
@@ -85,7 +79,22 @@ def arg_parser() -> argparse.Namespace:
             "Default: continue"
     )
 
-    #random
+    #other
+    parser.add_argument(
+        "-S", "--seed", type=int, default=None, dest = "seed",
+        help="random seed for reproducibility, default: random"
+    )
+    parser.add_argument(
+        "-s", "--symbols", type=str, dest = "symbols",
+        help="symbols used to render cells (e.g. ' .oO'), default: random"
+    )
+
+
+    ##RANDOM
+    #figure
+    
+    
+    #rule
     group_rule.add_argument(
         "-rr", action="store_true", dest="rr",
         help= "absolute random rule"
@@ -120,7 +129,8 @@ def args_to_params(stdscr, args: argparse.Namespace) -> Caparams:
     if args.width: width = args.width
     if args.height: height = args.height
     figure = Figure(width = width, height = height)
-    if args.blank is None: figure.fill_full_random()
+    if(args.fill): figure.fill_random(fraction=args.fill)
+    if args.blank: figure.blank_field()
     if(args.contain): parse_or_raise("contain", FigureParse.contain_cells, figure, rule.aging, args.contain)
 
     return Caparams(
