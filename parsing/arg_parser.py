@@ -13,6 +13,7 @@ def arg_parser() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Cellular automaton in the terminal"
     )
+    #figure
     parser.add_argument(
         "-W", "--width", type=int, dest="width",
         help="field width (cells horizontally), default: fit to screen"
@@ -22,47 +23,55 @@ def arg_parser() -> argparse.Namespace:
         help="field height (cells vertically), default: fit to screen (status bar excluded)"
     )
     parser.add_argument(
-        "-d", "--delay", type=float, dest="delay", default=0.1,
-        help="delay between frames in seconds, default 0.1"
-    )
-    parser.add_argument(
         "-f", "--fullscreen", dest="fullscreen", action="store_true",
         help="field fills the screen; ignored for dimensions set via -W/-H"
-    )
-    parser.add_argument(
-        "-s", "--symbols", type=str, dest = "symbols",
-        help="symbols used to render cells (e.g. ' .oO'), default: random"
-    )
-    parser.add_argument(
-        "-S", "--seed", type=int, default=None, dest = "seed",
-        help="random seed for reproducibility, default: random"
     )
     parser.add_argument(
         "-b", "--blank", action="store_true", dest = "blank",
         help="clear the field before starting"
     )
     parser.add_argument(
-        "-p", "--pause", action="store_true", dest = "pause",
-        help="start paused"
+        "-c", "--contain", type=str, dest="contain", nargs="*",
+        help="cells to set: 'x:y[:a]', space-separated. "
+         "x/y/a are numbers or expressions with w, h, a "
+         "(e.g. '3:2:4 w/2:h/3 5:w/2'). Default: random"
     )
 
-    # rule parse
-    group = parser.add_mutually_exclusive_group()
-    group.add_argument(
+
+    #rule
+    group_rule = parser.add_mutually_exclusive_group()
+    group_rule.add_argument(
         "-r", "--rule", type=str, dest = "rule",
         help="rule in B/S/ notation (e.g. B2/S0345/10), default: random"
     )
-    group.add_argument(
-        "--gol", action="store_true",
+    group_rule.add_argument(
+        "-gol", action="store_true", dest = "gol",
         help="start with Game of Life rule (B3/S23)"
     )
-    group.add_argument(
-        "--gof", action="store_true",
+    group_rule.add_argument(
+        "-gof", action="store_true", dest = "gof",
         help="start with Game of Fly rule (B2/S0345/10)"
     )
 
+    #player
+    parser.add_argument(
+        "-p", "--pause", action="store_true", dest = "pause",
+        help="start paused"
+    )
+    parser.add_argument(
+        "-d", "--delay", type=float, dest="delay", default=0.1,
+        help="delay between frames in seconds, default 0.1"
+    )
 
-
+    #other
+    parser.add_argument(
+        "-S", "--seed", type=int, default=None, dest = "seed",
+        help="random seed for reproducibility, default: random"
+    )
+    parser.add_argument(
+        "-s", "--symbols", type=str, dest = "symbols",
+        help="symbols used to render cells (e.g. ' .oO'), default: random"
+    )
     parser.add_argument(
         "-B", "--behaviour",
         type=lambda v: StuckBehaviour[v.upper()],
@@ -76,33 +85,44 @@ def arg_parser() -> argparse.Namespace:
             "Default: continue"
     )
 
-    parser.add_argument(
-        "-c", "--contain", type=str, dest="contain", nargs="*",
-        help="cells to set: 'x:y[:a]', space-separated. "
-         "x/y/a are numbers or expressions with w, h, a "
-         "(e.g. '3:2:4 w/2:h/3 5:w/2'). Default: random"
+    #random
+    group_rule.add_argument(
+        "-rr", action="store_true", dest="rr",
+        help= "absolute random rule"
     )
+    group_rule.add_argument(
+        "-rra", action="store_true", dest="rra",
+        help= "random rule with age"
+    )
+    group_rule.add_argument(
+        "-rrs", action="store_true", dest="rrs",
+        help= "random rule without age (simple)"
+    )
+    
 
     args = parser.parse_args()
     return args
 
 def args_to_params(stdscr, args: argparse.Namespace) -> Caparams:
+
+    #rule
+    rule: Rule = random_prepared_rule()
+    if args.gol: rule = RuleParse.from_string(Rule.game_of_life)
+    if args.gof: rule = RuleParse.from_string(Rule.game_of_fly)
+    if args.rr: rule = random_rule()
+    if args.rra: rule = random_rule(aging_only=True)
+    if args.rrs: rule = random_rule(aging_only=False)
+    if args.rule: rule = parse_or_raise("Rule", RuleParse.from_string, args.rule)
+    
+    #figure
     height, width = stdscr.getmaxyx()
     if args.fullscreen is None: height-=1
     if args.width: width = args.width
     if args.height: height = args.height
-        
-    if args.gol: rule: Rule = RuleParse.from_string(Rule.game_of_life)
-    elif args.gof: rule: Rule = RuleParse.from_string(Rule.game_of_fly)
-    else:
-        rule: Rule = (parse_or_raise("Rule", RuleParse.from_string, args.rule) 
-              if args.rule is not None else random_prepared_rule())
-        
-    
     figure = Figure(width = width, height = height)
     if args.blank is None: figure.fill_full_random()
     if(args.contain): parse_or_raise("contain", FigureParse.contain_cells, figure, rule.aging, args.contain)
-    
+
     return Caparams(
         stdscr = stdscr,
         figure = figure,
