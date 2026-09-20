@@ -30,10 +30,6 @@ def arg_parser() -> argparse.Namespace:
         help="field fills the screen; ignored for dimensions set via -W/-H"
     )
     parser.add_argument(
-        "-r", "--rule", type=str, dest = "rule",
-        help="rule in B/S/ notation (e.g. B2/S0345/10), default: random"
-    )
-    parser.add_argument(
         "-s", "--symbols", type=str, dest = "symbols",
         help="symbols used to render cells (e.g. ' .oO'), default: random"
     )
@@ -49,6 +45,23 @@ def arg_parser() -> argparse.Namespace:
         "-p", "--pause", action="store_true", dest = "pause",
         help="start paused"
     )
+
+    # rule parse
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument(
+        "-r", "--rule", type=str, dest = "rule",
+        help="rule in B/S/ notation (e.g. B2/S0345/10), default: random"
+    )
+    group.add_argument(
+        "--gol", action="store_true",
+        help="start with Game of Life rule (B3/S23)"
+    )
+    group.add_argument(
+        "--gof", action="store_true",
+        help="start with Game of Fly rule (B2/S0345/10)"
+    )
+
+
 
     parser.add_argument(
         "-B", "--behaviour",
@@ -78,8 +91,14 @@ def args_to_params(stdscr, args: argparse.Namespace) -> Caparams:
     if args.fullscreen is None: height-=1
     if args.width: width = args.width
     if args.height: height = args.height
-
-    rule: Rule = parse_or_raise("Rule", RuleParse.from_string, random_prepared_rule() if args.rule is None else args.rule)
+        
+    if args.gol: rule: Rule = RuleParse.from_string(Rule.game_of_life)
+    elif args.gof: rule: Rule = RuleParse.from_string(Rule.game_of_fly)
+    else:
+        rule: Rule = (parse_or_raise("Rule", RuleParse.from_string, args.rule) 
+              if args.rule is not None else random_prepared_rule())
+        
+    
     figure = Figure(width = width, height = height)
     if args.blank is None: figure.fill_full_random()
     if(args.contain): parse_or_raise("contain", FigureParse.contain_cells, figure, rule.aging, args.contain)
