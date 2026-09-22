@@ -9,10 +9,12 @@ from cellular_automaton.rule import Rule
 from randomisation.randoms import random_symbols, random_rule, random_prepared_rule
 from randomisation.random_seed import RandomSeed
 
+
 def arg_parser() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Cellular automaton in the terminal"
     )
+
     #figure
     parser.add_argument(
         "-W", "--width", type=int, dest="width",
@@ -45,7 +47,7 @@ def arg_parser() -> argparse.Namespace:
     #rule
     group_rule = parser.add_mutually_exclusive_group()
     group_rule.add_argument(
-        "-r", "--rule", type=str, dest = "rule",
+        "-r", "--rule", type= lambda s: parse_or_raise("rule", RuleParse.from_string, s), dest = "rule",
         help="rule in B/S/ notation (e.g. B2/S0345/10), default: random"
     )
     group_rule.add_argument(
@@ -121,7 +123,7 @@ def args_to_params(stdscr, args: argparse.Namespace) -> Caparams:
     if args.rr: rule = random_rule()
     if args.rra: rule = random_rule(aging_only=True)
     if args.rrs: rule = random_rule(aging_only=False)
-    if args.rule: rule = parse_or_raise("Rule", RuleParse.from_string, args.rule)
+    if args.rule: rule = args.rule
     
     #figure
     height, width = stdscr.getmaxyx()
@@ -148,3 +150,4 @@ def parse_or_raise(label: str, fn, *args, **kwargs):
         return fn(*args, **kwargs)
     except ValueError as e:
         raise argparse.ArgumentTypeError(f"invalid {label}: {e}")
+    

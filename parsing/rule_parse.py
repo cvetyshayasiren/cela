@@ -3,8 +3,6 @@ from cellular_automaton.rule import Rule
 
 
 class RuleParse:
-
-  @staticmethod
   def from_string(string: str) -> Rule:
       string = string.upper()
       parts = string.split('/')
