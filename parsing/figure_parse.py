@@ -12,8 +12,8 @@ import operator
 
 class FigureParse:
   @staticmethod
-  def validate_contains(contains: list[str]) -> list[Cell]:
-    return [ Cell.validate(contain) for contain in contains ]
+  def validate_contains(contain: str) -> Cell:
+    return Cell.validate(contain)
 
   @staticmethod
   def contain_cells(figure: Figure, max_age: int, cells: list[Cell]):

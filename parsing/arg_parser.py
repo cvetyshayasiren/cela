@@ -1,3 +1,4 @@
+from debug import printl
 from parsing.rule_parse import RuleParse
 from parsing.figure_parse import FigureParse
 import argparse
@@ -8,7 +9,6 @@ from cellular_automaton.figure import Figure
 from cellular_automaton.rule import Rule
 from randomisation.randoms import random_symbols, random_rule, random_prepared_rule
 from randomisation.random_seed import RandomSeed
-
 
 def arg_parser() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
@@ -37,10 +37,16 @@ def arg_parser() -> argparse.Namespace:
         help="randomly fill the field with 1s at given fraction (0.0..1.0), default: random"
     )
     parser.add_argument(
-        "-c", "--contain", type=str, dest="contain", nargs="*",
+        "-c", "--contain", type=FigureParse.validate_contains, dest="contain", nargs="*",
         help="cells to set: 'x:y[:a]', space-separated. "
          "x/y/a are numbers or expressions with w, h, a "
          "(e.g. '3:2:4 w/2:h/3 5:w/2'). Default: random"
+    )
+    parser.add_argument(
+        "-R", "--rect", type=lambda s: parse_or_raise("rect", FigureParse.rect_parse, s), dest = "rect",
+        metavar="W:H",
+        help="add a rectangle of size W:H in the center of the field "
+             "(e.g. '5:3'). Default: none"
     )
 
 
@@ -131,9 +137,10 @@ def args_to_params(stdscr, args: argparse.Namespace) -> Caparams:
     if args.width: width = args.width
     if args.height: height = args.height
     figure = Figure(width = width, height = height)
-    if(args.fill): figure.fill_random(fraction=args.fill)
+    if args.fill: figure.fill_random(fraction=args.fill)
     if args.blank: figure.blank_field()
-    if(args.contain): parse_or_raise("contain", FigureParse.contain_cells, figure, rule.aging, args.contain)
+    if args.contain: FigureParse.contain_cells(figure=figure, max_age=rule.aging, cells=args.contain)
+    if args.rect: FigureParse.contain_rect(figure=figure, rect = args.rect)
 
     return Caparams(
         stdscr = stdscr,

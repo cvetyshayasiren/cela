@@ -40,7 +40,7 @@ class Figure:
         self.contain_rect(x=x_start, y=y_start, width=width, height=height)
 
     def contain_cell(self, x: int, y: int, age: int):
-        if(x > self.width or y > self.height or age > Config.MAX_AGING): return
+        if(x >= self.width or y >= self.height or age > Config.MAX_AGING): return
         self.generation[y, x] = age
     
     def toogle_cell(self, x: int, y: int):
