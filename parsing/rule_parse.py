@@ -1,8 +1,15 @@
+from parsing.arg_parser import parse_or_raise
 from config import Config
 from cellular_automaton.rule import Rule
 
 
 class RuleParse:
+
+  @classmethod
+  def validate_rule(rule: str) -> Rule:
+      return parse_or_raise("rule", RuleParse.from_string, rule)
+      
+  @classmethod  
   def from_string(string: str) -> Rule:
       string = string.upper()
       parts = string.split('/')

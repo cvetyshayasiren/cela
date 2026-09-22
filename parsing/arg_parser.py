@@ -37,13 +37,13 @@ def arg_parser() -> argparse.Namespace:
         help="randomly fill the field with 1s at given fraction (0.0..1.0), default: random"
     )
     parser.add_argument(
-        "-c", "--contain", type=FigureParse.validate_contains, dest="contain", nargs="*",
+        "-c", "--contain", type=FigureParse.validate_contain, dest="contain", nargs="*",
         help="cells to set: 'x:y[:a]', space-separated. "
          "x/y/a are numbers or expressions with w, h, a "
          "(e.g. '3:2:4 w/2:h/3 5:w/2'). Default: random"
     )
     parser.add_argument(
-        "-R", "--rect", type=lambda s: parse_or_raise("rect", FigureParse.rect_parse, s), dest = "rect",
+        "-R", "--rect", type=FigureParse.validate_rect, dest = "rect",
         metavar="W:H",
         help="add a rectangle of size W:H in the center of the field "
              "(e.g. '5:3'). Default: none"
@@ -53,7 +53,7 @@ def arg_parser() -> argparse.Namespace:
     #rule
     group_rule = parser.add_mutually_exclusive_group()
     group_rule.add_argument(
-        "-r", "--rule", type=RuleParse.from_string, dest = "rule",
+        "-r", "--rule", type=RuleParse.validate_rule, dest = "rule",
         help="rule in B/S/ notation (e.g. B2/S0345/10), default: random"
     )
     group_rule.add_argument(
@@ -156,5 +156,5 @@ def parse_or_raise(label: str, fn, *args, **kwargs):
     try:
         return fn(*args, **kwargs)
     except ValueError as e:
-        raise argparse.ArgumentTypeError(f"invalid {label}: {e}")
+        raise argparse.ArgumentTypeError(f"invalid parse {label}: {e}")
     

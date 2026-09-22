@@ -1,4 +1,5 @@
 from __future__ import annotations
+from parsing.arg_parser import parse_or_raise
 import stat
 from numpy.distutils.extension import Extension
 from dataclasses import dataclass
@@ -12,14 +13,18 @@ import operator
 
 class FigureParse:
   @staticmethod
-  def validate_contains(contain: str) -> Cell:
-    return Cell.validate(contain)
+  def validate_contain(contain: str) -> Cell:
+    return parse_or_raise("contain", Cell.validate, contain)
 
   @staticmethod
   def contain_cells(figure: Figure, max_age: int, cells: list[Cell]):
     for cell in cells:
       cell.contain(figure=figure, max_age=max_age)
-  
+
+  @staticmethod
+  def validate_rect(rect: str) ->tuple[int, int]:
+      return parse_or_raise("rect", FigureParse.rect_parse, rect)
+    
   @staticmethod
   def rect_parse(arg: str) -> tuple[int, int]:
     parts = arg.split(":")
