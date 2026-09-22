@@ -53,7 +53,7 @@ def arg_parser() -> argparse.Namespace:
     #rule
     group_rule = parser.add_mutually_exclusive_group()
     group_rule.add_argument(
-        "-r", "--rule", type= lambda s: parse_or_raise("rule", RuleParse.from_string, s), dest = "rule",
+        "-r", "--rule", type=RuleParse.from_string, dest = "rule",
         help="rule in B/S/ notation (e.g. B2/S0345/10), default: random"
     )
     group_rule.add_argument(
