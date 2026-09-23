@@ -1,4 +1,5 @@
 from __future__ import annotations
+import string
 import stat
 from numpy.distutils.extension import Extension
 from dataclasses import dataclass
@@ -20,6 +21,10 @@ class FigureParse:
       return FigureParse.rect_parse(rect)
 
   @staticmethod
+  def validate_fraction(fraction: str) -> float:
+      return FigureParse.parse_fraction(fraction)
+
+  @staticmethod
   def contain_cells(figure: Figure, max_age: int, cells: list[Cell]):
     for cell in cells:
       cell.contain(figure=figure, max_age=max_age)
@@ -36,6 +41,16 @@ class FigureParse:
     if w <= 0 or h <= 0:
         raise ValueError(f"width and height must be > 0, got {w}:{h}")
     return w, h
+
+  @staticmethod
+  def parse_fraction(arg: str, low: float = 0.0, high: float = 1.0) -> float:
+      try:
+          f = float(arg)
+      except ValueError:
+          raise ValueError(f"expected a number, got {arg!r}")
+      if not low <= f <= high:
+          raise ValueError(f"must be 0.0..1.0, got {f}")
+      return f
 
   @staticmethod
   def contain_rect(figure: Figure, rect: tuple[int, int]):

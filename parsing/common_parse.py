@@ -21,8 +21,14 @@ class CommonParse():
         return CommonParse._parse_or_raise("rect", FigureParse.validate_rect, arg)
 
     @staticmethod
+    def figure_parse_fill_type(arg: str) -> float:
+        return CommonParse._parse_or_raise("fill", FigureParse.validate_fraction, arg)
+
+    @staticmethod
     def rule_parse_type(arg: str) -> Rule:
         return CommonParse._parse_or_raise("rule", RuleParse.validate_rule, arg)
+
+
 
     
 

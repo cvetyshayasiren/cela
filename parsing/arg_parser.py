@@ -34,7 +34,7 @@ def arg_parser() -> argparse.Namespace:
         help="clear the field before starting"
     )
     parser.add_argument(
-        "-f", "--fill", type=float, default=None, dest = "fill", metavar="FRACTION",
+        "-f", "--fill", type=CommonParse.figure_parse_fill_type, default=None, dest = "fill", metavar="FRACTION",
         help="randomly fill the field with 1s at given fraction (0.0..1.0), default: random"
     )
     parser.add_argument(
