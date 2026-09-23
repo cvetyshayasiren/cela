@@ -1,3 +1,4 @@
+from parsing.common_parse import CommonParse
 from debug import printl
 from parsing.rule_parse import RuleParse
 from parsing.figure_parse import FigureParse
@@ -37,13 +38,13 @@ def arg_parser() -> argparse.Namespace:
         help="randomly fill the field with 1s at given fraction (0.0..1.0), default: random"
     )
     parser.add_argument(
-        "-c", "--contain", type=FigureParse.validate_contain, dest="contain", nargs="*",
+        "-c", "--contain", type=CommonParse.figure_parse_contain_type, dest="contain", nargs="*",
         help="cells to set: 'x:y[:a]', space-separated. "
          "x/y/a are numbers or expressions with w, h, a "
          "(e.g. '3:2:4 w/2:h/3 5:w/2'). Default: random"
     )
     parser.add_argument(
-        "-R", "--rect", type=FigureParse.validate_rect, dest = "rect",
+        "-R", "--rect", type=CommonParse.figure_parse_rect_type, dest = "rect",
         metavar="W:H",
         help="add a rectangle of size W:H in the center of the field "
              "(e.g. '5:3'). Default: none"
@@ -53,7 +54,7 @@ def arg_parser() -> argparse.Namespace:
     #rule
     group_rule = parser.add_mutually_exclusive_group()
     group_rule.add_argument(
-        "-r", "--rule", type=RuleParse.validate_rule, dest = "rule",
+        "-r", "--rule", type=CommonParse.rule_parse_type, dest = "rule",
         help="rule in B/S/ notation (e.g. B2/S0345/10), default: random"
     )
     group_rule.add_argument(
@@ -151,10 +152,4 @@ def args_to_params(stdscr, args: argparse.Namespace) -> Caparams:
         symbols = random_symbols() if args.symbols is None else args.symbols,
         seed = RandomSeed.seed if args.seed is None else args.seed
     )
-
-def parse_or_raise(label: str, fn, *args, **kwargs):
-    try:
-        return fn(*args, **kwargs)
-    except ValueError as e:
-        raise argparse.ArgumentTypeError(f"invalid parse {label}: {e}")
     
