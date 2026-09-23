@@ -72,7 +72,7 @@ def arg_parser() -> argparse.Namespace:
         help="start paused"
     )
     parser.add_argument(
-        "-d", "--delay", type=float, dest="delay", default=0.1,
+        "-d", "--delay", type=CommonParse.player_parse_delay_type, dest="delay", default=0.1,
         help="delay between frames in seconds, default 0.1"
     )
     parser.add_argument(

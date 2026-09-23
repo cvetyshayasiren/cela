@@ -1,3 +1,6 @@
+from parsing.utils_parse import UtilsParse
+import statistics
+from config import Config
 from parsing.rule_parse import RuleParse
 from cellular_automaton.rule import Rule
 from parsing.figure_parse import FigureParse, Cell
@@ -14,11 +17,13 @@ class CommonParse():
 
     @staticmethod
     def figure_parse_width_type(arg) -> int:
-        return CommonParse._parse_or_raise("width", FigureParse.validate_dimension, arg, 1, 400)
+        return CommonParse._parse_or_raise("width", FigureParse.validate_dimension, arg, 
+                                           Config.MIN_DIMENSION, Config.MAX_DIMENSION)
 
     @staticmethod
     def figure_parse_height_type(arg) -> int:
-        return CommonParse._parse_or_raise("height", FigureParse.validate_dimension, arg, 1, 400)
+        return CommonParse._parse_or_raise("height", FigureParse.validate_dimension, arg, 
+                                           Config.MIN_DIMENSION, Config.MAX_DIMENSION)
     
     @staticmethod
     def figure_parse_contain_type(arg: str) -> Cell:
@@ -35,6 +40,10 @@ class CommonParse():
     @staticmethod
     def rule_parse_type(arg: str) -> Rule:
         return CommonParse._parse_or_raise("rule", RuleParse.validate_rule, arg)
+
+    @staticmethod
+    def player_parse_delay_type(arg: str) -> float:
+        return CommonParse._parse_or_raise("delay", UtilsParse.parse_float, arg, 0, 3600)
 
 
 

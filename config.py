@@ -4,3 +4,6 @@ class Config:
     MAX_DELAY = 3600
     MAX_AGING = 100
     MAX_RANDOM_AGING = 10
+
+    MIN_DIMENSION = 1
+    MAX_DIMENSION = 400
