@@ -18,11 +18,11 @@ def arg_parser() -> argparse.Namespace:
 
     #figure
     parser.add_argument(
-        "-W", "--width", type=int, dest="width",
+        "-W", "--width", type=CommonParse.figure_parse_width_type, dest="width",
         help="field width (cells horizontally), default: fit to screen"
     )
     parser.add_argument(
-        "-H", "--height", type=int, dest="height",
+        "-H", "--height", type=CommonParse.figure_parse_height_type, dest="height",
         help="field height (cells vertically), default: fit to screen (status bar excluded)"
     )
     parser.add_argument(

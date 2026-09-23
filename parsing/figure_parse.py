@@ -1,4 +1,5 @@
 from __future__ import annotations
+from parsing.utils_parse import UtilsParse
 import string
 import stat
 from numpy.distutils.extension import Extension
@@ -13,6 +14,10 @@ import operator
 
 class FigureParse:
   @staticmethod
+  def validate_dimension(value: str, low: int, high: int) -> int:
+    return UtilsParse.parse_int(arg=value, low = low, high=high)
+    
+  @staticmethod
   def validate_contain(contain: str) -> Cell:
     return Cell.validate(contain)
 
@@ -21,8 +26,8 @@ class FigureParse:
       return FigureParse.rect_parse(rect)
 
   @staticmethod
-  def validate_fraction(fraction: str) -> float:
-      return FigureParse.parse_fraction(fraction)
+  def validate_fill(fraction: str) -> float:
+      return UtilsParse.parse_float(fraction)
 
   @staticmethod
   def contain_cells(figure: Figure, max_age: int, cells: list[Cell]):
@@ -41,16 +46,6 @@ class FigureParse:
     if w <= 0 or h <= 0:
         raise ValueError(f"width and height must be > 0, got {w}:{h}")
     return w, h
-
-  @staticmethod
-  def parse_fraction(arg: str, low: float = 0.0, high: float = 1.0) -> float:
-      try:
-          f = float(arg)
-      except ValueError:
-          raise ValueError(f"expected a number, got {arg!r}")
-      if not low <= f <= high:
-          raise ValueError(f"must be 0.0..1.0, got {f}")
-      return f
 
   @staticmethod
   def contain_rect(figure: Figure, rect: tuple[int, int]):

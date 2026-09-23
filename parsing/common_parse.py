@@ -13,6 +13,14 @@ class CommonParse():
           raise argparse.ArgumentTypeError(f"invalid parse {label}: {e}")
 
     @staticmethod
+    def figure_parse_width_type(arg) -> int:
+        return CommonParse._parse_or_raise("width", FigureParse.validate_dimension, arg, 1, 400)
+
+    @staticmethod
+    def figure_parse_height_type(arg) -> int:
+        return CommonParse._parse_or_raise("height", FigureParse.validate_dimension, arg, 1, 400)
+    
+    @staticmethod
     def figure_parse_contain_type(arg: str) -> Cell:
         return CommonParse._parse_or_raise("contain", FigureParse.validate_contain, arg)
 
@@ -22,7 +30,7 @@ class CommonParse():
 
     @staticmethod
     def figure_parse_fill_type(arg: str) -> float:
-        return CommonParse._parse_or_raise("fill", FigureParse.validate_fraction, arg)
+        return CommonParse._parse_or_raise("fill", FigureParse.validate_fill, arg)
 
     @staticmethod
     def rule_parse_type(arg: str) -> Rule:
