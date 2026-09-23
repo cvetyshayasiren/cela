@@ -4,11 +4,11 @@ from cellular_automaton.rule import Rule
 
 class RuleParse:
 
-  @classmethod
+  @staticmethod
   def validate_rule(rule: str) -> Rule:
       return RuleParse.from_string(rule)
       
-  @classmethod  
+  @staticmethod 
   def from_string(string: str) -> Rule:
       string = string.upper()
       parts = string.split('/')
