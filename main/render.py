@@ -17,6 +17,9 @@ class Render():
 
     def toogle_tips(self): self.tips_mode = TipsMode.next(self.tips_mode)
 
+    def draw_win():
+        pass
+
     def draw(self, paused: bool):
         self.caparams.stdscr.erase()
         generation = self.caparams.figure.generation

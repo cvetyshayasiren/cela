@@ -97,6 +97,10 @@ def arg_parser() -> argparse.Namespace:
         "-s", "--symbols", type=str, dest = "symbols",
         help="symbols used to render cells (e.g. ' .oO'), default: random"
     )
+    parser.add_argument(
+        "--frame", action="store_true",
+        help="draw a frame around the field"
+    )
 
 
     ##RANDOM
@@ -150,6 +154,7 @@ def args_to_params(stdscr, args: argparse.Namespace) -> Caparams:
         delay = args.delay,
         stuck_behaviour=args.behaviour,
         symbols = random_symbols() if args.symbols is None else args.symbols,
+        frame = args.frame,
         seed = RandomSeed.seed if args.seed is None else args.seed
     )
     

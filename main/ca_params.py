@@ -19,6 +19,7 @@ class Caparams():
                  delay: float,
                  stuck_behaviour: StuckBehaviour,
                  symbols: str,
+                 frame: bool,
                  seed: int
                  ):
         self.stdscr = stdscr
@@ -27,6 +28,7 @@ class Caparams():
         self.delay = self.fix_delay(delay)
         self.stuck_behaviour: StuckBehaviour = stuck_behaviour
         self.symbols_array = self.build_symbols_array(symbols)
+        self.frame = frame
         self.seed = seed
 
     def toogle_stuck_behaviour(self):
