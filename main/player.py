@@ -99,6 +99,10 @@ class Player:
             self.pause()
             self.output = ArgBuilder.build_args_string(caparams=self.caparams)
             self.stop()
+
+        elif key == ord('f'):
+            self.caparams.frame = not self.caparams.frame
+            self.draw_if_paused()
             
             
 

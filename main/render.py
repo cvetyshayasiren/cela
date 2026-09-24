@@ -15,7 +15,6 @@ class Render():
         self.caparams = caparams
         self.tips_mode: TipsMode = TipsMode.MINI
         self.ca_win = curses.newwin(self.caparams.figure.height, self.caparams.figure.width, 0, 0)
-        self.ca_win.box()
 
     def toogle_tips(self): self.tips_mode = TipsMode.next(self.tips_mode)
 
@@ -30,8 +29,13 @@ class Render():
                                         self.caparams.get_symbol(age=value),
                                         curses.color_pair(ColorManager.pair_for_aging(value))
                                        )
+        self.draw_frame()
         self.ca_win.refresh()
         self.caparams.stdscr.getch()
+
+    def draw_frame(self):
+        if self.caparams.frame:
+            self.ca_win.box()
 
     def draw(self, paused: bool):
         self.caparams.stdscr.erase()
