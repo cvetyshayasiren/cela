@@ -14,11 +14,24 @@ class Render():
     def __init__(self, caparams: Caparams):
         self.caparams = caparams
         self.tips_mode: TipsMode = TipsMode.MINI
+        self.ca_win = curses.newwin(self.caparams.figure.height, self.caparams.figure.width, 0, 0)
+        self.ca_win.box()
 
     def toogle_tips(self): self.tips_mode = TipsMode.next(self.tips_mode)
 
-    def draw_win():
-        pass
+    def draw_win(self):
+        generation = self.caparams.figure.generation
+        h, w = self.ca_win.getmaxyx()
+
+        for i, j in np.ndindex(generation.shape):
+            if i >= h or j >= w - 1: continue
+            value = generation[i, j]
+            self.ca_win.addstr(i, j, 
+                                        self.caparams.get_symbol(age=value),
+                                        curses.color_pair(ColorManager.pair_for_aging(value))
+                                       )
+        self.ca_win.refresh()
+        self.caparams.stdscr.getch()
 
     def draw(self, paused: bool):
         self.caparams.stdscr.erase()

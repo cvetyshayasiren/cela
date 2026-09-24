@@ -125,7 +125,8 @@ class Player:
             pass
 
     def draw(self):
-        self.render.draw(paused=self.paused)
+        self.render.draw_win()
+        # self.render.draw(paused=self.paused)
         
     def draw_if_paused(self):
         if(self.paused): self.draw()
