@@ -104,10 +104,6 @@ class Player:
             self.caparams.frame = not self.caparams.frame
             self.draw_if_paused()
             
-            
-
-
-
     def mouse_handler(self, key):
         if key != curses.KEY_MOUSE: return
         try:
@@ -129,8 +125,7 @@ class Player:
             pass
 
     def draw(self):
-        self.render.draw_win()
-        # self.render.draw(paused=self.paused)
+        self.render.draw()
         
     def draw_if_paused(self):
         if(self.paused): self.draw()
