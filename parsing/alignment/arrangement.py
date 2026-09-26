@@ -1,4 +1,5 @@
 from __future__ import annotations
+from parsing.alignment.window_calc import Size, Offset
 from enum import Enum, auto
 
 class Arrangment(Enum):
@@ -12,6 +13,16 @@ class Arrangment(Enum):
   BOTTOM_CENTER = auto()
   BOTTOM_END = auto()
 
+  def align(self, outer_box: Size, inner_box: Size) -> Offset:
+    x, y = 0, 0
+    match self:
+      case Arrangment.TOP_START: return Offset(1, 1)
+
+    return Offset(x,y)
+    
+
+    
+  
   @staticmethod
   def from_id(id: int) -> Arrangment:
     match id:
