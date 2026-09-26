@@ -1,3 +1,7 @@
+from typing import cast
+import alignment.window_calc
+from alignment.window_calc import Offset, Size
+from alignment.arrangement import Arrangment
 from parsing.common_parse import CommonParse
 from debug import printl
 from parsing.rule_parse import RuleParse
@@ -88,11 +92,7 @@ def arg_parser() -> argparse.Namespace:
             "Default: continue"
     )
 
-    #other
-    parser.add_argument(
-        "-S", "--seed", type=int, default=None, dest = "seed",
-        help="random seed for reproducibility, default: random"
-    )
+    #render
     parser.add_argument(
         "-s", "--symbols", type=str, dest = "symbols",
         help="symbols used to render cells (e.g. ' .oO'), default: random"
@@ -101,7 +101,26 @@ def arg_parser() -> argparse.Namespace:
         "--frame", action="store_true",
         help="draw a frame around the field"
     )
+    arrangment = parser.add_mutually_exclusive_group()
 
+    arrangment.add_argument(
+        "-o", "--offset", type=CommonParse.render_parse_offset_type, default=Offset(),
+        metavar="X:Y",
+        help="offset from top-left corner in cells (e.g. '2:4'). Default: none"
+    )
+
+    arrangment.add_argument(
+        "-a", "--align", type=CommonParse.render_parse_align_type, default=Arrangment.CENTER,
+        metavar="{1..9}",
+        help="position on screen, phone keypad layout: 1=top-left, 9=bottom-right. "
+             "Default: 5 (center)"
+    )
+
+    #other
+    parser.add_argument(
+        "-S", "--seed", type=int, default=None, dest = "seed",
+        help="random seed for reproducibility, default: random"
+    )
 
     ##RANDOM
     #figure
@@ -147,6 +166,14 @@ def args_to_params(stdscr, args: argparse.Namespace) -> Caparams:
     if args.contain: FigureParse.contain_cells(figure=figure, max_age=rule.aging, cells=args.contain)
     if args.rect: FigureParse.contain_rect(figure=figure, rect = args.rect)
 
+    #render
+    offset = cast(Offset, args.offset)
+    if args.align is not None:
+        outer = Size.from_curses_window(stdscr)
+        inner = figure.size()
+        align = cast(Arrangment, args.align)
+        offset = align.align(outer_box=outer, inner_box=inner)
+        
     return Caparams(
         stdscr = stdscr,
         figure = figure,
@@ -155,6 +182,7 @@ def args_to_params(stdscr, args: argparse.Namespace) -> Caparams:
         stuck_behaviour=args.behaviour,
         symbols = random_symbols() if args.symbols is None else args.symbols,
         frame = args.frame,
+        offset= offset,
         seed = RandomSeed.seed if args.seed is None else args.seed
     )
     

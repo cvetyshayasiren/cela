@@ -1,7 +1,8 @@
 from __future__ import annotations
+from typing import ClassVar
 
 import curses
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 @dataclass
 class Size:
@@ -18,5 +19,5 @@ class Size:
     
 @dataclass
 class Offset:
-  x: int
-  y: int
+  x: int = field(default_factory=lambda: 0)
+  y: int = field(default_factory=lambda: 0)

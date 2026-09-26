@@ -14,7 +14,10 @@ class Render():
     def __init__(self, caparams: Caparams):
         self.caparams = caparams
         self.tips_mode: TipsMode = TipsMode.MINI
-        self.ca_win = curses.newwin(self.caparams.figure.height, self.caparams.figure.width, 0, 0)
+        self.ca_win = curses.newwin(
+            self.caparams.figure.height, self.caparams.figure.width,
+            self.caparams.offset.y, self.caparams.offset.x
+        )
 
     def toogle_tips(self): self.tips_mode = TipsMode.next(self.tips_mode)
 

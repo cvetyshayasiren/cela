@@ -1,4 +1,5 @@
 from __future__ import annotations
+from alignment.window_calc import Offset
 from debug import printl
 
 import curses
@@ -20,6 +21,7 @@ class Caparams():
                  stuck_behaviour: StuckBehaviour,
                  symbols: str,
                  frame: bool,
+                 offset: Offset,
                  seed: int
                  ):
         self.stdscr = stdscr
@@ -29,6 +31,7 @@ class Caparams():
         self.stuck_behaviour: StuckBehaviour = stuck_behaviour
         self.symbols_array = self.build_symbols_array(symbols)
         self.frame = frame
+        self.offset = offset
         self.seed = seed
 
     def toogle_stuck_behaviour(self):

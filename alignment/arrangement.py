@@ -1,5 +1,5 @@
 from __future__ import annotations
-from parsing.alignment.window_calc import Size, Offset
+from alignment.window_calc import Size, Offset
 from enum import Enum, auto
 
 class Arrangment(Enum):

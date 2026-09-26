@@ -1,3 +1,4 @@
+from alignment.window_calc import Size
 from config import Config
 from cellular_automaton.rule import Rule
 import numpy as np
@@ -78,3 +79,6 @@ class Figure:
         area = arr[rows, :][:, cols].flatten()
         neighbors = np.delete(area, 4)
         return np.count_nonzero(neighbors == 1)
+
+    def size(self) -> Size:
+        return Size(width=self.width, height=self.height)

@@ -1,3 +1,6 @@
+from alignment.arrangement import Arrangment
+from parsing.render_parse import RenderParse
+from alignment.window_calc import Offset
 from parsing.utils_parse import UtilsParse
 import statistics
 from config import Config
@@ -43,7 +46,15 @@ class CommonParse():
 
     @staticmethod
     def player_parse_delay_type(arg: str) -> float:
-        return CommonParse._parse_or_raise("delay", UtilsParse.parse_float, arg, 0, 3600)
+        return CommonParse._parse_or_raise("delay", UtilsParse.parse_float, arg, 0, Config.MAX_DELAY)
+
+    @staticmethod
+    def render_parse_offset_type(arg: str) -> Offset:
+        return CommonParse._parse_or_raise("offset", RenderParse.parse_offset, arg)
+
+    @staticmethod
+    def render_parse_align_type(arg: str) -> Arrangment:
+        return CommonParse._parse_or_raise("align", RenderParse.parse_arrangment, arg)
 
 
 
