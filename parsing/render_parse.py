@@ -1,3 +1,4 @@
+from parsing.utils_parse import UtilsParse
 from alignment.arrangement import Arrangment
 import alignment
 from alignment.window_calc import Offset
@@ -25,4 +26,5 @@ class RenderParse:
 
   @staticmethod
   def parse_arrangment(arg: str) -> Arrangment:
-    return Arrangment.CENTER
+    id = UtilsParse.parse_int(arg=arg, low=1, high=9)
+    return Arrangment.from_id(id)

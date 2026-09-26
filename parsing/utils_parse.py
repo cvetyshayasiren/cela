@@ -6,6 +6,8 @@ class UtilsParse():
           f = float(arg)
       except ValueError:
           raise ValueError(f"expected a number, got {arg!r}")
+      if (low is not None and high is not None) and (f < low or f > high):
+        raise ValueError(f"must be in {low}..{high}, got {f}")
       if low is not None and f < low:
         raise ValueError(f"must be greater than or equal to {low}, got {f}")
       if high is not None and f > high:
@@ -18,6 +20,8 @@ class UtilsParse():
       i = int(arg)
     except ValueError:
       raise ValueError(f"expected a integer, got {arg!r}")
+    if (low is not None and high is not None) and (i < low or i > high):
+      raise ValueError(f"must be in {low}..{high}, got {i}")
     if low is not None and i < low:
       raise ValueError(f"must be greater than or equal to {low}, got {i}")
     if high is not None and i > high:

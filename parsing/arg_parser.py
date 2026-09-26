@@ -104,7 +104,7 @@ def arg_parser() -> argparse.Namespace:
     arrangment = parser.add_mutually_exclusive_group()
 
     arrangment.add_argument(
-        "-o", "--offset", type=CommonParse.render_parse_offset_type, default=Offset(),
+        "-o", "--offset", type=CommonParse.render_parse_offset_type, default=None,
         metavar="X:Y",
         help="offset from top-left corner in cells (e.g. '2:4'). Default: none"
     )
@@ -167,8 +167,9 @@ def args_to_params(stdscr, args: argparse.Namespace) -> Caparams:
     if args.rect: FigureParse.contain_rect(figure=figure, rect = args.rect)
 
     #render
-    offset = cast(Offset, args.offset)
-    if args.align is not None:
+    if args.offset is not None:
+        offset = cast(Offset, args.offset)
+    else:
         outer = Size.from_curses_window(stdscr)
         inner = figure.size()
         align = cast(Arrangment, args.align)
