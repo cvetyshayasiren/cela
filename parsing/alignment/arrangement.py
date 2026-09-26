@@ -15,14 +15,25 @@ class Arrangment(Enum):
 
   def align(self, outer_box: Size, inner_box: Size) -> Offset:
     x, y = 0, 0
+    horizontal_centering = lambda: (outer_box.width - inner_box.width) // 2
+    vertical_centering = lambda: (outer_box.height - inner_box.height) // 2
+    horizontal_ending = lambda: outer_box.width - inner_box.width
+    vertical_ending = lambda: outer_box.height - inner_box.height
+  
     match self:
-      case Arrangment.TOP_START: return Offset(1, 1)
+      case Arrangment.TOP_CENTER: x=horizontal_centering()
+      case Arrangment.TOP_END: x=horizontal_ending()
 
+      case Arrangment.CENTER_START: y=vertical_centering()
+      case Arrangment.CENTER: x=horizontal_centering(); y=vertical_centering()
+      case Arrangment.CENTER_END: x=horizontal_ending(); y=vertical_centering()
+
+      case Arrangment.BOTTOM_START: y=vertical_ending()
+      case Arrangment.BOTTOM_CENTER: x=horizontal_centering(); y=vertical_ending()
+      case Arrangment.BOTTOM_END: x=horizontal_ending(); y=vertical_ending()
+      
     return Offset(x,y)
     
-
-    
-  
   @staticmethod
   def from_id(id: int) -> Arrangment:
     match id:
