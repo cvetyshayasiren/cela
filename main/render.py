@@ -72,6 +72,9 @@ class Render():
             f"rule {self.caparams.rule.string}"
         )
 
+    def height_weidth(self) -> tuple[int, int]:
+        return self.ca_win.getmaxyx()
+
 
 class TipsMode(Enum):
     HIDDEN = auto()
