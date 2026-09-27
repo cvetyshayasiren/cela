@@ -1,4 +1,5 @@
 from __future__ import annotations
+from alignment.window_calc import Size
 from main.colors import ColorManager
 import curses
 
@@ -18,11 +19,13 @@ class Render():
             self.caparams.figure.height, self.caparams.figure.width,
             self.caparams.offset.y, self.caparams.offset.x
         )
+        self.tips_win = self._make_tips_window()
 
     def toogle_tips(self): self.tips_mode = TipsMode.next(self.tips_mode)
 
     def draw(self):
         self.draw_win()
+        self.draw_tips()
 
     def draw_win(self):
         generation = self.caparams.figure.generation
@@ -43,8 +46,13 @@ class Render():
         if self.caparams.frame:
             self.ca_win.box()
 
-    def draw_tips(self, paused: bool, h: int, w: int):
+    def draw_tips(self):
         if(self.tips_mode == TipsMode.HIDDEN): return
+
+        paused = False
+        win_size = Size.from_curses_window(self.tips_win)
+        h = win_size.height
+        w = win_size.width
 
         size_string = f"{self.caparams.figure.width}x{self.caparams.figure.height}"
         pause_state_string = "paused" if paused else "playing"
@@ -75,8 +83,14 @@ class Render():
             f"rule {self.caparams.rule.string}"
         )
 
-    def height_weidth(self) -> tuple[int, int]:
-        return self.ca_win.getmaxyx()
+    def _make_tips_window(self) -> curses.window:
+        term_size = self.caparams.getTermSize()
+        win_height = int(term_size.height * 0.8)
+        return curses.newwin(
+            win_height, term_size.width, term_size.height - win_height, 0
+        )
+
+    
 
 
 class TipsMode(Enum):

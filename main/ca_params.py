@@ -1,5 +1,5 @@
 from __future__ import annotations
-from alignment.window_calc import Offset
+from alignment.window_calc import Offset, Size
 from debug import printl
 
 import curses
@@ -59,6 +59,9 @@ class Caparams():
 
     def fix_delay(self, candidate: float) -> float:
         return (0 if candidate < Config.MIN_DELAY else round(min(max(candidate, 0.01), Config.MAX_DELAY), 2)) if candidate > 0 else Config.MIN_DELAY
+
+    def getTermSize(self) -> Size:
+        return Size.from_curses_window(self.stdscr)
 
 class StuckBehaviour(Enum):
     PAUSE = auto()
