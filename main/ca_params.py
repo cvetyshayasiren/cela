@@ -63,6 +63,9 @@ class Caparams():
     def getTermSize(self) -> Size:
         return Size.from_curses_window(self.stdscr)
 
+    def getFigSize(self) -> Size:
+        return self.figure.size()
+
 class StuckBehaviour(Enum):
     PAUSE = auto()
     CONTINUE = auto()

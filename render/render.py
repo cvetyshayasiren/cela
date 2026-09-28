@@ -82,6 +82,10 @@ class Render():
             "b - blank field\n"
             f"rule {self.caparams.rule.string}"
         )
+    
+    def divider(self):
+        width = self.caparams.getFigSize().width
+        return f"""\n{"-" * width}\n"""
 
     def _make_tips_window(self) -> curses.window:
         term_size = self.caparams.getTermSize()
