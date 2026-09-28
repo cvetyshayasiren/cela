@@ -3,7 +3,7 @@ from main.ca_params import Caparams
 class Tips:
 
   def __init__(self, caparams: Caparams):
-    self.caparams = caparams
+    self.caparams: Caparams = caparams
     self.tips = self.make_tips()
 
   def make_tips(self) -> str:
@@ -17,6 +17,11 @@ class Tips:
       "b - blank field",
       f"rule {self.caparams.rule.string}"
     ]
+    return ""
+
+  def embed_a_string(self, string: str) -> str:
+    term_width = self.caparams.getTermSize().width
+    chunks = [string[i:i+term_width] for i in range(0, len(string), term_width)]
     return ""
 
   
