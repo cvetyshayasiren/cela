@@ -4,8 +4,8 @@ import curses
 
 from main.ca_params import Caparams, StuckBehaviour
 from debug import printd, printl
-from main.colors import ColorManager
-from main.render import Render
+from render.colors import ColorManager
+from render.render import Render
 from randomisation.randoms import random_symbols
 
 class Player:
