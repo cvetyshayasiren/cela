@@ -24,7 +24,6 @@ class Render():
     def draw(self):
         self.draw_win()
         curses.doupdate()
-        self.caparams.stdscr.getch()
 
     def draw_win(self):
         generation = self.caparams.figure.generation

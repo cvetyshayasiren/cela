@@ -118,7 +118,7 @@ class Player:
         self.render.draw()
         
     def draw_if_paused(self):
-        if(self.paused): self.draw()
+        if(self.caparams.paused): self.draw()
 
     def stuck_behaviour(self):
         match self.caparams.stuck_behaviour:
