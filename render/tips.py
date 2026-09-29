@@ -1,4 +1,5 @@
 from __future__ import annotations
+from alignment.window_calc import Size
 
 from enum import Enum, auto
 from config import Config
@@ -11,17 +12,17 @@ class Tips:
     self.caparams: Caparams = caparams
     self.tips_mode: TipsMode = TipsMode.MINI
     self.tips_win: curses.window = self._make_tips_window()
-    self.tips_full_string: str = self.make_tips_full_string()
+    self.tips_win_size: Size = Size.from_curses_window(self.tips_win)
+    self.tips_full_lines_list: list[str] = self.make_tips_full_lines_list()
     self.tips_mini_string: str = self.make_tips_mini_string()
     self.offset: int = 0
     self.max_offset: int = 0
 
   def calculate_max_offset(self) -> int:
-    
-    return 0
+    return max(0, self.count_tips_full_lines() - self.height_without_box())
 
   def count_tips_full_lines(self) -> int:
-    return len(self.tips_full_string.splitlines())
+    return len(self.tips_full_lines_list)
   
   def move_down(self):
     if self.can_move_down(): self.offset += 1
@@ -31,6 +32,11 @@ class Tips:
   
   def can_move_down(self) -> bool: return self.offset < self.max_offset
   def can_move_up(self) -> bool: return self.offset > 0
+
+  def get_current_full_string(self) -> str:
+    start: int = self.offset
+    end: int = min(start + self.height_without_box(), self.max_offset)
+    return "\n".join(self.tips_full_lines_list[start:end])
 
   def draw_tips(self):
     self.tips_win.clear()
@@ -42,7 +48,8 @@ class Tips:
     self.tips_win.addstr(self.make_tips_mini_string())
 
   def draw_full(self):
-    self.tips_win.addstr(self.make_tips_full_string())
+    current_full_string = self.get_current_full_string()
+    self.tips_win.addstr(1, 1, current_full_string)
     self.tips_win.box()
 
   def _make_tips_window(self) -> curses.window:
@@ -52,9 +59,9 @@ class Tips:
         win_height, term_size.width, term_size.height - win_height, 0
     )
 
-  def make_tips_full_string(self) -> str:
-    header = f"rule {self.caparams.rule.string}"
-    output = self.embed_a_string(header)
+  def make_tips_full_lines_list(self) -> list[str]:
+    header: str = f"rule {self.caparams.rule.string}"
+    full_string: str = self.embed_a_string(header)
     tips_list: list[str] = [
       f"q - exit",
       "p - pause/resume",
@@ -65,9 +72,9 @@ class Tips:
       "b - blank field",
     ]
     for t in tips_list:
-      output += (self.divider() + self.embed_a_string(t))
+      full_string += (self.divider() + self.embed_a_string(t))
     
-    return output
+    return full_string.splitlines()
 
   def make_tips_mini_string(self):
     paused = self.caparams.paused
@@ -89,8 +96,8 @@ class Tips:
     width = self.width_without_box()
     return f"""\n{"-" * width}\n"""
 
-  def width_without_box(self) -> int: return self.caparams.getTermWidth() - 2
-  def height_without_box(self) -> int: return self.caparams.getTermHeight() - 2
+  def width_without_box(self) -> int: return self.tips_win_size.width - 2
+  def height_without_box(self) -> int: return self.tips_win_size.height - 2
 
 
 class TipsMode(Enum):
