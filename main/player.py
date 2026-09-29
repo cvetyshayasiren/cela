@@ -11,10 +11,10 @@ from randomisation.randoms import random_symbols
 class Player:
 
     def __init__(self, caparams: Caparams):
-        self.caparams = caparams
-        self.render = Render(caparams=caparams)
+        self.caparams: Caparams = caparams
+        self.render: Render = Render(caparams=caparams)
         self.is_playing: bool = False
-        self.dragging = False
+        self.dragging: bool = False
         self.init_mouse()
         self.output: str = ""
 
@@ -82,7 +82,7 @@ class Player:
             self.draw_if_paused()
 
         elif key == ord('i'):
-            self.render.toogle_tips()
+            self.render.tips.toogle_tips()
             self.draw_if_paused()
 
         elif key == ord('`'):
