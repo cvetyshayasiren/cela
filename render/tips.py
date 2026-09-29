@@ -15,9 +15,10 @@ class Tips:
     self.tips_mini_string: str = self.make_tips_mini_string()
 
   def draw_tips(self):
-    if(self.tips_mode == TipsMode.HIDDEN): return
+    if(self.tips_mode == TipsMode.HIDDEN): self.tips_win.clear()
     if(self.tips_mode == TipsMode.MINI): self.draw_mini()
     if(self.tips_mode == TipsMode.FULL): self.draw_full()
+    self.tips_win.noutrefresh()
     
 
   def draw_mini(self):
@@ -56,7 +57,9 @@ class Tips:
     pause_state_string = "PAUSED.." if paused else "playing"
     pass
 
-  def toogle_tips(self): self.tips_mode = TipsMode.next(self.tips_mode)
+  def toogle_tips(self): 
+    self.tips_mode = TipsMode.next(self.tips_mode)
+    self.draw_tips()
   
   def embed_a_string(self, string: str) -> str:
     term_width = self.caparams.getTermSize().width

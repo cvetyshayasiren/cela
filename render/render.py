@@ -16,14 +16,15 @@ class Render():
     def __init__(self, caparams: Caparams):
         self.caparams = caparams
         self.tips: Tips = Tips(self.caparams)
-        self.ca_win = curses.newwin(
+        self.ca_win: curses.window = curses.newwin(
             self.caparams.figure.height, self.caparams.figure.width,
             self.caparams.offset.y, self.caparams.offset.x
         )
 
     def draw(self):
         self.draw_win()
-        self.tips.draw_tips()
+        curses.doupdate()
+        self.caparams.stdscr.getch()
 
     def draw_win(self):
         generation = self.caparams.figure.generation
@@ -37,8 +38,7 @@ class Render():
                                         curses.color_pair(ColorManager.pair_for_aging(value))
                                        )
         self.draw_frame()
-        self.ca_win.refresh()
-        self.caparams.stdscr.getch()
+        self.ca_win.noutrefresh()
 
     def draw_frame(self):
         if self.caparams.frame:
