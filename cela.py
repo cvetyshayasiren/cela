@@ -3,7 +3,7 @@ import curses
 
 from parsing.arg_parser import arg_parser, args_to_params
 from main.player import Player
-from main.colors import ColorManager
+from render.colors import ColorManager
 from randomisation.random_seed import RandomSeed
 
 
