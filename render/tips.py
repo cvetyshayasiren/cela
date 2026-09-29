@@ -13,19 +13,21 @@ class Tips:
     self.tips_win: curses.window = self._make_tips_window()
     self.tips_full_string: str = self.make_tips_full_string()
     self.tips_mini_string: str = self.make_tips_mini_string()
+    self.offset: int = 0
 
   def draw_tips(self):
-    if(self.tips_mode == TipsMode.HIDDEN): self.tips_win.clear()
+    self.tips_win.clear()
     if(self.tips_mode == TipsMode.MINI): self.draw_mini()
     if(self.tips_mode == TipsMode.FULL): self.draw_full()
     self.tips_win.noutrefresh()
     
 
   def draw_mini(self):
-    self.tips_win.addstr("MINI")
+    self.tips_win.addstr(self.make_tips_mini_string())
 
   def draw_full(self):
-    self.tips_win.addstr("FULL")
+    self.tips_win.addstr(self.make_tips_full_string())
+    self.tips_win.box()
 
   def _make_tips_window(self) -> curses.window:
     term_size = self.caparams.getTermSize()
@@ -55,20 +57,23 @@ class Tips:
     paused = self.caparams.paused
     size_string = f"{self.caparams.figure.width}x{self.caparams.figure.height}"
     pause_state_string = "PAUSED.." if paused else "playing"
-    pass
+    candidate = f"{pause_state_string}|{size_string}|i - info/tips"
+    return candidate[:self.width_without_box()]
 
   def toogle_tips(self): 
     self.tips_mode = TipsMode.next(self.tips_mode)
     self.draw_tips()
   
   def embed_a_string(self, string: str) -> str:
-    term_width = self.caparams.getTermSize().width
-    chunks = [string[i:i+term_width] for i in range(0, len(string), term_width)]
+    width = self.width_without_box()
+    chunks = [string[i:i+width] for i in range(0, len(string), width)]
     return "\n".join(chunks)
 
   def divider(self) -> str:
-    width = self.caparams.getTermWidth()
+    width = self.width_without_box()
     return f"""\n{"-" * width}\n"""
+
+  def width_without_box(self) -> int: return self.caparams.getTermWidth() - 2
 
 
 class TipsMode(Enum):
