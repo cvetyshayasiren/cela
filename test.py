@@ -10,9 +10,9 @@ def main_test():
     s = embed_a_string(string, 4)
     print(s)
 
-def embed_a_string(string: str, width: int) -> list[str]:
+def embed_a_string(string: str, width: int) -> str:
     chunks = [string[i:i+width] for i in range(0, len(string), width)]
-    return chunks
+    return "\n".join(chunks)
     
 
 if __name__ == "__main__":
