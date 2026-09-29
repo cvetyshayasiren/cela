@@ -21,6 +21,7 @@ class Render():
 
     def draw(self):
         self.draw_win()
+        self.tips.draw_tips()
         curses.doupdate()
 
     def draw_win(self):
