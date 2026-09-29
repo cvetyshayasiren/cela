@@ -14,7 +14,6 @@ class Player:
         self.caparams = caparams
         self.render = Render(caparams=caparams)
         self.is_playing: bool = False
-        self.paused = False
         self.dragging = False
         self.init_mouse()
         self.output: str = ""
@@ -26,22 +25,13 @@ class Player:
         while(self.is_playing == True):
             self.caparams.stdscr.timeout(int(self.caparams.delay * 1000))
             self.button_handler()
-            if self.paused: continue
+            if self.caparams.paused: continue
             next = self.caparams.figure.next(rule=self.caparams.rule)
             if not next: self.stuck_behaviour()
             self.draw()
 
     def stop(self):
         self.is_playing = False
-
-    def pause(self): self.pause_toogle(True)
-    def unpause(self): self.pause_toogle(False)
-    def pause_toogle(self, value: bool | None = None):
-        if value is not None:
-            self.paused = value
-        else:
-            self.paused = not self.paused
-        self.draw_if_paused()
 
     def button_handler(self):
         key = self.caparams.stdscr.getch()
@@ -51,7 +41,7 @@ class Player:
             self.stop()
 
         elif key == ord('p'):
-            self.pause_toogle()
+            self.caparams.pause_toogle()
 
         elif key == curses.KEY_RIGHT or key == ord('n'):
             if(self.paused):
@@ -96,7 +86,7 @@ class Player:
             self.draw_if_paused()
 
         elif key == ord('`'):
-            self.pause()
+            self.caparams.pause()
             self.output = ArgBuilder.build_args_string(caparams=self.caparams)
             self.stop()
 

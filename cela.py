@@ -19,7 +19,6 @@ def run(stdscr: curses.window, args: argparse.Namespace):
     ColorManager.initialise_random_colors()
     caparams = args_to_params(stdscr = stdscr, args = args)
     player = Player(caparams = caparams)
-    if args.pause: player.pause()
     player.play()
     return player.output
 

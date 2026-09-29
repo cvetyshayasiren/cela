@@ -62,13 +62,18 @@ class Caparams():
     def fix_delay(self, candidate: float) -> float:
         return (0 if candidate < Config.MIN_DELAY else round(min(max(candidate, 0.01), Config.MAX_DELAY), 2)) if candidate > 0 else Config.MIN_DELAY
 
+    def pause(self): self.pause_toogle(True)
+    def unpause(self): self.pause_toogle(False)
+    def pause_toogle(self, value: bool | None = None):
+        if value is not None:
+            self.paused = value
+        else:
+            self.paused = not self.paused
+
     def getTermSize(self) -> Size:
         return Size.from_curses_window(self.stdscr)
-
     def getTermWidth(self) -> int: return self.getTermSize().width
     def getTermHeight(self) -> int: return self.getTermSize().height
-    
-
     def getFigSize(self) -> Size:
         return self.figure.size()
 
