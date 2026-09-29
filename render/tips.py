@@ -14,6 +14,23 @@ class Tips:
     self.tips_full_string: str = self.make_tips_full_string()
     self.tips_mini_string: str = self.make_tips_mini_string()
     self.offset: int = 0
+    self.max_offset: int = 0
+
+  def calculate_max_offset(self) -> int:
+    
+    return 0
+
+  def count_tips_full_lines(self) -> int:
+    return len(self.tips_full_string.splitlines())
+  
+  def move_down(self):
+    if self.can_move_down(): self.offset += 1
+
+  def move_up(self):
+    if self.can_move_up(): self.offset -= 1
+  
+  def can_move_down(self) -> bool: return self.offset < self.max_offset
+  def can_move_up(self) -> bool: return self.offset > 0
 
   def draw_tips(self):
     self.tips_win.clear()
@@ -21,7 +38,6 @@ class Tips:
     if(self.tips_mode == TipsMode.FULL): self.draw_full()
     self.tips_win.noutrefresh()
     
-
   def draw_mini(self):
     self.tips_win.addstr(self.make_tips_mini_string())
 
@@ -74,6 +90,7 @@ class Tips:
     return f"""\n{"-" * width}\n"""
 
   def width_without_box(self) -> int: return self.caparams.getTermWidth() - 2
+  def height_without_box(self) -> int: return self.caparams.getTermHeight() - 2
 
 
 class TipsMode(Enum):

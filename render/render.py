@@ -10,8 +10,6 @@ from enum import Enum, auto
 from main.ca_params import Caparams
 
 
-
-
 class Render():
     def __init__(self, caparams: Caparams):
         self.caparams = caparams

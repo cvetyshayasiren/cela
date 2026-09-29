@@ -22,7 +22,5 @@ def run(stdscr: curses.window, args: argparse.Namespace):
     player.play()
     return player.output
 
-    
-
 if __name__ == "__main__":
     main()
