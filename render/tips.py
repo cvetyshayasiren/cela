@@ -7,6 +7,8 @@ class Tips:
     self.tips = self.make_tips()
 
   def make_tips(self) -> str:
+    output = ""
+    header = f"rule {self.caparams.rule.string}"
     tips_list: list[str] = [
       f"q - exit",
       "p - pause/resume",
@@ -15,13 +17,17 @@ class Tips:
       "s - randomise symbols",
       "(1-9) - add square in center",
       "b - blank field",
-      f"rule {self.caparams.rule.string}"
     ]
-    return ""
+    
+    return output
 
   def embed_a_string(self, string: str) -> str:
     term_width = self.caparams.getTermSize().width
     chunks = [string[i:i+term_width] for i in range(0, len(string), term_width)]
     return ""
+
+  def divider(self):
+    width = self.caparams.getTermWidth()
+    return f"""\n{"-" * width}\n"""
 
   

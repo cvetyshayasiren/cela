@@ -6,8 +6,13 @@ from main.ca_params import StuckBehaviour
 from randomisation.random_seed import RandomSeed
 
 def main_test():
-    print(4.5/2)
-    print(4.5//2)
+    string = "lalkeklol keklollal kekelolo lalalol"
+    s = embed_a_string(string, 4)
+    print(s)
+
+def embed_a_string(string: str, width: int) -> list[str]:
+    chunks = [string[i:i+width] for i in range(0, len(string), width)]
+    return chunks
     
 
 if __name__ == "__main__":

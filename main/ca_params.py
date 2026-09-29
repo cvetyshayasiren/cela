@@ -63,6 +63,10 @@ class Caparams():
     def getTermSize(self) -> Size:
         return Size.from_curses_window(self.stdscr)
 
+    def getTermWidth(self) -> int: return self.getTermSize().width
+    def getTermHeight(self) -> int: return self.getTermSize().height
+    
+
     def getFigSize(self) -> Size:
         return self.figure.size()
 
