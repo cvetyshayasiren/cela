@@ -1,10 +1,21 @@
+from enum import Enum, auto
+from config import Config
+import curses
 from main.ca_params import Caparams
 
 class Tips:
 
   def __init__(self, caparams: Caparams):
     self.caparams: Caparams = caparams
+    self.tips_win = self._make_tips_window()
     self.tips = self.make_tips()
+
+  def _make_tips_window(self) -> curses.window:
+    term_size = self.caparams.getTermSize()
+    win_height = int(term_size.height * Config.TIPS_HEIGHT_FRACTION)
+    return curses.newwin(
+        win_height, term_size.width, term_size.height - win_height, 0
+    )
 
   def make_tips(self) -> str:
     header = f"rule {self.caparams.rule.string}"
@@ -32,4 +43,13 @@ class Tips:
     width = self.caparams.getTermWidth()
     return f"""\n{"-" * width}\n"""
 
-  
+
+class TipsMode(Enum):
+  HIDDEN = auto()
+  MINI = auto()
+  FULL = auto()
+
+  @classmethod
+  def next(cls, mode: TipsMode) -> TipsMode:
+      members = list(cls)
+      return members[(members.index(mode) + 1) % len(members)]

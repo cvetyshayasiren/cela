@@ -1,6 +1,6 @@
 from __future__ import annotations
 from alignment.window_calc import Size
-from main.colors import ColorManager
+from render.colors import ColorManager
 import curses
 
 import numpy as np

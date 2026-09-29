@@ -7,3 +7,5 @@ class Config:
 
     MIN_DIMENSION = 1
     MAX_DIMENSION = 400
+
+    TIPS_HEIGHT_FRACTION = 0.8
