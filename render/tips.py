@@ -1,4 +1,5 @@
 from __future__ import annotations
+from debug import printl
 from alignment.window_calc import Size
 
 from enum import Enum, auto
@@ -33,10 +34,10 @@ class Tips:
   def can_move_down(self) -> bool: return self.offset < self.max_offset
   def can_move_up(self) -> bool: return self.offset > 0
 
-  def get_current_full_string(self) -> str:
+  def get_current_full_range(self) -> list[str]:
     start: int = self.offset
-    end: int = min(start + self.height_without_box(), self.max_offset)
-    return "\n".join(self.tips_full_lines_list[start:end])
+    end: int = min(start + self.height_without_box(), self.count_tips_full_lines())
+    return self.tips_full_lines_list[start:end]
 
   def draw_tips(self):
     self.tips_win.clear()
@@ -48,8 +49,8 @@ class Tips:
     self.tips_win.addstr(self.make_tips_mini_string())
 
   def draw_full(self):
-    current_full_string = self.get_current_full_string()
-    self.tips_win.addstr(1, 1, current_full_string)
+    for index, line in enumerate(self.get_current_full_range()):
+      self.tips_win.addstr(index + 1, 1, line)
     self.tips_win.box()
 
   def _make_tips_window(self) -> curses.window:

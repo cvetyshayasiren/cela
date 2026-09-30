@@ -8,7 +8,7 @@ from randomisation.random_seed import RandomSeed
 def main_test():
     string = "lalkeklol keklollal kekelolo lalalol"
     s = embed_a_string(string, 4)
-    print(s)
+    print(s.splitlines())
 
 def embed_a_string(string: str, width: int) -> str:
     chunks = [string[i:i+width] for i in range(0, len(string), width)]
