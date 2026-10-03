@@ -94,7 +94,7 @@ def arg_parser() -> argparse.Namespace:
             "Default: continue"
     )
     parser.add_argument(
-        "-n", "--history_size", type=CommonParse.player_parse_history_size_type, dest="history_size", default=Config.DEFAULT_HISTORY_SIZE,
+        "-m", "--history_size", type=CommonParse.player_parse_history_size_type, dest="history_size", default=Config.DEFAULT_HISTORY_SIZE,
         metavar="N",
         help=f"number of past states to keep for undo, 0 to disable. Default: {Config.DEFAULT_HISTORY_SIZE}"
     )
@@ -192,6 +192,7 @@ def args_to_params(stdscr, args: argparse.Namespace) -> Caparams:
         frame = args.frame,
         offset= offset,
         seed = RandomSeed.seed if args.seed is None else args.seed,
-        paused= args.pause
+        paused= args.pause,
+        history_size=args.history_size
     )
     
