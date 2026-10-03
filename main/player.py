@@ -86,7 +86,7 @@ class Player:
             self.draw_if_paused()
 
         elif key == ord('i'):
-            self.render.tips.toogle_tips()
+            self.render.toogle_tips()
             self.draw_if_paused()
 
         elif key == ord('`'):

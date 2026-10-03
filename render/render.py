@@ -47,8 +47,17 @@ class Render():
         self.caparams.stdscr.erase()
         self.draw()
 
+    def toogle_tips(self):
+        mode = self.tips.toogle_tips()
+        if mode == TipsMode.HIDDEN:
+            self._reset_screen()
+    
     def move_tips_down(self):
         self.tips.move_down()
 
     def move_tips_up(self):
         self.tips.move_up()
+
+    def _reset_screen(self):
+        self.ca_win.erase()
+        self.draw()

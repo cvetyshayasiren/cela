@@ -17,10 +17,11 @@ class Tips:
     self.tips_full_lines_list: list[str] = self._make_tips_full_lines_list()
     self.tips_mini_string: str = self._make_tips_mini_string()
     self.offset: int = 0
-    self.max_offset: int = self.calculate_max_offset()
+    self.max_offset: int = self._calculate_max_offset()
 
-  def toogle_tips(self): 
+  def toogle_tips(self) -> TipsMode: 
     self.tips_mode = TipsMode.next(self.tips_mode)
+    return self.tips_mode
   
   def can_move_down(self) -> bool: return self.offset < self.max_offset
   def can_move_up(self) -> bool: return self.offset > 0
@@ -38,26 +39,26 @@ class Tips:
     if(self.tips_mode == TipsMode.FULL): self._draw_full(win)
 
   def _draw_mini(self, win: curses.window):
-    y = self._height_without_box() - 1
+    y = self.tips_win_size.height - 1
     self.tips_win.addstr(y, 1, self._make_tips_mini_string())
     self.tips_win.overlay(win)
     
 
   def _draw_full(self, win: curses.window):
-    for index, line in enumerate(self.get_current_full_range()):
+    for index, line in enumerate(self._get_current_full_range()):
       self.tips_win.addstr(index + 1, 1, line)
     self.tips_win.box()
     self.tips_win.overwrite(win)
 
-  def calculate_max_offset(self) -> int:
-    return max(0, self.count_tips_full_lines() - self._height_without_box())
+  def _calculate_max_offset(self) -> int:
+    return max(0, self._count_tips_full_lines() - self._height_without_box())
 
-  def count_tips_full_lines(self) -> int:
+  def _count_tips_full_lines(self) -> int:
     return len(self.tips_full_lines_list)
   
-  def get_current_full_range(self) -> list[str]:
+  def _get_current_full_range(self) -> list[str]:
     start: int = self.offset
-    end: int = min(start + self._height_without_box(), self.count_tips_full_lines())
+    end: int = min(start + self._height_without_box(), self._count_tips_full_lines())
     return self.tips_full_lines_list[start:end]
 
   def _make_tips_window(self) -> curses.window:
