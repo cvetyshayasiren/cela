@@ -47,8 +47,8 @@ class Render():
         self.caparams.stdscr.erase()
         self.draw()
 
-    def move_down(self):
+    def move_tips_down(self):
         self.tips.move_down()
 
-    def move_up(self):
+    def move_tips_up(self):
         self.tips.move_up()
