@@ -9,7 +9,8 @@ from parsing.figure_parse import FigureParse
 import argparse
 import curses
 
-from main.ca_params import Caparams, StuckBehaviour
+from caparams.ca_params import Caparams
+from caparams.stuck_behaviour import StuckBehaviour
 from cellular_automaton.figure import Figure
 from cellular_automaton.rule import Rule
 from randomisation.randoms import random_symbols, random_rule, random_prepared_rule

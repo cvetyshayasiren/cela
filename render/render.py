@@ -7,7 +7,7 @@ import curses
 import numpy as np
 from enum import Enum, auto
 
-from main.ca_params import Caparams
+from caparams.ca_params import Caparams
 
 
 class Render():

@@ -1,5 +1,5 @@
 from randomisation.random_seed import RandomSeed
-from main.ca_params import Caparams
+from caparams.ca_params import Caparams
 from cellular_automaton.figure import Figure
 import numpy as np
 

@@ -5,7 +5,7 @@ from alignment.window_calc import Size
 from enum import Enum, auto
 from config import Config
 import curses
-from main.ca_params import Caparams
+from caparams.ca_params import Caparams
 
 class Tips:
 

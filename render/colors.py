@@ -2,7 +2,7 @@ import curses
 from randomisation.random_seed import RandomSeed
 
 from config import Config
-from main.ca_params import Caparams
+from caparams.ca_params import Caparams
 
 
 class ColorManager:

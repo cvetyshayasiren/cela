@@ -2,7 +2,8 @@ from parsing.arg_parser import args_to_params
 from parsing.arg_builder import ArgBuilder
 import curses
 
-from main.ca_params import Caparams, StuckBehaviour
+from caparams.ca_params import Caparams
+from caparams.stuck_behaviour import StuckBehaviour
 from debug import printd, printl
 from render.colors import ColorManager
 from render.render import Render
