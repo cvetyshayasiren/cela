@@ -22,7 +22,7 @@ class Render():
     def draw(self):
         self.draw_win()
         self.draw_frame()
-        self.tips.draw_tips()
+        self.tips.draw_tips(self.ca_win)
         self.ca_win.noutrefresh()
         curses.doupdate()
 
