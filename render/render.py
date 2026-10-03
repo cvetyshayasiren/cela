@@ -21,7 +21,9 @@ class Render():
 
     def draw(self):
         self.draw_win()
+        self.draw_frame()
         self.tips.draw_tips()
+        self.ca_win.noutrefresh()
         curses.doupdate()
 
     def draw_win(self):
@@ -35,9 +37,18 @@ class Render():
                                         self.caparams.get_symbol(age=value),
                                         curses.color_pair(ColorManager.pair_for_aging(value))
                                        )
-        self.draw_frame()
-        self.ca_win.noutrefresh()
 
     def draw_frame(self):
         if self.caparams.frame:
             self.ca_win.box()
+
+    def frame_toogle(self):
+        self.caparams.frame_toogle()
+        self.caparams.stdscr.erase()
+        self.draw()
+
+    def move_down(self):
+        self.tips.move_down()
+
+    def move_up(self):
+        self.tips.move_up()

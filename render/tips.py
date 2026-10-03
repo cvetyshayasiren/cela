@@ -17,7 +17,30 @@ class Tips:
     self.tips_full_lines_list: list[str] = self.make_tips_full_lines_list()
     self.tips_mini_string: str = self.make_tips_mini_string()
     self.offset: int = 0
-    self.max_offset: int = 0
+    self.max_offset: int = self.calculate_max_offset()
+
+  def can_move_down(self) -> bool: return self.offset < self.max_offset
+  def can_move_up(self) -> bool: return self.offset > 0
+
+  def move_down(self):
+    if self.can_move_down(): self.offset += 1
+
+  def move_up(self):
+    if self.can_move_up(): self.offset -= 1
+  
+  def draw_tips(self) -> curses.window | None:
+    self.tips_win.clear()
+    if(self.tips_mode == TipsMode.MINI): self._draw_mini()
+    if(self.tips_mode == TipsMode.FULL): self._draw_full()
+    return self.tips_win
+
+  def _draw_mini(self):
+    self.tips_win.addstr(self.make_tips_mini_string())
+
+  def _draw_full(self):
+    for index, line in enumerate(self.get_current_full_range()):
+      self.tips_win.addstr(index + 1, 1, line)
+    self.tips_win.box()
 
   def calculate_max_offset(self) -> int:
     return max(0, self.count_tips_full_lines() - self.height_without_box())
@@ -25,33 +48,16 @@ class Tips:
   def count_tips_full_lines(self) -> int:
     return len(self.tips_full_lines_list)
   
-  def move_down(self):
-    if self.can_move_down(): self.offset += 1
 
-  def move_up(self):
-    if self.can_move_up(): self.offset -= 1
   
-  def can_move_down(self) -> bool: return self.offset < self.max_offset
-  def can_move_up(self) -> bool: return self.offset > 0
+
 
   def get_current_full_range(self) -> list[str]:
     start: int = self.offset
     end: int = min(start + self.height_without_box(), self.count_tips_full_lines())
     return self.tips_full_lines_list[start:end]
 
-  def draw_tips(self):
-    self.tips_win.clear()
-    if(self.tips_mode == TipsMode.MINI): self.draw_mini()
-    if(self.tips_mode == TipsMode.FULL): self.draw_full()
-    self.tips_win.noutrefresh()
-    
-  def draw_mini(self):
-    self.tips_win.addstr(self.make_tips_mini_string())
 
-  def draw_full(self):
-    for index, line in enumerate(self.get_current_full_range()):
-      self.tips_win.addstr(index + 1, 1, line)
-    self.tips_win.box()
 
   def _make_tips_window(self) -> curses.window:
     term_size = self.caparams.getTermSize()

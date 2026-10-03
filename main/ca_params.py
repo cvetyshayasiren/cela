@@ -70,6 +70,8 @@ class Caparams():
         else:
             self.paused = not self.paused
 
+    def frame_toogle(self): self.frame = not self.frame
+
     def getTermSize(self) -> Size:
         return Size.from_curses_window(self.stdscr)
     def getTermWidth(self) -> int: return self.getTermSize().width

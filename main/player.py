@@ -25,9 +25,9 @@ class Player:
         while(self.is_playing == True):
             self.caparams.stdscr.timeout(int(self.caparams.delay * 1000))
             self.button_handler()
-            if self.caparams.paused: continue
-            next = self.caparams.figure.next(rule=self.caparams.rule)
-            if not next: self.stuck_behaviour()
+            if not self.caparams.paused: 
+                next = self.caparams.figure.next(rule=self.caparams.rule)
+                if not next: self.stuck_behaviour()
             self.draw()
 
     def stop(self):
@@ -91,7 +91,7 @@ class Player:
             self.stop()
 
         elif key == ord('f'):
-            self.caparams.frame = not self.caparams.frame
+            self.render.frame_toogle()
             self.draw_if_paused()
             
     def mouse_handler(self, key):
@@ -118,7 +118,8 @@ class Player:
         self.render.draw()
         
     def draw_if_paused(self):
-        if(self.caparams.paused): self.draw()
+        pass
+        # if(self.caparams.paused): self.draw()
 
     def stuck_behaviour(self):
         match self.caparams.stuck_behaviour:
