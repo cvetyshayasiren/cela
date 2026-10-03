@@ -1,0 +1,1 @@
+"""Caparams application package."""

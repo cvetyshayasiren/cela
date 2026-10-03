@@ -1,9 +1,10 @@
 from __future__ import annotations
+from caparams.stuck_behaviour import StuckBehaviour
 from alignment.window_calc import Offset, Size
 from debug import printl
 
+
 import curses
-from enum import Enum, auto
 
 import numpy as np
 
@@ -82,13 +83,3 @@ class Caparams():
     def getTermHeight(self) -> int: return self.getTermSize().height
     def getFigSize(self) -> Size:
         return self.figure.size()
-
-class StuckBehaviour(Enum):
-    PAUSE = auto()
-    CONTINUE = auto()
-    STOP = auto()
-
-    @classmethod
-    def next(cls, mode: StuckBehaviour) -> StuckBehaviour:
-        members = list(cls)
-        return members[(members.index(mode) + 1) % len(members)]
