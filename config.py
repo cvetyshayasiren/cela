@@ -9,3 +9,5 @@ class Config:
     MAX_DIMENSION = 400
 
     TIPS_HEIGHT_FRACTION = 0.8
+
+    DEFAULT_HISTORY_SIZE = 10

@@ -1,2 +1,0 @@
-class PlayerCache:
-  pass

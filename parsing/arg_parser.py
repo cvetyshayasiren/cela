@@ -1,3 +1,4 @@
+from config import Config
 from typing import cast
 import alignment.window_calc
 from alignment.window_calc import Offset, Size
@@ -91,6 +92,11 @@ def arg_parser() -> argparse.Namespace:
             "(deeper cycles are not detected): "
             "pause, continue (restart with random field), or stop. "
             "Default: continue"
+    )
+    parser.add_argument(
+        "-n", "--history_size", type=CommonParse.player_parse_history_size_type, dest="history_size", default=Config.DEFAULT_HISTORY_SIZE,
+        metavar="N",
+        help=f"number of past states to keep for undo, 0 to disable. Default: {Config.DEFAULT_HISTORY_SIZE}"
     )
 
     #render

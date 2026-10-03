@@ -24,7 +24,8 @@ class Caparams():
                  frame: bool,
                  offset: Offset,
                  seed: int,
-                 paused: bool
+                 paused: bool,
+                 history_size: int
                  ):
         self.stdscr = stdscr
         self.figure = figure
@@ -36,6 +37,7 @@ class Caparams():
         self.offset = offset
         self.seed = seed
         self.paused = paused
+        self.history_size = history_size
 
     def toogle_stuck_behaviour(self):
         self.stuck_behaviour = StuckBehaviour.next(self.stuck_behaviour)

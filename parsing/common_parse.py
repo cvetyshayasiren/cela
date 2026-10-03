@@ -49,6 +49,10 @@ class CommonParse():
         return CommonParse._parse_or_raise("delay", UtilsParse.parse_float, arg, 0, Config.MAX_DELAY)
 
     @staticmethod
+    def player_parse_history_size_type(arg: str) -> float:
+        return CommonParse._parse_or_raise("history_size", UtilsParse.parse_int, arg, 0)
+
+    @staticmethod
     def render_parse_offset_type(arg: str) -> Offset:
         return CommonParse._parse_or_raise("offset", RenderParse.parse_offset, arg)
 
