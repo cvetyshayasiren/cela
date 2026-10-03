@@ -61,3 +61,10 @@ class Render():
     def _reset_screen(self):
         self.ca_win.erase()
         self.draw()
+
+    def is_need_tips_control(self) -> bool:
+        return self.tips.tips_mode == TipsMode.FULL
+
+    def is_no_need_tips_control(self) -> bool:
+        return not self.is_need_tips_control()
+        

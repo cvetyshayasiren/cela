@@ -80,6 +80,11 @@ class Tips:
       "(1-9) - add square in center",
       "b - blank field",
     ]
+
+    ###TODO DELETE
+    tips_list += [str(i) for i in range(40)]
+    ###/TODO
+    
     for t in tips_list:
       full_string += (self._divider() + self._embed_a_string(t))
     

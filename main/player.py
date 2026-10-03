@@ -48,13 +48,13 @@ class Player:
                 self.caparams.figure.next(self.caparams.rule)
                 self.draw_if_paused()
 
-        elif key == curses.KEY_UP and self.caparams.is_not_paused(): self.caparams.increase_delay(by=2)
+        elif key == curses.KEY_UP and self.render.is_no_need_tips_control(): self.caparams.increase_delay(by=2)
 
-        elif key == curses.KEY_DOWN and self.caparams.is_not_paused(): self.caparams.decrease_delay(by=2)
+        elif key == curses.KEY_DOWN and self.render.is_no_need_tips_control(): self.caparams.decrease_delay(by=2)
 
-        elif key == curses.KEY_UP and self.caparams.is_paused(): self.render.move_tips_up()
+        elif key == curses.KEY_UP and self.render.is_need_tips_control(): self.render.move_tips_up()
 
-        elif key == curses.KEY_DOWN and self.caparams.is_paused(): self.render.move_tips_down()
+        elif key == curses.KEY_DOWN and self.render.is_need_tips_control(): self.render.move_tips_down()
 
         elif key == ord('r'):
             self.caparams.figure.fill_full_random()
