@@ -39,7 +39,7 @@ class Tips:
     if(self.tips_mode == TipsMode.FULL): self._draw_full(win)
 
   def _draw_mini(self, win: curses.window):
-    y = self.tips_win_size.height - 1
+    y = self.tips_win_size.height - 2
     self.tips_win.addstr(y, 1, self._make_tips_mini_string())
     self.tips_win.overlay(win)
     
