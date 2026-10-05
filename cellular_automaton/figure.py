@@ -67,7 +67,6 @@ class Figure:
                 case _:
                     if value < rule.aging:
                         newGeneration[i, j] = value + 1
-        # equal = np.array_equal(self.generation, newGeneration)
         self.generation = newGeneration
 
     def get_neighbors(self, i: int, j: int) -> int:

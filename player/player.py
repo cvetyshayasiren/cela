@@ -32,18 +32,19 @@ class Player:
             self.caparams.stdscr.timeout(self.caparams.delay)
             self.button_handler()
             if self.caparams.paused: continue
-            old_generation = self.caparams.figure.generation
-            next = self.caparams.figure.next(rule=self.caparams.rule)
-            new_generation = self.caparams.figure.generation
-            self.save_history(old_generation)
-            equal = np.array_equal(old_generation, new_generation)
-            if equal: self.stuck_behaviour()
+            self.step_forward()
             self.draw()
 
-    def step(self):
-        pass
+    def step_forward(self):
+        old_generation = self.caparams.figure.generation
+        self.caparams.figure.next(rule=self.caparams.rule)
+        self.save_history(old_generation)
+        self.stuck_behaviour(old_generation)
 
-    def stuck_behaviour(self):
+    def stuck_behaviour(self, old_generation: np.ndarray):
+        new_generation = self.caparams.figure.generation
+        equal = np.array_equal(old_generation, new_generation)
+        if not equal: return
         match self.caparams.stuck_behaviour:
             case StuckBehaviour.PAUSE:
                 self.paused = True
@@ -66,10 +67,7 @@ class Player:
         elif key == ord('p'):
             self.caparams.pause_toogle()
 
-        elif key == curses.KEY_RIGHT or key == ord('n'):
-            if(self.caparams.is_paused()):
-                self.caparams.figure.next(self.caparams.rule)
-                self.save_history()
+        elif (key == curses.KEY_RIGHT or key == ord('n')) and self.caparams.is_paused(): self.step_forward()
 
         elif key == curses.KEY_UP and self.render.is_no_need_tips_control(): self.caparams.increase_delay(by=2)
 
