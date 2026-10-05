@@ -56,16 +56,18 @@ class Caparams():
 
     def get_symbols_string(self) -> str: return "".join(self.symbols_array)
 
-    def increase_delay(self, by: float = 2): self.set_delay(int(self.delay * by))
+    def increase_delay(self, by: float = 2): 
+        self.set_delay(max(int(self.delay * by), Config.MIN_DELAY))
 
-    def decrease_delay(self, by: float = 2): self.set_delay(int(self.delay / by))
+    def decrease_delay(self, by: float = 2): 
+        new = 0 if self.delay <= Config.MIN_DELAY else max(int(self.delay / by), Config.MIN_DELAY)
+        self.set_delay(new)
 
     def set_delay(self, candidate: int): self.delay = self.fix_delay(candidate=candidate)
 
-    def fix_delay(self, candidate: float) -> int:
-        return int((0 if candidate < Config.MIN_DELAY else min(max(candidate, Config.MIN_DELAY), Config.MAX_DELAY)) 
-                   if candidate > 0 else Config.MIN_DELAY)
-
+    def fix_delay(self, candidate: int) -> int: 
+        return 0 if candidate < Config.MIN_DELAY else min(candidate, Config.MAX_DELAY)
+        
 
     def is_paused(self) -> bool: return self.paused
     def is_not_paused(self) -> bool: return not self.paused
