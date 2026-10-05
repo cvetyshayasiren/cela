@@ -18,7 +18,7 @@ class Caparams():
     def __init__(self, stdscr: curses.window, 
                  figure: Figure,
                  rule: Rule,
-                 delay: float,
+                 delay: int,
                  stuck_behaviour: StuckBehaviour,
                  symbols: str,
                  frame: bool,
@@ -56,14 +56,15 @@ class Caparams():
 
     def get_symbols_string(self) -> str: return "".join(self.symbols_array)
 
-    def increase_delay(self, by: float = 2): self.set_delay(self.delay * by)
+    def increase_delay(self, by: float = 2): self.set_delay(int(self.delay * by))
 
-    def decrease_delay(self, by: float = 2): self.set_delay(self.delay / by)
+    def decrease_delay(self, by: float = 2): self.set_delay(int(self.delay / by))
 
-    def set_delay(self, candidate: float): self.delay = self.fix_delay(candidate=candidate)
+    def set_delay(self, candidate: int): self.delay = self.fix_delay(candidate=candidate)
 
-    def fix_delay(self, candidate: float) -> float:
-        return (0 if candidate < Config.MIN_DELAY else round(min(max(candidate, 0.01), Config.MAX_DELAY), 2)) if candidate > 0 else Config.MIN_DELAY
+    def fix_delay(self, candidate: float) -> int:
+        return int((0 if candidate < Config.MIN_DELAY else min(max(candidate, Config.MIN_DELAY), Config.MAX_DELAY)) 
+                   if candidate > 0 else Config.MIN_DELAY)
 
 
     def is_paused(self) -> bool: return self.paused

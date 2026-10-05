@@ -29,13 +29,29 @@ class Player:
         self.is_playing = True
 
         while(self.is_playing == True):
-            self.caparams.stdscr.timeout(int(self.caparams.delay * 1000))
+            self.caparams.stdscr.timeout(self.caparams.delay)
             self.button_handler()
             if self.caparams.paused: continue
+            old_generation = self.caparams.figure.generation
             next = self.caparams.figure.next(rule=self.caparams.rule)
-            self.save_history()
-            if not next: self.stuck_behaviour()
+            new_generation = self.caparams.figure.generation
+            self.save_history(old_generation)
+            equal = np.array_equal(old_generation, new_generation)
+            if equal: self.stuck_behaviour()
             self.draw()
+
+    def step(self):
+        pass
+
+    def stuck_behaviour(self):
+        match self.caparams.stuck_behaviour:
+            case StuckBehaviour.PAUSE:
+                self.paused = True
+            case StuckBehaviour.CONTINUE:
+                self.caparams.figure.fill_full_random()
+            case StuckBehaviour.STOP:
+                self.stop()
+    
 
     def stop(self):
         self.is_playing = False
@@ -126,15 +142,6 @@ class Player:
     def draw_if_paused(self):
         if(self.caparams.paused): self.draw()
 
-    def stuck_behaviour(self):
-        match self.caparams.stuck_behaviour:
-            case StuckBehaviour.PAUSE:
-                self.paused = True
-            case StuckBehaviour.CONTINUE:
-                self.caparams.figure.fill_full_random()
-            case StuckBehaviour.STOP:
-                self.stop()
-
     def init_mouse(self):
         curses.mousemask(curses.ALL_MOUSE_EVENTS)
         self.caparams.stdscr.keypad(True)
@@ -145,8 +152,8 @@ class Player:
     def _is_need_save_on_history(self) -> bool:
         return self.history is not None
 
-    def save_history(self):
+    def save_history(self, generation: np.ndarray):
         if self.history is not None:
-            self.history.save(self.caparams.figure.generation)
+            self.history.save(generation)
 
     

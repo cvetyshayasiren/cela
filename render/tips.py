@@ -94,7 +94,7 @@ class Tips:
     paused = self.caparams.paused
     size_string = f"{self.caparams.figure.width}x{self.caparams.figure.height}"
     pause_state_string = "PAUSED.." if paused else "playing"
-    candidate = f"{pause_state_string}|{size_string}|i - info/tips"
+    candidate = f"{pause_state_string}|{size_string}|i - info/tips |delay {self.caparams.delay} ms."
     return candidate[:self._width_without_box()]
 
   def _embed_a_string(self, string: str) -> str:

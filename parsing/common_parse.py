@@ -46,7 +46,7 @@ class CommonParse():
 
     @staticmethod
     def player_parse_delay_type(arg: str) -> float:
-        return CommonParse._parse_or_raise("delay", UtilsParse.parse_float, arg, 0, Config.MAX_DELAY)
+        return CommonParse._parse_or_raise("delay", UtilsParse.parse_int, arg, 0, Config.MAX_DELAY)
 
     @staticmethod
     def player_parse_history_size_type(arg: str) -> float:

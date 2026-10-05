@@ -1,13 +1,13 @@
 
 class Config:
-    MIN_DELAY = 0.01
-    MAX_DELAY = 3600
-    MAX_AGING = 100
-    MAX_RANDOM_AGING = 10
+    MIN_DELAY: int = 1
+    MAX_DELAY: int = 60_000
+    MAX_AGING: int = 100
+    MAX_RANDOM_AGING: int = 10
 
-    MIN_DIMENSION = 1
-    MAX_DIMENSION = 400
+    MIN_DIMENSION: int = 1
+    MAX_DIMENSION: int = 400
 
-    TIPS_HEIGHT_FRACTION = 0.8
+    TIPS_HEIGHT_FRACTION: float = 0.8
 
-    DEFAULT_HISTORY_SIZE = 10
+    DEFAULT_HISTORY_SIZE: int = 10
