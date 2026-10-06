@@ -40,6 +40,8 @@ class Figure:
         x_start = (self.width - width) // 2
         self.contain_rect(x=x_start, y=y_start, width=width, height=height)
 
+    def contain_square_in_center(self, side: int): self.contain_rect_in_center(side, side)
+
     def contain_cell(self, x: int, y: int, age: int):
         if(x >= self.width or y >= self.height or age > Config.MAX_AGING): return
         self.generation[y, x] = age

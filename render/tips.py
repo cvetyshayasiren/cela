@@ -69,7 +69,7 @@ class Tips:
     )
 
   def _make_tips_full_lines_list(self) -> list[str]:
-    header: str = f"rule {self.caparams.rule.string}"
+    header: str = self.rule_string()
     full_string: str = self._embed_a_string(header)
     tips_list: list[str] = [
       f"q - exit",
@@ -93,10 +93,12 @@ class Tips:
   def _make_tips_mini_string(self):
     paused = self.caparams.paused
     size_string = f"{self.caparams.figure.width}x{self.caparams.figure.height}"
-    pause_state_string = "PAUSED.." if paused else "playing"
-    candidate = f"{pause_state_string}|{size_string}|i - info/tips |delay {self.caparams.delay} ms."
+    pause_state_string = "PAUSED.." if paused else ""
+    candidate = f"{pause_state_string} {size_string} | i - info | delay {self.caparams.delay} ms. {self.rule_string()}"
     return candidate[:self._width_without_box()]
 
+  def rule_string(self) -> str: return f"rule {self.caparams.rule.string}"
+    
   def _embed_a_string(self, string: str) -> str:
     width = self._width_without_box()
     chunks = [string[i:i+width] for i in range(0, len(string), width)]

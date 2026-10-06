@@ -46,12 +46,12 @@ class ColorManager:
             curses.init_pair(i, color, bg)
 
     @classmethod
-    def random_background(cls, caparams: Caparams):
+    def random_background(cls, caparams: Caparams, window: curses.window):
         back = RandomSeed.rng.integers(1, cls.num_available_colors() + 1)
         for i in range(1, cls.num_necessary_colors() + 1):
             fg, _ = curses.pair_content(i)
             curses.init_pair(i, fg, back)
-        caparams.stdscr.bkgd(caparams.get_blank_symbol(), curses.color_pair(1))
+        window.bkgd(caparams.get_blank_symbol(), curses.color_pair(1))
 
     @classmethod
     def reset_colors(cls):

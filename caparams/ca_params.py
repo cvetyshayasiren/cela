@@ -51,7 +51,7 @@ class Caparams():
     def get_symbol(self, age: int): 
         return self.symbols_array[min(age, len(self.symbols_array) - 1)]
 
-    def get_blank_symbol(self):
+    def get_blank_symbol(self) -> str:
         return self.symbols_array[0] if len(self.symbols_array) else " "
 
     def get_symbols_string(self) -> str: return "".join(self.symbols_array)

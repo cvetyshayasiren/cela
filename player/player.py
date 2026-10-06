@@ -88,6 +88,10 @@ class Player:
             digit = key - ord('0')
             self.caparams.figure.fill_random_range(low=digit/10, high=(digit+1)/10)
 
+        elif key in [ord(i) for i in "kl;'"]:
+            side = {ord('k'): 2, ord('l'): 3, ord(';'): 4, ord("'"): 5}[key]
+            self.caparams.figure.contain_square_in_center(side)
+
         elif key == ord('b'):
             self.caparams.figure.blank_field()
 
@@ -98,7 +102,7 @@ class Player:
             ColorManager.randomise_colors()
 
         elif key == ord(','):
-            ColorManager.random_background(caparams=self.caparams)
+            ColorManager.random_background(caparams= self.caparams, window=self.render.ca_win)
 
         elif key == ord('/'):
             ColorManager.reset_colors()
