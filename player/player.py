@@ -19,7 +19,7 @@ class Player:
         self.render: Render = Render(caparams=caparams)
         self.is_playing: bool = False
         self.dragging: bool = False
-        self.init_mouse()
+        self._init_mouse()
         self.output: str = ""
         
         self.history: PlayerHistory | None = self._init_history(caparams.history_size)
@@ -30,18 +30,18 @@ class Player:
 
         while(self.is_playing == True):
             self.caparams.stdscr.timeout(self.caparams.delay)
-            self.button_handler()
+            self._button_handler()
             if self.caparams.paused: continue
             self.step_forward()
-            self.draw()
+            self._draw()
 
     def step_forward(self):
         old_generation = self.caparams.figure.generation
         self.caparams.figure.next(rule=self.caparams.rule)
-        self.save_history(old_generation)
-        self.stuck_behaviour(old_generation)
+        self._save_history(old_generation)
+        self._stuck_behaviour(old_generation)
 
-    def stuck_behaviour(self, old_generation: np.ndarray):
+    def _stuck_behaviour(self, old_generation: np.ndarray):
         new_generation = self.caparams.figure.generation
         equal = np.array_equal(old_generation, new_generation)
         if not equal: return
@@ -57,9 +57,9 @@ class Player:
     def stop(self):
         self.is_playing = False
 
-    def button_handler(self):
+    def _button_handler(self):
         key = self.caparams.stdscr.getch()
-        self.mouse_handler(key)
+        self._mouse_handler(key)
 
         if key == ord('q') or key == 27:
             self.stop()
@@ -118,9 +118,9 @@ class Player:
         elif key == ord('f'):
             self.render.frame_toogle()
 
-        self.draw_if_paused()
+        self._draw_if_paused()
         
-    def mouse_handler(self, key):
+    def _mouse_handler(self, key):
         if key != curses.KEY_MOUSE: return
         try:
             _, x, y, _, bstate = curses.getmouse()
@@ -138,13 +138,13 @@ class Player:
         except curses.error:
             pass
 
-    def draw(self):
+    def _draw(self):
         self.render.draw()
         
-    def draw_if_paused(self):
-        if(self.caparams.paused): self.draw()
+    def _draw_if_paused(self):
+        if(self.caparams.paused): self._draw()
 
-    def init_mouse(self):
+    def _init_mouse(self):
         curses.mousemask(curses.ALL_MOUSE_EVENTS)
         self.caparams.stdscr.keypad(True)
 
@@ -154,7 +154,7 @@ class Player:
     def _is_need_save_on_history(self) -> bool:
         return self.history is not None
 
-    def save_history(self, generation: np.ndarray):
+    def _save_history(self, generation: np.ndarray):
         if self.history is not None:
             self.history.save(generation)
 

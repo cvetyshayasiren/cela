@@ -11,3 +11,5 @@ class Config:
     TIPS_HEIGHT_FRACTION: float = 0.8
 
     DEFAULT_HISTORY_SIZE: int = 10
+
+    BASE_SYMBOLS_LIST: list[str] = [" ", "■"]

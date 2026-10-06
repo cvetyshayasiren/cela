@@ -30,9 +30,9 @@ class Caparams():
         self.stdscr = stdscr
         self.figure = figure
         self.rule = rule
-        self.delay = self.fix_delay(delay)
+        self.delay = self._fix_delay(delay)
         self.stuck_behaviour: StuckBehaviour = stuck_behaviour
-        self.symbols_array = self.build_symbols_array(symbols)
+        self.symbols_array = self._build_symbols_array(symbols)
         self.frame = frame
         self.offset = offset
         self.seed = seed
@@ -42,17 +42,11 @@ class Caparams():
     def toogle_stuck_behaviour(self):
         self.stuck_behaviour = StuckBehaviour.next(self.stuck_behaviour)
 
-    def init_symbols(self, symbols: str):
-        self.symbols_array = self.build_symbols_array(symbols=symbols)
-
-    def build_symbols_array(self, symbols: str):
-        return np.array(list(symbols) or [" ", "■"], dtype="<U1")
-
-    def get_symbol(self, age: int): 
+    def get_symbol_by_age(self, age: int): 
         return self.symbols_array[min(age, len(self.symbols_array) - 1)]
 
     def get_blank_symbol(self) -> str:
-        return self.symbols_array[0] if len(self.symbols_array) else " "
+        return self.symbols_array[0] if len(self.symbols_array) else Config.BASE_SYMBOLS_LIST[0]
 
     def get_symbols_string(self) -> str: return "".join(self.symbols_array)
 
@@ -63,9 +57,9 @@ class Caparams():
         new = 0 if self.delay <= Config.MIN_DELAY else max(int(self.delay / by), Config.MIN_DELAY)
         self.set_delay(new)
 
-    def set_delay(self, candidate: int): self.delay = self.fix_delay(candidate=candidate)
+    def set_delay(self, candidate: int): self.delay = self._fix_delay(candidate=candidate)
 
-    def fix_delay(self, candidate: int) -> int: 
+    def _fix_delay(self, candidate: int) -> int: 
         return 0 if candidate < Config.MIN_DELAY else min(candidate, Config.MAX_DELAY)
         
 
@@ -88,3 +82,6 @@ class Caparams():
     def getTermHeight(self) -> int: return self.getTermSize().height
     def getFigSize(self) -> Size:
         return self.figure.size()
+
+    def _build_symbols_array(self, symbols: str):
+        return np.array(list(symbols) or Config.BASE_SYMBOLS_LIST, dtype="<U1")
