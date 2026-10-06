@@ -50,7 +50,7 @@ class CommonParse():
 
     @staticmethod
     def player_parse_history_size_type(arg: str) -> float:
-        return CommonParse._parse_or_raise("history_size", UtilsParse.parse_int, arg, 0)
+        return CommonParse._parse_or_raise("history_size", UtilsParse.parse_int, arg, 1)
 
     @staticmethod
     def render_parse_offset_type(arg: str) -> Offset:

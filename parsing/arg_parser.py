@@ -94,9 +94,14 @@ def arg_parser() -> argparse.Namespace:
             "Default: continue"
     )
     parser.add_argument(
-        "-m", "--history_size", type=CommonParse.player_parse_history_size_type, dest="history_size", default=Config.DEFAULT_HISTORY_SIZE,
-        metavar="N",
-        help=f"number of past states to keep for undo, 0 to disable. Default: {Config.DEFAULT_HISTORY_SIZE}"
+        "-m", "--hs", "--history_size", type=CommonParse.player_parse_history_size_type, 
+        dest="history_size", default=Config.DEFAULT_HISTORY_SIZE, metavar="N",
+        help=f"number of past states to keep for undo, minimum 1. Default: {Config.DEFAULT_HISTORY_SIZE}"
+    )
+
+    parser.add_argument(
+        "--cycles", action="store_true", dest= "cycles",
+        help="detect cycles in history (length up to history size)"
     )
 
     #render
@@ -193,6 +198,7 @@ def args_to_params(stdscr, args: argparse.Namespace) -> Caparams:
         offset= offset,
         seed = RandomSeed.seed if args.seed is None else args.seed,
         paused= args.pause,
-        history_size=args.history_size
+        history_size=args.history_size,
+        cycles= args.cycles
     )
     

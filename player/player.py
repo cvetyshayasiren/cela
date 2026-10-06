@@ -21,8 +21,7 @@ class Player:
         self.dragging: bool = False
         self._init_mouse()
         self.output: str = ""
-        
-        self.history: PlayerHistory | None = self._init_history(caparams.history_size)
+        self.history: PlayerHistory = self._init_history(caparams.history_size)
 
     def play(self):
         if self.is_playing: return
@@ -36,15 +35,22 @@ class Player:
             self._draw()
 
     def step_forward(self):
-        old_generation = self.caparams.figure.generation
         self.caparams.figure.next(rule=self.caparams.rule)
-        self._save_history(old_generation)
-        self._stuck_behaviour(old_generation)
+        old_generation = self.history.last()
+        self.history.save(old_generation)
+        self._stuck_behaviour()
 
-    def _stuck_behaviour(self, old_generation: np.ndarray):
+    def _is_stuck(self, old_generation: np.ndarray):
         new_generation = self.caparams.figure.generation
-        equal = np.array_equal(old_generation, new_generation)
-        if not equal: return
+        if(self.caparams.cycles):
+            stuck = True
+        else:
+            stuck = new_generation == self.history.last()
+
+    def _stuck_behaviour(self):
+
+            
+        if not stuck: return
         match self.caparams.stuck_behaviour:
             case StuckBehaviour.PAUSE:
                 self.paused = True
@@ -77,7 +83,7 @@ class Player:
 
         elif key == curses.KEY_DOWN and self.render.is_need_tips_control(): self.render.move_tips_down()
 
-        elif key == curses.KEY_LEFT and self.history is not None and len(self.history.history) > 0:
+        elif key == curses.KEY_LEFT:
             self.caparams.pause_toogle(value=True)
             self.caparams.figure.generation = self.history.take()
 
@@ -148,14 +154,11 @@ class Player:
         curses.mousemask(curses.ALL_MOUSE_EVENTS)
         self.caparams.stdscr.keypad(True)
 
-    def _init_history(self, history_size: int) -> PlayerHistory | None:
-        return PlayerHistory(history_size) if history_size > 0 else None
+    def _init_history(self, history_size: int) -> PlayerHistory:
+        return PlayerHistory.from_size(size=history_size, generation = self.caparams.figure.generation)
 
     def _is_need_save_on_history(self) -> bool:
         return self.history is not None
-
-    def _save_history(self, generation: np.ndarray):
-        if self.history is not None:
-            self.history.save(generation)
+            
 
     

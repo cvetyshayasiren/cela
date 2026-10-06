@@ -25,7 +25,8 @@ class Caparams():
                  offset: Offset,
                  seed: int,
                  paused: bool,
-                 history_size: int
+                 history_size: int,
+                 cycles: bool
                  ):
         self.stdscr = stdscr
         self.figure = figure
@@ -38,6 +39,8 @@ class Caparams():
         self.seed = seed
         self.paused = paused
         self.history_size = history_size
+        self.cycles = cycles
+        
 
     def toogle_stuck_behaviour(self):
         self.stuck_behaviour = StuckBehaviour.next(self.stuck_behaviour)
@@ -65,7 +68,7 @@ class Caparams():
 
     def is_paused(self) -> bool: return self.paused
     def is_not_paused(self) -> bool: return not self.paused
-    
+
     def pause(self): self.pause_toogle(True)
     def unpause(self): self.pause_toogle(False)
     def pause_toogle(self, value: bool | None = None):
@@ -83,5 +86,8 @@ class Caparams():
     def getFigSize(self) -> Size:
         return self.figure.size()
 
+    def init_symbols(self, symbols: str):
+        self.symbols_array = self._build_symbols_array(symbols=symbols)
+    
     def _build_symbols_array(self, symbols: str):
         return np.array(list(symbols) or Config.BASE_SYMBOLS_LIST, dtype="<U1")
