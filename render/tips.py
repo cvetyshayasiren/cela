@@ -18,7 +18,7 @@ class Tips:
     self.tips_mini_string: str = self._make_tips_mini_string()
     self.offset: int = 0
     self.max_offset: int = self._calculate_max_offset()
-    self.pause_message = ""
+    self.pause_message: str = ""
 
   def set_pause_message(self, message: str): self.pause_message = f"[{message}]"
   def reset_pause_message(self): self.pause_message = ""
