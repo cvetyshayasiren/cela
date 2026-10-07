@@ -13,7 +13,7 @@ class PlayerHistory(ABC):
     ...
 
   @abstractmethod
-  def take(self) -> np.ndarray:
+  def undo(self) -> np.ndarray:
     ...
 
   @abstractmethod
@@ -32,7 +32,7 @@ class PlayerHistoryValue(PlayerHistory):
   def save(self, generation: np.ndarray): 
     self.old_generation = generation
 
-  def take(self) -> np.ndarray: return self.old_generation
+  def undo(self) -> np.ndarray: return self.old_generation
 
   def last(self) -> np.ndarray: return self.old_generation
 
@@ -44,7 +44,7 @@ class PlayerHistoryDeque(PlayerHistory):
   def save(self, generation: np.ndarray):
     self.history.append(generation)
 
-  def take(self) -> np.ndarray:
+  def undo(self) -> np.ndarray:
     if len(self.history) > 1: return self.history.pop()
     return self.history[0]
     
