@@ -99,11 +99,6 @@ def arg_parser() -> argparse.Namespace:
         help=f"number of past states to keep for undo, minimum 1. Default: {Config.DEFAULT_HISTORY_SIZE}"
     )
 
-    parser.add_argument(
-        "--cycles", action="store_true", dest= "cycles",
-        help="detect cycles in history (length up to history size)"
-    )
-
     #render
     parser.add_argument(
         "-s", "--symbols", type=str, dest = "symbols",
@@ -199,6 +194,5 @@ def args_to_params(stdscr, args: argparse.Namespace) -> Caparams:
         seed = RandomSeed.seed if args.seed is None else args.seed,
         paused= args.pause,
         history_size=args.history_size,
-        cycles= args.cycles
     )
     

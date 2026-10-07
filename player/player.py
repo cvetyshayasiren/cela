@@ -25,6 +25,7 @@ class Player:
 
     def play(self):
         if self.is_playing: return
+        self.render.tips.reset_pause_message()
         self.is_playing = True
 
         while(self.is_playing == True):
@@ -35,21 +36,21 @@ class Player:
             self._draw()
 
     def step_forward(self):
-        self.history.save(self.caparams.figure.generation)
+        stuck = self.history.save(self.caparams.figure.generation)
         self.caparams.figure.next(rule=self.caparams.rule)
-        self._stuck_behaviour()
-
-    def _stuck_behaviour(self):
-        if not self.history.is_contain(self.caparams.figure.generation): return
+        if stuck:
+            self._stuck_behaviour(stuck)
+        
+    def _stuck_behaviour(self, cycle_depth: int):
         match self.caparams.stuck_behaviour:
             case StuckBehaviour.PAUSE:
-                self.paused = True
+                self.render.tips.set_pause_message(f"cycle {cycle_depth}")
+                self.caparams.pause()
             case StuckBehaviour.CONTINUE:
                 self.caparams.figure.fill_full_random()
             case StuckBehaviour.STOP:
                 self.stop()
     
-
     def stop(self):
         self.is_playing = False
 

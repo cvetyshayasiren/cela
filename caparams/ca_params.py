@@ -26,7 +26,6 @@ class Caparams():
                  seed: int,
                  paused: bool,
                  history_size: int,
-                 cycles: bool
                  ):
         self.stdscr = stdscr
         self.figure = figure
@@ -39,7 +38,6 @@ class Caparams():
         self.seed = seed
         self.paused = paused
         self.history_size = history_size
-        self.cycles = cycles
         
 
     def toogle_stuck_behaviour(self):
