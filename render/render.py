@@ -34,7 +34,7 @@ class Render():
             if i >= h or j >= w - 1: continue
             value = generation[i, j]
             self.ca_win.addstr(i, j, 
-                                        self.caparams.get_symbol(age=value),
+                                        self.caparams.get_symbol_by_age(age=value),
                                         curses.color_pair(ColorManager.pair_for_aging(value))
                                        )
 

@@ -59,4 +59,4 @@ class PlayerHistoryDeque(PlayerHistory):
     return self.history[-1]
 
   def is_contain(self, generation: np.ndarray) -> bool:
-    return generation in self.history
+    return any(np.array_equal(state, generation) for state in self.history)
