@@ -76,7 +76,7 @@ class Player:
 
         elif key == curses.KEY_LEFT:
             self.caparams.pause_toogle(value=True)
-            self.caparams.figure.generation = self.history.take()
+            self.caparams.figure.generation = self.history.undo()
 
         elif key == ord('r'):
             self.caparams.figure.fill_full_random()

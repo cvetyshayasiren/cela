@@ -15,10 +15,10 @@ class Tips:
     self.tips_win: curses.window = self._make_tips_window()
     self.tips_win_size: Size = Size.from_curses_window(self.tips_win)
     self.tips_full_lines_list: list[str] = self._make_tips_full_lines_list()
+    self.pause_message: str = ""
     self.tips_mini_string: str = self._make_tips_mini_string()
     self.offset: int = 0
     self.max_offset: int = self._calculate_max_offset()
-    self.pause_message: str = ""
 
   def set_pause_message(self, message: str): self.pause_message = f"[{message}]"
   def reset_pause_message(self): self.pause_message = ""

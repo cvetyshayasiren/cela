@@ -169,6 +169,7 @@ def args_to_params(stdscr, args: argparse.Namespace) -> Caparams:
     if args.height: height = args.height
     figure = Figure(width = width, height = height)
     if args.fill: figure.fill_random(fraction=args.fill)
+    else: figure.fill_full_random()
     if args.blank: figure.blank_field()
     if args.contain: FigureParse.contain_cells(figure=figure, max_age=rule.aging, cells=args.contain)
     if args.rect: FigureParse.contain_rect(figure=figure, rect = args.rect)
