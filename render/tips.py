@@ -18,7 +18,11 @@ class Tips:
     self.tips_mini_string: str = self._make_tips_mini_string()
     self.offset: int = 0
     self.max_offset: int = self._calculate_max_offset()
+    self.pause_message = ""
 
+  def set_pause_message(self, message: str): self.pause_message = f"[{message}]"
+  def reset_pause_message(self): self.pause_message = ""
+  
   def toogle_tips(self) -> TipsMode: 
     self.tips_mode = TipsMode.next(self.tips_mode)
     return self.tips_mode
@@ -43,7 +47,6 @@ class Tips:
     self.tips_win.addstr(y, 1, self._make_tips_mini_string())
     self.tips_win.overlay(win)
     
-
   def _draw_full(self, win: curses.window):
     for index, line in enumerate(self._get_current_full_range()):
       self.tips_win.addstr(index + 1, 1, line)
@@ -69,7 +72,7 @@ class Tips:
     )
 
   def _make_tips_full_lines_list(self) -> list[str]:
-    header: str = self.rule_string()
+    header: str = self._rule_string()
     full_string: str = self._embed_a_string(header)
     tips_list: list[str] = [
       f"q - exit",
@@ -94,10 +97,13 @@ class Tips:
     paused = self.caparams.paused
     size_string = f"{self.caparams.figure.width}x{self.caparams.figure.height}"
     pause_state_string = "PAUSED.." if paused else ""
-    candidate = f"{pause_state_string} {size_string} | i - info | delay {self.caparams.delay} ms. {self.rule_string()}"
+    candidate = (
+      f"{self.pause_message}{pause_state_string} {size_string} | "
+      f"i - info | delay {self.caparams.delay} ms. {self._rule_string()}"
+    )
     return candidate[:self._width_without_box()]
 
-  def rule_string(self) -> str: return f"rule {self.caparams.rule.string}"
+  def _rule_string(self) -> str: return f"rule {self.caparams.rule.string}"
     
   def _embed_a_string(self, string: str) -> str:
     width = self._width_without_box()
