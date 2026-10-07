@@ -20,6 +20,10 @@ class PlayerHistory(ABC):
   def last(self) -> np.ndarray:
     ...
 
+  @abstractmethod
+  def is_contain(self, generation: np.ndarray) -> bool:
+    ...
+
   @staticmethod
   def from_size(size: int, generation: np.ndarray) -> PlayerHistory:
     if(size == 1): return PlayerHistoryValue(generation)
@@ -36,6 +40,9 @@ class PlayerHistoryValue(PlayerHistory):
 
   def last(self) -> np.ndarray: return self.old_generation
 
+  def is_contain(self, generation: np.ndarray) -> bool:
+    return generation == self.old_generation
+
 class PlayerHistoryDeque(PlayerHistory):
   def __init__(self, size: int, generation: np.ndarray):
     self.history: deque[np.ndarray] = deque(maxlen=size)
@@ -50,3 +57,6 @@ class PlayerHistoryDeque(PlayerHistory):
     
   def last(self) -> np.ndarray:
     return self.history[-1]
+
+  def is_contain(self, generation: np.ndarray) -> bool:
+    return generation in self.history

@@ -35,22 +35,12 @@ class Player:
             self._draw()
 
     def step_forward(self):
+        self.history.save(self.caparams.figure.generation)
         self.caparams.figure.next(rule=self.caparams.rule)
-        old_generation = self.history.last()
-        self.history.save(old_generation)
         self._stuck_behaviour()
 
-    def _is_stuck(self, old_generation: np.ndarray):
-        new_generation = self.caparams.figure.generation
-        if(self.caparams.cycles):
-            stuck = True
-        else:
-            stuck = new_generation == self.history.last()
-
     def _stuck_behaviour(self):
-
-            
-        if not stuck: return
+        if not self.history.is_contain(self.caparams.figure.generation): return
         match self.caparams.stuck_behaviour:
             case StuckBehaviour.PAUSE:
                 self.paused = True
