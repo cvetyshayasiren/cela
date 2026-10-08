@@ -194,7 +194,7 @@ def args_to_params(stdscr, args: argparse.Namespace) -> Caparams:
         frame = args.frame,
         offset= offset,
         seed = RandomSeed.seed if args.seed is None else args.seed,
-        paused= Pause(paused=args.pause),
+        pause = Pause(paused=args.pause),
         history_size=args.history_size,
     )
     
