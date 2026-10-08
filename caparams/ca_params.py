@@ -1,4 +1,6 @@
 from __future__ import annotations
+from numpy.typing import NDArray
+from caparams.pause import Pause
 from caparams.stuck_behaviour import StuckBehaviour
 from alignment.window_calc import Offset, Size
 from debug import printl
@@ -24,22 +26,21 @@ class Caparams():
                  frame: bool,
                  offset: Offset,
                  seed: int,
-                 paused: bool,
+                 pause: Pause,
                  history_size: int,
                  ):
-        self.stdscr = stdscr
-        self.figure = figure
-        self.rule = rule
-        self.delay = self._fix_delay(delay)
+        self.stdscr: curses.window = stdscr
+        self.figure: Figure = figure
+        self.rule: Rule = rule
+        self.delay: int = self._fix_delay(delay)
         self.stuck_behaviour: StuckBehaviour = stuck_behaviour
-        self.symbols_array = self._build_symbols_array(symbols)
-        self.frame = frame
-        self.offset = offset
-        self.seed = seed
-        self.paused = paused
-        self.history_size = history_size
+        self.symbols_array: NDArray = self._build_symbols_array(symbols)
+        self.frame: bool = frame
+        self.offset: Offset = offset
+        self.seed: int = seed
+        self.pause: Pause = pause
+        self.history_size: int = history_size
         
-
     def toogle_stuck_behaviour(self):
         self.stuck_behaviour = StuckBehaviour.next(self.stuck_behaviour)
 
@@ -63,18 +64,6 @@ class Caparams():
     def _fix_delay(self, candidate: int) -> int: 
         return 0 if candidate < Config.MIN_DELAY else min(candidate, Config.MAX_DELAY)
         
-
-    def is_paused(self) -> bool: return self.paused
-    def is_not_paused(self) -> bool: return not self.paused
-
-    def pause(self): self.pause_toogle(True)
-    def unpause(self): self.pause_toogle(False)
-    def pause_toogle(self, value: bool | None = None):
-        if value is not None:
-            self.paused = value
-        else:
-            self.paused = not self.paused
-
     def frame_toogle(self): self.frame = not self.frame
 
     def getTermSize(self) -> Size:
@@ -87,5 +76,5 @@ class Caparams():
     def init_symbols(self, symbols: str):
         self.symbols_array = self._build_symbols_array(symbols=symbols)
     
-    def _build_symbols_array(self, symbols: str):
+    def _build_symbols_array(self, symbols: str) -> NDArray:
         return np.array(list(symbols) or Config.BASE_SYMBOLS_LIST, dtype="<U1")

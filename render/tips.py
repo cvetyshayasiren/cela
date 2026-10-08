@@ -15,7 +15,6 @@ class Tips:
     self.tips_win: curses.window = self._make_tips_window()
     self.tips_win_size: Size = Size.from_curses_window(self.tips_win)
     self.tips_full_lines_list: list[str] = self._make_tips_full_lines_list()
-    self.pause_message: str = ""
     self.tips_mini_string: str = self._make_tips_mini_string()
     self.offset: int = 0
     self.max_offset: int = self._calculate_max_offset()
@@ -94,11 +93,9 @@ class Tips:
     return full_string.splitlines()
 
   def _make_tips_mini_string(self):
-    paused = self.caparams.paused
     size_string = f"{self.caparams.figure.width}x{self.caparams.figure.height}"
-    pause_state_string = "PAUSED.." if paused else ""
     candidate = (
-      f"{self.pause_message}{pause_state_string} {size_string} | "
+      f"{self.caparams.pause.pause_string} {size_string} | "
       f"i - info | delay {self.caparams.delay} ms. {self._rule_string()}"
     )
     return candidate[:self._width_without_box()]

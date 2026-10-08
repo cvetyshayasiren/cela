@@ -30,7 +30,7 @@ class Player:
         while(self.is_playing == True):
             self.caparams.stdscr.timeout(self.caparams.delay)
             self._button_handler()
-            if self.caparams.paused: continue
+            if self.caparams.pause.paused: continue
             self.step_forward()
             self._draw()
 
@@ -43,8 +43,7 @@ class Player:
     def _stuck_behaviour(self, cycle_depth: int):
         match self.caparams.stuck_behaviour:
             case StuckBehaviour.PAUSE:
-                self.render.tips.set_pause_message(f"cycle {cycle_depth}")
-                self.caparams.pause()
+                self.caparams.pause.pause(message=f"cycle {cycle_depth}")
             case StuckBehaviour.CONTINUE:
                 self.caparams.figure.fill_full_random()
             case StuckBehaviour.STOP:
@@ -61,9 +60,9 @@ class Player:
             self.stop()
 
         elif key == ord('p'):
-            self.caparams.pause_toogle()
+            self.caparams.pause.pause_toogle()
 
-        elif (key == curses.KEY_RIGHT or key == ord('n')) and self.caparams.is_paused(): self.step_forward()
+        elif (key == curses.KEY_RIGHT or key == ord('n')) and self.caparams.pause.is_paused(): self.step_forward()
 
         elif key == curses.KEY_UP and self.render.is_no_need_tips_control(): self.caparams.increase_delay(by=2)
 
@@ -74,7 +73,7 @@ class Player:
         elif key == curses.KEY_DOWN and self.render.is_need_tips_control(): self.render.move_tips_down()
 
         elif key == curses.KEY_LEFT:
-            self.caparams.pause_toogle(value=True)
+            self.caparams.pause.pause(message="UNDO")
             self.caparams.figure.generation = self.history.undo()
 
         elif key == ord('r'):
@@ -138,7 +137,7 @@ class Player:
         self.render.draw()
         
     def _draw_if_paused(self):
-        if(self.caparams.paused): self._draw()
+        if(self.caparams.pause.paused): self._draw()
 
     def _init_mouse(self):
         curses.mousemask(curses.ALL_MOUSE_EVENTS)

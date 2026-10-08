@@ -1,7 +1,7 @@
 from config import Config
 class Pause:
     
-    def __init__(self, paused: bool, message: str | None = None):
+    def __init__(self, paused: bool = False, message: str | None = None):
         self.paused: bool = paused
         self.pause_string: str = self._make_pause_string(message)
 
@@ -18,6 +18,9 @@ class Pause:
             self.paused = value
         else:
             self.paused = not self.paused
+
+    def is_paused(self) -> bool: return self.paused
+    def is_unpaused(self) -> bool: return not self.paused
 
     def _set_pause_string(self, message: str | None):
         self.pause_string = self._make_pause_string(message)
