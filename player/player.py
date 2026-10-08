@@ -25,7 +25,6 @@ class Player:
 
     def play(self):
         if self.is_playing: return
-        self.render.tips.reset_pause_message()
         self.is_playing = True
 
         while(self.is_playing == True):

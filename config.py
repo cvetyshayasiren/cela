@@ -13,3 +13,5 @@ class Config:
     DEFAULT_HISTORY_SIZE: int = 10
 
     BASE_SYMBOLS_LIST: list[str] = [" ", "■"]
+
+    DEFAULT_PAUSE_STRING: str = "PAUSED.."
