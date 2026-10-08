@@ -62,6 +62,7 @@ class Player:
 
         elif key == ord('p'):
             self.caparams.pause.pause_toogle()
+            
 
         elif (key == curses.KEY_RIGHT or key == ord('n')) and self.caparams.pause.is_paused(): self.step_forward()
 

@@ -6,18 +6,20 @@ class Pause:
         self.pause_string: str = self._make_pause_string(message)
 
     def pause(self, message: str | None = None): 
-        self.pause_toogle(True)
+        self.paused = True
         self._set_pause_string(message)
         
     def unpause(self): 
-        self.pause_toogle(False)
+        self.paused = False
         self.pause_string = ""
         
     def pause_toogle(self, value: bool | None = None):
         if value is not None:
-            self.paused = value
+            if value == True: self.pause()
+            else: self.unpause()
         else:
-            self.paused = not self.paused
+            if self.paused: self.unpause()
+            else: self.pause()
 
     def is_paused(self) -> bool: return self.paused
     def is_unpaused(self) -> bool: return not self.paused
