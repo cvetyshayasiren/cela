@@ -1,4 +1,5 @@
 from __future__ import annotations
+from alignment.window_calc import Size
 from parsing.utils_parse import UtilsParse
 import string
 import stat
@@ -16,13 +17,17 @@ class FigureParse:
   @staticmethod
   def validate_dimension(value: str, low: int, high: int) -> int:
     return UtilsParse.parse_int(arg=value, low = low, high=high)
+
+  @staticmethod
+  def validate_size(value: str) -> Size:
+    return FigureParse.rect_parse(value)
     
   @staticmethod
   def validate_contain(contain: str) -> Cell:
     return Cell.validate(contain)
 
   @staticmethod
-  def validate_rect(rect: str) ->tuple[int, int]:
+  def validate_rect(rect: str) -> Size:
       return FigureParse.rect_parse(rect)
 
   @staticmethod
@@ -35,7 +40,7 @@ class FigureParse:
       cell.contain(figure=figure, max_age=max_age)
 
   @staticmethod
-  def rect_parse(arg: str) -> tuple[int, int]:
+  def rect_parse(arg: str) -> Size:
     parts = arg.split(":")
     if len(parts) != 2:
         raise ValueError(f"expected 'width:height', got {arg!r}")
@@ -45,11 +50,11 @@ class FigureParse:
         raise ValueError(f"invalid numbers in {arg!r}")
     if w <= 0 or h <= 0:
         raise ValueError(f"width and height must be > 0, got {w}:{h}")
-    return w, h
+    return Size(w, h)
 
   @staticmethod
-  def contain_rect(figure: Figure, rect: tuple[int, int]):
-    figure.contain_rect_in_center(width=rect[0], height=rect[1])
+  def contain_rect(figure: Figure, rect: Size):
+    figure.contain_rect_in_center(width=rect.width, height=rect.height)
     
 @dataclass
 class Cell():

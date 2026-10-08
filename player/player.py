@@ -121,6 +121,8 @@ class Player:
         if key != curses.KEY_MOUSE: return
         try:
             _, x, y, _, bstate = curses.getmouse()
+            x -= self.caparams.offset.x
+            y -= self.caparams.offset.y
             if bstate & curses.BUTTON1_CLICKED:
                 self.caparams.figure.toogle_cell(x = x, y = y)
 

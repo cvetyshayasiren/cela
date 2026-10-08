@@ -33,6 +33,11 @@ def arg_parser() -> argparse.Namespace:
         help="field height (cells vertically), default: fit to screen (status bar excluded)"
     )
     parser.add_argument(
+        "--size", "--WH", type=CommonParse.figure_parse_size_type, 
+        dest="size", default=None, metavar="W:H",
+        help="field size as W:H (e.g. '40:20'). Default: fit to screen"
+    )
+    parser.add_argument(
         "-F", "--fullscreen", dest="fullscreen", action="store_true",
         help="field fills the screen; ignored for dimensions set via -W/-H"
     )
@@ -168,6 +173,9 @@ def args_to_params(stdscr, args: argparse.Namespace) -> Caparams:
     if args.fullscreen is None: height-=1
     if args.width: width = args.width
     if args.height: height = args.height
+    if args.size:
+        width = args.size.width
+        height = args.size.height
     figure = Figure(width = width, height = height)
     if args.fill: figure.fill_random(fraction=args.fill)
     else: figure.fill_full_random()

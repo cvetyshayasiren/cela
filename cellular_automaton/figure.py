@@ -47,7 +47,7 @@ class Figure:
         self.generation[y, x] = age
     
     def toogle_cell(self, x: int, y: int):
-        if(x >= self.width or y >= self.height): return
+        if(x >= self.width or x < 0 or y >= self.height or y < 0): return
         value = self.generation[y, x]
         self.generation[y, x] = 0 if value else 1
 

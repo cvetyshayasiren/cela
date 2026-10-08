@@ -27,6 +27,10 @@ class CommonParse():
     def figure_parse_height_type(arg) -> int:
         return CommonParse._parse_or_raise("height", FigureParse.validate_dimension, arg, 
                                            Config.MIN_DIMENSION, Config.MAX_DIMENSION)
+
+    @staticmethod
+    def figure_parse_size_type(arg) -> int:
+        return CommonParse._parse_or_raise("size", FigureParse.validate_size, arg)
     
     @staticmethod
     def figure_parse_contain_type(arg: str) -> Cell:
