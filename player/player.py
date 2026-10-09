@@ -44,7 +44,6 @@ class Player:
         match self.caparams.stuck_behaviour:
             case StuckBehaviour.PAUSE:
                 self.caparams.pause.pause(message=f"cycle {cycle_depth}")
-                self._draw()
             case StuckBehaviour.CONTINUE:
                 self.caparams.figure.fill_full_random()
             case StuckBehaviour.STOP:

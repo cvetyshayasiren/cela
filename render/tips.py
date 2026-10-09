@@ -13,7 +13,6 @@ class Tips:
     self.caparams: Caparams = caparams
     self.tips_mode: TipsMode = TipsMode.MINI
     self.tips_win: curses.window = self._make_tips_window()
-    self.tips_win_size: Size = Size.from_curses_window(self.tips_win)
     self.tips_full_lines_list: list[str] = self._make_tips_full_lines_list()
     self.tips_mini_string: str = self._make_tips_mini_string()
     self.offset: int = 0
@@ -24,6 +23,7 @@ class Tips:
   
   def toogle_tips(self) -> TipsMode: 
     self.tips_mode = TipsMode.next(self.tips_mode)
+    self.tips_win = self._make_tips_window()
     return self.tips_mode
   
   def can_move_down(self) -> bool: return self.offset < self.max_offset
@@ -37,21 +37,19 @@ class Tips:
   
   def draw_tips(self, win: curses.window):
     if self.tips_mode == TipsMode.HIDDEN: return
-    self.tips_win.erase()
     if(self.tips_mode == TipsMode.MINI): self._draw_mini(win)
     if(self.tips_mode == TipsMode.FULL): self._draw_full(win)
 
   def _draw_mini(self, win: curses.window):
-    y = self.tips_win_size.height - 2
-    self.tips_win.addstr(y, 1, self._make_tips_mini_string())
-    self.tips_win.overlay(win)
+    self.tips_win.addstr(0, 1, self._make_tips_mini_string())
+    self.tips_win.noutrefresh()
     
   def _draw_full(self, win: curses.window):
     for index, line in enumerate(self._get_current_full_range()):
       self.tips_win.addstr(index + 1, 1, line)
     self.tips_win.box()
-    self.tips_win.overwrite(win)
-
+    self.tips_win.noutrefresh()
+    
   def _calculate_max_offset(self) -> int:
     return max(0, self._count_tips_full_lines() - self._height_without_box())
 
@@ -64,11 +62,21 @@ class Tips:
     return self.tips_full_lines_list[start:end]
 
   def _make_tips_window(self) -> curses.window:
+    if self.tips_mode == TipsMode.FULL:
+      return self._make_tips_full_window()
+    return self._make_tips_mini_window()
+  
+  def _make_tips_full_window(self) -> curses.window:
     term_size = self.caparams.getTermSize()
     win_height = int(term_size.height * Config.TIPS_HEIGHT_FRACTION)
     return curses.newwin(
         win_height, term_size.width, term_size.height - win_height, 0
     )
+
+  def _make_tips_mini_window(self) -> curses.window:
+    term_size = self.caparams.getTermSize()
+    return curses.newwin(1, term_size.width, term_size.height - 2, 0)
+    
 
   def _make_tips_full_lines_list(self) -> list[str]:
     header: str = self._rule_string()
@@ -111,8 +119,13 @@ class Tips:
     width = self._width_without_box()
     return f"""\n{"-" * width}\n"""
 
-  def _width_without_box(self) -> int: return self.tips_win_size.width - 2
-  def _height_without_box(self) -> int: return self.tips_win_size.height - 2
+  def _tips_full_win_size(self) -> Size:
+    term_size = self.caparams.getTermSize()
+    win_height = int(term_size.height * Config.TIPS_HEIGHT_FRACTION)
+    return Size(width=term_size.width, height=win_height)
+    
+  def _width_without_box(self) -> int: return self._tips_full_win_size().width - 2
+  def _height_without_box(self) -> int: return self._tips_full_win_size().height - 2
 
 
 class TipsMode(Enum):

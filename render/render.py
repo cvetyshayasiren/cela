@@ -22,8 +22,8 @@ class Render():
     def draw(self):
         self.draw_win()
         self.draw_frame()
-        self.tips.draw_tips(self.ca_win)
         self.ca_win.noutrefresh()
+        self.tips.draw_tips(self.caparams.stdscr)
         curses.doupdate()
 
     def draw_win(self):
