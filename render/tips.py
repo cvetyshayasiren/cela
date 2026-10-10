@@ -23,6 +23,10 @@ class Tips:
   def reset_pause_message(self): self.pause_message = ""
   
   def toogle_tips(self) -> TipsMode: 
+    if self.tips_mode == TipsMode.FULL:
+      self.tips_full_win.touchwin()
+      self.tips_full_win.erase()
+      self.tips_full_win.noutrefresh()
     self.tips_mode = TipsMode.next(self.tips_mode)
     return self.tips_mode
   

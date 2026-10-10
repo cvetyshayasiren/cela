@@ -49,8 +49,7 @@ class Render():
 
     def toogle_tips(self):
         mode = self.tips.toogle_tips()
-        if mode == TipsMode.HIDDEN:
-            self._reset_screen()
+        self._reset_screen()
     
     def move_tips_down(self):
         self.tips.move_down()
@@ -59,7 +58,6 @@ class Render():
         self.tips.move_up()
 
     def _reset_screen(self):
-        self.ca_win.erase()
         self.draw()
 
     def is_need_tips_control(self) -> bool:

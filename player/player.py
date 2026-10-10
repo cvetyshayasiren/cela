@@ -48,6 +48,7 @@ class Player:
                 self.caparams.figure.fill_full_random()
             case StuckBehaviour.STOP:
                 self.stop()
+        self._draw()
     
     def stop(self):
         self.is_playing = False
