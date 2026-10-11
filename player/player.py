@@ -106,7 +106,7 @@ class Player:
             ColorManager.reset_colors()
 
         elif key == ord('i'):
-            self.render.toogle_tips()
+            self.render.tips.toogle_tips()
 
         elif key == ord('`'):
             self.caparams.pause.pause(message="END")

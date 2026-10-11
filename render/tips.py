@@ -24,7 +24,6 @@ class Tips:
   
   def toogle_tips(self) -> TipsMode: 
     if self.tips_mode == TipsMode.FULL:
-      self.tips_full_win.touchwin()
       self.tips_full_win.erase()
       self.tips_full_win.noutrefresh()
     self.tips_mode = TipsMode.next(self.tips_mode)
@@ -34,10 +33,10 @@ class Tips:
   def can_move_up(self) -> bool: return self.offset > 0
 
   def move_down(self):
-    if self.can_move_down(): self.offset += 1
+    if self.can_move_down(): self.offset += 1; self.tips_full_win.erase()
 
   def move_up(self):
-    if self.can_move_up(): self.offset -= 1
+    if self.can_move_up(): self.offset -= 1; self.tips_full_win.erase()
   
   def draw_tips(self, win: curses.window):
     if self.tips_mode == TipsMode.HIDDEN: return

@@ -46,10 +46,6 @@ class Render():
         self.caparams.frame_toogle()
         self.ca_win.erase()
         self.draw()
-
-    def toogle_tips(self):
-        mode = self.tips.toogle_tips()
-        self.draw()
     
     def move_tips_down(self):
         self.tips.move_down()
