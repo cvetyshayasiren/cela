@@ -39,10 +39,8 @@ class PlayerHistoryDeque(PlayerHistory):
 
   def save(self, generation: np.ndarray) -> int:
     stuck = self._is_stuck(generation)
-    if stuck: 
-      return stuck
     self.history.append(generation)
-    return 0
+    return stuck
 
   def undo(self) -> np.ndarray:
     if len(self.history) > 1: return self.history.pop()
@@ -51,5 +49,5 @@ class PlayerHistoryDeque(PlayerHistory):
   def _is_stuck(self, generation: np.ndarray) -> int:
     for i, state in enumerate(reversed(self.history)):
         if np.array_equal(state, generation):
-            return i
+            return i + 1
     return 0
