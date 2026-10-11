@@ -10,7 +10,7 @@ from caparams.stuck_behaviour import StuckBehaviour
 from debug import printd, printl
 from render.colors import ColorManager
 from render.render import Render
-from randomisation.randoms import random_symbols
+from randomisation.randoms import random_symbols, random_rule
 
 class Player:
 
@@ -63,8 +63,7 @@ class Player:
 
         elif key == ord('p'):
             self.caparams.pause.pause_toogle()
-            
-
+        
         elif (key == curses.KEY_RIGHT or key == ord('n')) and self.caparams.pause.is_paused(): self.step_forward()
 
         elif key == curses.KEY_UP and self.render.is_no_need_tips_control(): self.caparams.increase_delay(by=2)
@@ -115,6 +114,12 @@ class Player:
 
         elif key == ord('f'):
             self.render.frame_toogle()
+
+        elif key == ord('t'):
+            self.caparams.rule = random_rule(aging_only=True)
+
+        elif key == ord('y'):
+            self.caparams.rule = random_rule(aging_only=False)
 
         self._draw_if_paused()
         

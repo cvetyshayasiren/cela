@@ -70,12 +70,24 @@ def arg_parser() -> argparse.Namespace:
         help="rule in B/S/ notation (e.g. B2/S0345/10), default: random"
     )
     group_rule.add_argument(
-        "-gol", action="store_true", dest = "gol",
+        "--gol", action="store_true", dest = "gol",
         help="start with Game of Life rule (B3/S23)"
     )
     group_rule.add_argument(
-        "-gof", action="store_true", dest = "gof",
+        "--gof", action="store_true", dest = "gof",
         help="start with Game of Fly rule (B2/S0345/10)"
+    )
+    group_rule.add_argument(
+        "--rr", action="store_true", dest="rr",
+        help= "absolute random rule"
+    )
+    group_rule.add_argument(
+        "--rra", action="store_true", dest="rra",
+        help= "random rule with age"
+    )
+    group_rule.add_argument(
+        "--rrs", action="store_true", dest="rrs",
+        help= "random rule without age (simple)"
     )
 
     #player
@@ -134,25 +146,6 @@ def arg_parser() -> argparse.Namespace:
         "-S", "--seed", type=int, default=None, dest = "seed",
         help="random seed for reproducibility, default: random"
     )
-
-    ##RANDOM
-    #figure
-    
-    
-    #rule
-    group_rule.add_argument(
-        "-rr", action="store_true", dest="rr",
-        help= "absolute random rule"
-    )
-    group_rule.add_argument(
-        "-rra", action="store_true", dest="rra",
-        help= "random rule with age"
-    )
-    group_rule.add_argument(
-        "-rrs", action="store_true", dest="rrs",
-        help= "random rule without age (simple)"
-    )
-    
 
     args = parser.parse_args()
     return args
