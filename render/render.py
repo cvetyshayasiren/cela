@@ -44,21 +44,18 @@ class Render():
 
     def frame_toogle(self):
         self.caparams.frame_toogle()
-        self.caparams.stdscr.erase()
+        self.ca_win.erase()
         self.draw()
 
     def toogle_tips(self):
         mode = self.tips.toogle_tips()
-        self._reset_screen()
+        self.draw()
     
     def move_tips_down(self):
         self.tips.move_down()
 
     def move_tips_up(self):
         self.tips.move_up()
-
-    def _reset_screen(self):
-        self.draw()
 
     def is_need_tips_control(self) -> bool:
         return self.tips.tips_mode == TipsMode.FULL

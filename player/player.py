@@ -35,8 +35,9 @@ class Player:
             self._draw()
 
     def step_forward(self):
+        self.history.save(self.caparams.figure.generation)
         self.caparams.figure.next(rule=self.caparams.rule)
-        stuck = self.history.save(self.caparams.figure.generation)
+        stuck = self.history.is_stuck(self.caparams.figure.generation)
         if stuck:
             self._stuck_behaviour(stuck)
         
