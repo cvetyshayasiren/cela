@@ -107,6 +107,9 @@ class Player:
         elif key == ord('/'):
             ColorManager.reset_colors()
 
+        elif key == ord('m'):
+            ColorManager.randomise_colors_mono()
+
         elif key == ord('i'):
             self.render.tips.toogle_tips()
 

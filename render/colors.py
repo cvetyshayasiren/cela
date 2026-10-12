@@ -46,6 +46,13 @@ class ColorManager:
             curses.init_pair(i, color, bg)
 
     @classmethod
+    def randomise_colors_mono(cls):
+        picked_color = RandomSeed.rng.integers(1, cls.num_available_colors() + 1)
+        for i in range(1, cls.num_necessary_colors() + 1):
+            _, bg = curses.pair_content(i)
+            curses.init_pair(i, picked_color, bg)
+
+    @classmethod
     def random_background(cls, caparams: Caparams, window: curses.window):
         back = RandomSeed.rng.integers(1, cls.num_available_colors() + 1)
         for i in range(1, cls.num_necessary_colors() + 1):
