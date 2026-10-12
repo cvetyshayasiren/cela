@@ -24,6 +24,9 @@ class Pause:
     def is_paused(self) -> bool: return self.paused
     def is_unpaused(self) -> bool: return not self.paused
 
+    def clear_pause_message(self): 
+        if self.paused: self.pause()
+
     def _set_pause_string(self, message: str | None):
         self.pause_string = self._make_pause_string(message)
     

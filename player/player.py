@@ -64,7 +64,9 @@ class Player:
         elif key == ord('p'):
             self.caparams.pause.pause_toogle()
         
-        elif (key == curses.KEY_RIGHT or key == ord('n')) and self.caparams.pause.is_paused(): self.step_forward()
+        elif (key == curses.KEY_RIGHT or key == ord('n')) and self.caparams.pause.is_paused(): 
+            self.caparams.pause.clear_pause_message()
+            self.step_forward()
 
         elif key == curses.KEY_UP and self.render.is_no_need_tips_control(): self.caparams.increase_delay(by=2)
 
@@ -77,6 +79,7 @@ class Player:
         elif key == curses.KEY_LEFT:
             self.caparams.pause.pause(message="UNDO")
             self.caparams.figure.generation = self.history.undo()
+            self.caparams.pause.pause(message=f"UNDO ({self.history.remains()})")
 
         elif key == ord('r'):
             self.caparams.figure.fill_full_random()

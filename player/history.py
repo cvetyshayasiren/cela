@@ -20,6 +20,10 @@ class PlayerHistory(ABC):
   def is_stuck(self, generation: np.ndarray) -> int:
     ...
 
+  @abstractmethod
+  def remains(self) -> int:
+    ...
+
   @staticmethod
   def from_size(size: int, generation: np.ndarray) -> PlayerHistory:
     if(size == 1): return PlayerHistoryValue(generation)
@@ -38,12 +42,14 @@ class PlayerHistoryValue(PlayerHistory):
     if self.old_generation == generation: return 1
     return 0
 
+  def remains(self) -> int: return 0
+
 class PlayerHistoryDeque(PlayerHistory):
   def __init__(self, size: int, generation: np.ndarray):
     self.history: deque[np.ndarray] = deque(maxlen=size)
     self.save(generation)
 
-  def save(self, generation: np.ndarray) -> int:
+  def save(self, generation: np.ndarray):
     self.history.append(generation)
 
   def undo(self) -> np.ndarray:
@@ -55,3 +61,5 @@ class PlayerHistoryDeque(PlayerHistory):
         if np.array_equal(state, generation):
             return i + 1
     return 0
+
+  def remains(self) -> int: return len(self.history) - 1
