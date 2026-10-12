@@ -68,3 +68,34 @@ class ColorManager:
     @classmethod
     def pair_for_aging(cls, aging: int) -> int:
         return min(aging, cls.num_necessary_colors())
+
+    @classmethod
+    def test_colors(cls):
+        steps = cls.num_necessary_colors() + 1
+        left_border = RandomSeed.rng.integers(1, 361)
+        config_max_gradient_width = 360
+        right_border = RandomSeed.rng.integers(1, config_max_gradient_width + 1)
+        border_diff = ((360 + right_border - left_border) % 360) / steps
+        
+        for i in range(steps):
+            h = (left_border + (border_diff * i)) % 360
+            r, g, b = hsl_to_rgb(h, 1.0, 0.5)
+            col_n = i + steps
+            curses.init_color(col_n, r, g, b)
+            curses.init_pair(i, col_n, -1)
+
+
+def hsl_to_rgb(h: float, s: float, l: float) -> tuple[int, int, int]:
+    h = h % 360
+    c = (1 - abs(2 * l - 1)) * s
+    x = c * (1 - abs((h / 60) % 2 - 1))
+    m = l - c / 2
+
+    if   h < 60:  r, g, b = c, x, 0
+    elif h < 120: r, g, b = x, c, 0
+    elif h < 180: r, g, b = 0, c, x
+    elif h < 240: r, g, b = 0, x, c
+    elif h < 300: r, g, b = x, 0, c
+    else:         r, g, b = c, 0, x
+
+    return int((r + m) * 1000), int((g + m) * 1000), int((b + m) * 1000)

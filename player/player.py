@@ -20,7 +20,7 @@ class Player:
         self.is_playing: bool = False
         self.dragging: bool = False
         self._init_mouse()
-        self.output: str = ""
+        self.output: str = f""
         self.history: PlayerHistory = self._init_history(caparams.history_size)
 
     def play(self):
@@ -126,6 +126,9 @@ class Player:
 
         elif key == ord('y'):
             self.caparams.rule = random_rule(aging_only=False)
+
+        elif key == ord('a'):
+            ColorManager.test_colors()
 
         self._draw_if_paused()
         
