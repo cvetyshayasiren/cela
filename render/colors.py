@@ -21,6 +21,10 @@ class ColorManager:
         return cls._instance
 
     @classmethod
+    def is_extended_colors_available(cls) -> bool:
+        return curses.can_change_color()
+    
+    @classmethod
     def num_available_colors(cls):
         return curses.COLORS - 1
 
