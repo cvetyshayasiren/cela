@@ -1,3 +1,4 @@
+from render.colors import HslColor
 from alignment.arrangement import Arrangment
 from parsing.render_parse import RenderParse
 from alignment.window_calc import Offset
@@ -63,6 +64,10 @@ class CommonParse():
     @staticmethod
     def render_parse_align_type(arg: str) -> Arrangment:
         return CommonParse._parse_or_raise("align", RenderParse.parse_arrangment, arg)
+
+    @staticmethod
+    def render_parse_color_type(arg: str) -> HslColor:
+        return CommonParse._parse_or_raise("color", RenderParse.parse_hex, arg)
 
 
 

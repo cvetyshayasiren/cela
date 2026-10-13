@@ -1,3 +1,4 @@
+from render.colors import ColorManager
 from caparams.pause import Pause
 from config import Config
 from typing import cast
@@ -135,10 +136,16 @@ def arg_parser() -> argparse.Namespace:
     )
 
     arrangment.add_argument(
-        "-a", "--align", type=CommonParse.render_parse_align_type, default=Arrangment.CENTER,
-        metavar="{1..9}",
+        "-a", "--align", type=CommonParse.render_parse_align_type, 
+        dest = "align",default=Arrangment.CENTER, metavar="{1..9}",
         help="position on screen, phone keypad layout: 1=top-left, 9=bottom-right. "
              "Default: 5 (center)"
+    )
+
+    parser.add_argument(
+        "--color", type=CommonParse.render_parse_color_type, default=None, 
+        dest= "color", metavar="#RRGGBB",
+        help="Color in hex format (#RRGGBB or RRGGBB). Default: random. Only works on supported terminals."
     )
 
     #other
@@ -184,6 +191,9 @@ def args_to_params(stdscr, args: argparse.Namespace) -> Caparams:
         inner = figure.size()
         align = cast(Arrangment, args.align)
         offset = align.align(outer_box=outer, inner_box=inner)
+
+    if args.color is not None:
+        ColorManager.init_base_color(color = args.color)
         
     return Caparams(
         stdscr = stdscr,

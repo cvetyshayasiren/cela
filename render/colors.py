@@ -14,12 +14,17 @@ from caparams.ca_params import Caparams
 class ColorManager:
     _instance = None
     num_colors = Config.MAX_AGING
+    base_color: HslColor | None = None
 
     def __new__(cls, *args, **kwargs):
         if cls._instance is None:
             cls._instance = super().__new__(cls)
         return cls._instance
 
+    @classmethod
+    def init_base_color(cls, color: HslColor):
+        cls.base_color = color
+        
     @classmethod
     def is_extended_colors_available(cls) -> bool:
         return curses.can_change_color()
