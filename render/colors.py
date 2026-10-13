@@ -1,4 +1,5 @@
 from __future__ import annotations
+import copy
 from typing import Self
 
 from dataclasses import dataclass
@@ -77,16 +78,12 @@ class ColorManager:
     @classmethod
     def test_colors(cls):
         steps = cls.num_necessary_colors() + 1
-        left_border = RandomSeed.rng.integers(1, 361)
-        config_max_gradient_width = 360
-        right_border = RandomSeed.rng.integers(1, config_max_gradient_width + 1)
-        border_diff = ((360 + right_border - left_border) % 360) / steps
+        base = HslColor.random(saturation= 0.6, lightness=0.6)
+        coef = RandomSeed.rng.uniform(0.5, 60)
         
         for i in range(steps):
-            h = (left_border + (border_diff * i)) % 360
-            rgb = HslColor(h, 1.0, 0.5).to_rgb()
             col_n = i + steps
-            curses.init_color(col_n, rgb.red, rgb.green, rgb.blue)
+            base.shift(hue=i * coef).curses_init(col_n)
             curses.init_pair(i, col_n, -1)
 
 @dataclass
@@ -113,6 +110,31 @@ class HslColor():
         else:                r, g, b = c, 0, x
 
         return RgbColor(int((r + m) * 1000), int((g + m) * 1000), int((b + m) * 1000))
+
+    def shift(
+        self,
+        hue: float | None = None,
+        saturation: float | None = None,
+        lightness: float | None = None
+    ) -> HslColor:
+        h = self.hue + hue if hue is not None else self.hue
+        s = self.saturation + saturation if saturation is not None else self.saturation
+        l = self.lightness + lightness if lightness is not None else self.lightness
+        return HslColor(h, s, l)
+
+    def curses_init(self, color_number): self.to_rgb().curses_init(color_number)
+
+    @classmethod
+    def random(cls, 
+               hue: float | None = None,
+               saturation: float | None = None,
+               lightness: float | None = None
+              ) -> HslColor:
+        return HslColor(
+            RandomSeed.rng.uniform(0, 360) if hue is None else hue, 
+            RandomSeed.rng.random() if saturation is None else saturation, 
+            RandomSeed.rng.random() if lightness is None else lightness
+        )
 
 @dataclass
 class RgbColor():
@@ -147,4 +169,15 @@ class RgbColor():
             h = 60 * ((r - g) / d + 4)
 
         return HslColor(h, s, l)
+
+    def curses_init(self, color_number): 
+        curses.init_color(color_number, self.red, self.green, self.blue)
+
+    @classmethod
+    def random(cls) -> RgbColor:
+        return RgbColor(
+            int(RandomSeed.rng.integers(0, 1000)), 
+            int(RandomSeed.rng.integers(0, 1000)), 
+            int(RandomSeed.rng.integers(0, 1000))
+        )
     
