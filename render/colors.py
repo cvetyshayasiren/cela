@@ -1,4 +1,5 @@
 from __future__ import annotations
+from utils.calculations import coerce_in_int
 import copy
 from typing import Self
 
@@ -22,12 +23,17 @@ class ColorManager:
         return cls._instance
 
     @classmethod
-    def init_base_color(cls, color: HslColor):
+    def init_base_color(cls, color: HslColor): 
         cls.base_color = color
         
     @classmethod
-    def is_extended_colors_available(cls) -> bool:
-        return curses.can_change_color()
+    def is_extended(cls) -> bool: return curses.can_change_color()
+    @classmethod
+    def is_not_extended(cls) -> bool: return not curses.can_change_color()
+
+    @classmethod
+    def get_base_color(cls):
+        return cls.base_color if cls.base_color is not None else HslColor.random()
     
     @classmethod
     def num_available_colors(cls):
@@ -86,6 +92,9 @@ class ColorManager:
 
     @classmethod
     def test_colors(cls):
+        if ColorManager.is_not_extended(): return
+        
+        
         steps = cls.num_necessary_colors() + 1
         base = HslColor.random(saturation= 0.6, lightness=0.6)
         coef = RandomSeed.rng.uniform(0.5, 60)
@@ -152,9 +161,9 @@ class RgbColor():
     blue: int
 
     def __post_init__(self) -> None:
-        self.red = max(0, min(1000, self.red))
-        self.green = max(0, min(1000, self.green))
-        self.blue = max(0, min(1000, self.blue))
+        self.red = coerce_in_int(0, 1000, self.red)
+        self.green = coerce_in_int(0, 1000, self.green)
+        self.blue = coerce_in_int(0, 1000, self.blue)
 
     def to_hsl(self) -> HslColor:
         r: float = self.red / 1000
@@ -189,4 +198,5 @@ class RgbColor():
             int(RandomSeed.rng.integers(0, 1000)), 
             int(RandomSeed.rng.integers(0, 1000))
         )
+
     
