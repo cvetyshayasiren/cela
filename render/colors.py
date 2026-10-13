@@ -1,3 +1,8 @@
+from __future__ import annotations
+from typing import Self
+
+from dataclasses import dataclass
+import dataclasses
 import curses
 from randomisation.random_seed import RandomSeed
 
@@ -79,23 +84,67 @@ class ColorManager:
         
         for i in range(steps):
             h = (left_border + (border_diff * i)) % 360
-            r, g, b = hsl_to_rgb(h, 1.0, 0.5)
+            rgb = HslColor(h, 1.0, 0.5).to_rgb()
             col_n = i + steps
-            curses.init_color(col_n, r, g, b)
+            curses.init_color(col_n, rgb.red, rgb.green, rgb.blue)
             curses.init_pair(i, col_n, -1)
 
+@dataclass
+class HslColor():
+    hue: float
+    saturation: float
+    lightness: float
 
-def hsl_to_rgb(h: float, s: float, l: float) -> tuple[int, int, int]:
-    h = h % 360
-    c = (1 - abs(2 * l - 1)) * s
-    x = c * (1 - abs((h / 60) % 2 - 1))
-    m = l - c / 2
+    def __post_init__(self) -> None:
+        self.hue = self.hue % 360
+        self.saturation = max(0.0, min(1.0, self.saturation))
+        self.lightness = max(0.0, min(1.0, self.lightness))
+    
+    def to_rgb(self) -> RgbColor:
+        c = (1 - abs(2 * self.lightness - 1)) * self.saturation
+        x = c * (1 - abs((self.hue / 60) % 2 - 1))
+        m = self.lightness - c / 2
+    
+        if   self.hue < 60:  r, g, b = c, x, 0
+        elif self.hue < 120: r, g, b = x, c, 0
+        elif self.hue < 180: r, g, b = 0, c, x
+        elif self.hue < 240: r, g, b = 0, x, c
+        elif self.hue < 300: r, g, b = x, 0, c
+        else:                r, g, b = c, 0, x
 
-    if   h < 60:  r, g, b = c, x, 0
-    elif h < 120: r, g, b = x, c, 0
-    elif h < 180: r, g, b = 0, c, x
-    elif h < 240: r, g, b = 0, x, c
-    elif h < 300: r, g, b = x, 0, c
-    else:         r, g, b = c, 0, x
+        return RgbColor(int((r + m) * 1000), int((g + m) * 1000), int((b + m) * 1000))
 
-    return int((r + m) * 1000), int((g + m) * 1000), int((b + m) * 1000)
+@dataclass
+class RgbColor():
+    red: int
+    green: int
+    blue: int
+
+    def __post_init__(self) -> None:
+        self.red = max(0, min(1000, self.red))
+        self.green = max(0, min(1000, self.green))
+        self.blue = max(0, min(1000, self.blue))
+
+    def to_hsl(self) -> HslColor:
+        r: float = self.red / 1000
+        g: float = self.green / 1000 
+        b: float = self.blue / 1000
+        mx = max(r, g, b)
+        mn = min(r, g, b)
+        l = (mx + mn) / 2
+        d = mx - mn
+
+        if d == 0:
+            return HslColor(0.0, 0.0, l)
+
+        s = d / (1 - abs(2 * l - 1))
+
+        if mx == r:
+            h = 60 * (((g - b) / d) % 6)
+        elif mx == g:
+            h = 60 * ((b - r) / d + 2)
+        else:
+            h = 60 * ((r - g) / d + 4)
+
+        return HslColor(h, s, l)
+    
