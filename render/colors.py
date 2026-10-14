@@ -150,8 +150,10 @@ class HslColor():
               ) -> HslColor:
         return HslColor(
             RandomSeed.rng.uniform(0, 360) if hue is None else hue, 
-            RandomSeed.rng.random() if saturation is None else saturation, 
-            RandomSeed.rng.random() if lightness is None else lightness
+            RandomSeed.rng.uniform(Config.MIN_SATURATION, Config.MAX_SATURATION) 
+            if saturation is None else saturation, 
+            RandomSeed.rng.uniform(Config.MIN_LIGHTNESS, Config.MAX_LIGHTNESS) 
+            if lightness is None else lightness
         )
 
 @dataclass

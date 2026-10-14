@@ -15,3 +15,8 @@ class Config:
     BASE_SYMBOLS_LIST: list[str] = [" ", "■"]
 
     DEFAULT_PAUSE_STRING: str = "PAUSED.."
+
+    MIN_SATURATION: float = 0.4
+    MAX_SATURATION: float = 1.0
+    MIN_LIGHTNESS: float = 0.2
+    MAX_LIGHTNESS: float = 1.0
