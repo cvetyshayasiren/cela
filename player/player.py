@@ -128,7 +128,7 @@ class Player:
             self.caparams.rule = random_rule(aging_only=False)
 
         elif key == ord('a'):
-            ColorManager.test_colors()
+            ColorManager.gradient()
 
         self._draw_if_paused()
         

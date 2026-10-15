@@ -51,7 +51,7 @@ class ColorManager:
 
     @classmethod
     def shuffled_colors(cls) -> list[int]:
-        return RandomSeed.rng.permutation(cls.num_necessary_colors()).tolist().tolist()
+        return RandomSeed.rng.permutation(cls.num_necessary_colors()).tolist()
 
     @classmethod
     def pick_random_color(cls) -> int:
