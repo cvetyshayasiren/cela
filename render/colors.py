@@ -1,7 +1,8 @@
 from __future__ import annotations
-from utils.calculations import coerce_in_int
-import copy
+from numpy import ndarray
+from utils.calculations import coerce_in_int, coerce_in_float
 from typing import Self
+from functools import lru_cache
 
 from dataclasses import dataclass
 import dataclasses
@@ -36,73 +37,83 @@ class ColorManager:
         return cls.base_color if cls.base_color is not None else HslColor.random()
     
     @classmethod
-    def num_available_colors(cls):
-        return curses.COLORS - 1
+    @lru_cache(maxsize=None)
+    def num_necessary_colors(cls) -> int:
+        max_aging = Config.MAX_AGING
+        num_available_colors = curses.COLORS
+        num_available_pairs = curses.COLOR_PAIRS
+        return min(max_aging, num_available_colors, num_available_pairs)
 
     @classmethod
-    def num_available_pair(cls):
-        return curses.COLOR_PAIRS - 1
+    @lru_cache(maxsize=None)
+    def colors_list(cls) -> list[int]:
+        return list(range(1, cls.num_necessary_colors()))
 
     @classmethod
-    def list_available_colors(cls):
-        return list(range(1, curses.COLORS))
+    def shuffled_colors(cls) -> list[int]:
+        return RandomSeed.rng.permutation(cls.num_necessary_colors()).tolist().tolist()
 
     @classmethod
-    def num_necessary_colors(cls):
-        return min(cls.num_colors, cls.num_available_colors(), cls.num_available_pair())
+    def pick_random_color(cls) -> int:
+        return int(RandomSeed.rng.integers(1, cls.num_necessary_colors() + 1))
+    
+    @classmethod
+    def _initialise_extended(cls):
+        if cls.is_not_extended: return
+        for i in range(1, cls.num_necessary_colors()):
+            HslColor.random().curses_init(i)
+            curses.init_pair(i, i, -1)
 
     @classmethod
     def initialise_random_colors(cls):
         curses.start_color()
         curses.use_default_colors()
-        picked_colors = RandomSeed.rng.choice(cls.list_available_colors(), cls.num_necessary_colors(), replace=False)
-        for i, color in enumerate(picked_colors, start=1):
+        cls._initialise_extended()
+        for i, color in enumerate(cls.shuffled_colors(), start=1):
             curses.init_pair(i, color, -1)
 
     @classmethod
     def randomise_colors(cls):
-        picked_colors = RandomSeed.rng.choice(cls.list_available_colors(), cls.num_necessary_colors(), replace=False)
-        for i, color in enumerate(picked_colors, start=1):
+        cls._initialise_extended()
+        for i, color in enumerate(cls.shuffled_colors(), start=1):
             _, bg = curses.pair_content(i)
             curses.init_pair(i, color, bg)
 
     @classmethod
     def randomise_colors_mono(cls):
-        picked_color = RandomSeed.rng.integers(1, cls.num_available_colors() + 1)
-        for i in range(1, cls.num_necessary_colors() + 1):
-            _, bg = curses.pair_content(i)
-            curses.init_pair(i, picked_color, bg)
+        picked_color = cls.pick_random_color()
+        for color in cls.colors_list():
+            _, bg = curses.pair_content(color)
+            curses.init_pair(color, picked_color, bg)
 
     @classmethod
     def random_background(cls, caparams: Caparams, window: curses.window):
-        back = RandomSeed.rng.integers(1, cls.num_available_colors() + 1)
-        for i in range(1, cls.num_necessary_colors() + 1):
-            fg, _ = curses.pair_content(i)
-            curses.init_pair(i, fg, back)
+        back = cls.pick_random_color()
+        for color in cls.colors_list():
+            fg, _ = curses.pair_content(color)
+            curses.init_pair(color, fg, back)
         window.bkgd(caparams.get_blank_symbol(), curses.color_pair(1))
 
     @classmethod
     def reset_colors(cls):
-        for i in range(1, cls.num_necessary_colors() + 1):
-            curses.init_pair(i, curses.COLOR_WHITE, -1)
+        for color in cls.colors_list():
+            curses.init_pair(color, -1, -1)
 
     @classmethod
     def pair_for_aging(cls, aging: int) -> int:
         return min(aging, cls.num_necessary_colors())
 
     @classmethod
-    def test_colors(cls):
-        if ColorManager.is_not_extended(): return
-        
-        
-        steps = cls.num_necessary_colors() + 1
+    def gradient(cls) -> bool:
+        if ColorManager.is_not_extended(): return False
         base = HslColor.random(saturation= 0.6, lightness=0.6)
-        coef = RandomSeed.rng.uniform(0.5, 60)
+        ratio = RandomSeed.rng.uniform(0.5, 60)
         
-        for i in range(steps):
-            col_n = i + steps
-            base.shift(hue=i * coef).curses_init(col_n)
-            curses.init_pair(i, col_n, -1)
+        for color in cls.colors_list():
+            base.shift(hue=color * ratio).curses_init(color)
+            curses.init_pair(color, color, -1)
+
+        return True
 
 @dataclass
 class HslColor():
@@ -111,9 +122,9 @@ class HslColor():
     lightness: float
 
     def __post_init__(self) -> None:
-        self.hue = self.hue % 360
-        self.saturation = max(0.0, min(1.0, self.saturation))
-        self.lightness = max(0.0, min(1.0, self.lightness))
+        self.hue: float = self.hue % 360
+        self.saturation: float = coerce_in_float(0.0, 1.0, self.saturation)
+        self.lightness: float = coerce_in_float(0.0, 1.0, self.lightness)
     
     def to_rgb(self) -> RgbColor:
         c = (1 - abs(2 * self.lightness - 1)) * self.saturation
