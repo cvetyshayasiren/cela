@@ -32,15 +32,9 @@ class ColorManager:
     def is_not_extended(cls) -> bool: return not curses.can_change_color()
 
     @classmethod
-    def get_base_color(cls) -> HslColor:
-        return cls.base_color if cls.base_color is not None else HslColor.random()
-
-    @classmethod
-    def inject_base_color(cls, bg: int = -1) -> HslColor:
-        base_color = cls.get_base_color()
-        base_color.curses_init(1)
-        curses.init_pair(1, 1, bg)
-        return base_color
+    def inject_base_color(cls):
+        base_color = cls.base_color if cls.base_color is not None else HslColor.random()
+        base_color.curses_init_pair(1)
     
     @classmethod
     @lru_cache(maxsize=None)
@@ -62,40 +56,26 @@ class ColorManager:
     @classmethod
     def pick_random_color(cls) -> int:
         return int(RandomSeed.rng.integers(1, cls.num_necessary_colors() + 1))
-    
-    @classmethod
-    def _initialise_extended(cls):
-        if cls.is_not_extended(): return    
-        base = cls.get_base_color()
-        base.curses_init(1)
-        curses.init_pair(1, 1, -1)
-        
-        for color in cls.colors_list()[1:]:
-            HslColor.random().curses_init(color)
-            curses.init_pair(color, color, -1)
 
     @classmethod
     def initialise_random_colors(cls):
         curses.start_color()
         curses.use_default_colors()
-        if cls.is_extended():
-            pass
-        else:
-            pass
-        cls._initialise_extended()
-        for i, color in enumerate(cls.shuffled_colors(), start=1):
-            curses.init_pair(i, color, -1)
+        cls.randomise_colors()
 
     @classmethod
     def randomise_colors(cls):
-        cls._initialise_extended()
-        for i, color in enumerate(cls.shuffled_colors(), start=1):
-            _, bg = curses.pair_content(i)
-            curses.init_pair(i, color, bg)
+        if cls.is_extended():
+            cls.inject_base_color()
+            for color_num in cls.colors_list()[1:]:
+                HslColor.random().curses_init_pair(color_number=color_num)
+        else:
+            for i, color in enumerate(cls.shuffled_colors(), start=1):
+                _, bg = curses.pair_content(i)
+                curses.init_pair(i, color, bg)
 
     @classmethod
     def randomise_colors_mono(cls):
-        cls._initialise_extended()
         picked_color = cls.pick_random_color()
         for color in cls.colors_list():
             _, bg = curses.pair_content(color)
