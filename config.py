@@ -22,3 +22,5 @@ class Config:
     MAX_LIGHTNESS: float = 1.0
     BACK_SATURATION: float = 0.2
     BACK_LIGHTNESS: float = 0.5
+
+    

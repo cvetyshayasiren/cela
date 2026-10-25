@@ -32,9 +32,11 @@ class ColorManager:
     def is_not_extended(cls) -> bool: return not curses.can_change_color()
 
     @classmethod
-    def inject_base_color(cls):
-        base_color = cls.base_color if cls.base_color is not None else HslColor.random()
-        base_color.curses_init_pair(1)
+    def get_base_color(cls) -> HslColor:
+        return cls.base_color if cls.base_color is not None else HslColor.random()
+    
+    @classmethod
+    def inject_base_color(cls, bg: int | None = None): cls.get_base_color().curses_init_pair(1, bg)
     
     @classmethod
     @lru_cache(maxsize=None)
@@ -76,10 +78,15 @@ class ColorManager:
 
     @classmethod
     def randomise_colors_mono(cls):
-        picked_color = cls.pick_random_color()
-        for color in cls.colors_list():
-            _, bg = curses.pair_content(color)
-            curses.init_pair(color, picked_color, bg)
+        if cls.is_extended():
+            cls.inject_base_color(bg=-1)
+        else:
+            random_color = cls.pick_random_color()
+            curses.init_pair(1, random_color, -1)
+            
+        fg, bg = curses.pair_content(1)
+        for color_num in cls.colors_list()[1:]:
+            curses.init_pair(color_num, fg, bg)
 
     @classmethod
     def random_background(cls, caparams: Caparams, window: curses.window):
@@ -103,12 +110,10 @@ class ColorManager:
         if ColorManager.is_not_extended(): return False
         base = cls.get_base_color()
         ratio = RandomSeed.rng.uniform(0.5, 60)
-        base.curses_init(1)
-        curses.init_pair(1, 1, -1)
+        base.curses_init_pair(1)
         
         for color in cls.colors_list()[1:]:
-            base.shift(hue=color * ratio).curses_init(color)
-            curses.init_pair(color, color, -1)
+            base.shift(hue=color * ratio).curses_init_pair(color)
 
         return True
 
