@@ -21,7 +21,7 @@ class Config:
     MIN_LIGHTNESS: float = 0.2
     MAX_LIGHTNESS: float = 1.0
     BG_SATURATION: float = 0.2
-    BG_LIGHTNESS: float = 0.5
+    BG_LIGHTNESS: float = 0.2
 
     MIN_GRADIENT_STEP: float = 0.5 # hue degree
     MAX_GRADIENT_STEP: float = 60.0  # hue degree

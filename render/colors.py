@@ -1,4 +1,5 @@
 from __future__ import annotations
+import re
 from numpy import ndarray
 from utils.calculations import coerce_in_int, coerce_in_float
 from typing import Self
@@ -36,7 +37,12 @@ class ColorManager:
         return cls.base_color if cls.base_color is not None else HslColor.random()
     
     @classmethod
-    def inject_base_color(cls, bg: int | None = None): cls.get_base_color().curses_init_pair(1, bg)
+    def inject_base_pair(cls, bg: int | None = None): cls.get_base_color().curses_init_pair(1, bg)
+
+    @classmethod
+    def get_current_bg(cls) -> int:
+        _, bg = curses.pair_content(1)
+        return bg
     
     @classmethod
     @lru_cache(maxsize=None)
@@ -63,23 +69,23 @@ class ColorManager:
     def initialise_random_colors(cls):
         curses.start_color()
         curses.use_default_colors()
-        cls.randomise_colors()
+        cls.randomise_colors(bg = -1)
 
     @classmethod
-    def randomise_colors(cls):
+    def randomise_colors(cls, bg: int | None = None):
         if cls.is_extended():
-            cls.inject_base_color()
+            cls.inject_base_pair(bg=bg)
             for color_num in cls.colors_list()[1:]:
-                HslColor.random().curses_init_pair(color_number=color_num)
+                HslColor.random().curses_init_pair(color_number=color_num, bg=bg)
         else:
+            if bg is None: bg = cls.get_current_bg()
             for i, color in enumerate(cls.shuffled_colors(), start=1):
-                _, bg = curses.pair_content(i)
                 curses.init_pair(i, color, bg)
 
     @classmethod
     def randomise_colors_mono(cls):
         if cls.is_extended():
-            cls.inject_base_color(bg=-1)
+            cls.inject_base_pair(bg=-1)
         else:
             random_color = cls.pick_random_color()
             curses.init_pair(1, random_color, -1)
