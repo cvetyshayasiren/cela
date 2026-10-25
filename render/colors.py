@@ -90,10 +90,15 @@ class ColorManager:
 
     @classmethod
     def random_background(cls, caparams: Caparams, window: curses.window):
-        back = cls.pick_random_color()
+        bg = cls.pick_random_color()
+        if cls.is_extended():
+            RgbColor(*curses.color_content(bg)).to_hsl().copy(
+                saturation = Config.BG_SATURATION, lightness = Config.BG_LIGHTNESS
+            ).curses_init_color(bg)
+        
         for color in cls.colors_list():
             fg, _ = curses.pair_content(color)
-            curses.init_pair(color, fg, back)
+            curses.init_pair(color, fg, bg)
         window.bkgd(caparams.get_blank_symbol(), curses.color_pair(1))
 
     @classmethod
@@ -109,11 +114,11 @@ class ColorManager:
     def gradient(cls) -> bool:
         if ColorManager.is_not_extended(): return False
         base = cls.get_base_color()
-        ratio = RandomSeed.rng.uniform(0.5, 60)
+        gradient_step = RandomSeed.rng.uniform(Config.MIN_GRADIENT_STEP, Config.MAX_GRADIENT_STEP)
         base.curses_init_pair(1)
         
         for color in cls.colors_list()[1:]:
-            base.shift(hue=color * ratio).curses_init_pair(color)
+            base.shift(hue = color+gradient_step).curses_init_pair(color)
 
         return True
 
@@ -142,6 +147,17 @@ class HslColor():
 
         return RgbColor(int((r + m) * 1000), int((g + m) * 1000), int((b + m) * 1000))
 
+    def copy(
+        self,
+        hue: float | None = None,
+        saturation: float | None = None,
+        lightness: float | None = None
+    ) -> HslColor:
+        h = hue if hue is not None else self.hue
+        s = saturation if saturation is not None else self.saturation
+        l = lightness if lightness is not None else self.lightness
+        return HslColor(h, s, l)
+    
     def shift(
         self,
         hue: float | None = None,
