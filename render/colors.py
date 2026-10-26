@@ -17,6 +17,7 @@ from caparams.ca_params import Caparams
 class ColorManager:
     _instance = None
     base_color: HslColor | None = None
+    bg: int = -1
 
     def __new__(cls, *args, **kwargs):
         if cls._instance is None:
@@ -37,12 +38,12 @@ class ColorManager:
         return cls.base_color if cls.base_color is not None else HslColor.random()
     
     @classmethod
-    def inject_base_pair(cls, bg: int | None = None): cls.get_base_color().curses_init_pair(1, bg)
+    def inject_base_pair(cls): cls.get_base_color().curses_init_pair(1, cls.bg)
 
     @classmethod
-    def get_current_bg(cls) -> int:
-        _, bg = curses.pair_content(1)
-        return bg
+    def set_bg(cls, bg: int):
+        if bg > curses.COLORS: return
+        cls.bg = bg
     
     @classmethod
     @lru_cache(maxsize=None)
@@ -69,48 +70,51 @@ class ColorManager:
     def initialise_random_colors(cls):
         curses.start_color()
         curses.use_default_colors()
-        cls.randomise_colors(bg = -1)
+        cls.randomise_colors()
 
     @classmethod
-    def randomise_colors(cls, bg: int | None = None):
+    def randomise_colors(cls):
         if cls.is_extended():
-            cls.inject_base_pair(bg=bg)
+            cls.inject_base_pair()
             for color_num in cls.colors_list()[1:]:
-                HslColor.random().curses_init_pair(color_number=color_num, bg=bg)
+                HslColor.random().curses_init_pair(color_number=color_num, bg=cls.bg)
         else:
-            if bg is None: bg = cls.get_current_bg()
             for i, color in enumerate(cls.shuffled_colors(), start=1):
-                curses.init_pair(i, color, bg)
+                curses.init_pair(i, color, cls.bg)
 
     @classmethod
     def randomise_colors_mono(cls):
+        cls.set_bg(-1)
         if cls.is_extended():
-            cls.inject_base_pair(bg=-1)
+            cls.inject_base_pair()
         else:
             random_color = cls.pick_random_color()
-            curses.init_pair(1, random_color, -1)
+            curses.init_pair(1, random_color, cls.bg)
             
-        fg, bg = curses.pair_content(1)
+        fg, _ = curses.pair_content(1)
         for color_num in cls.colors_list()[1:]:
-            curses.init_pair(color_num, fg, bg)
+            curses.init_pair(color_num, fg, cls.bg)
 
     @classmethod
     def random_background(cls, caparams: Caparams, window: curses.window):
-        bg = cls.pick_random_color()
         if cls.is_extended():
-            RgbColor(*curses.color_content(bg)).to_hsl().copy(
-                saturation = Config.BG_SATURATION, lightness = Config.BG_LIGHTNESS
-            ).curses_init_color(bg)
+            HslColor.random(
+                saturation=Config.BG_SATURATION, 
+                lightness=Config.BG_LIGHTNESS
+            ).curses_init_color(0)
+        else:
+            cls.bg = cls.pick_random_color()
         
         for color in cls.colors_list():
             fg, _ = curses.pair_content(color)
-            curses.init_pair(color, fg, bg)
+            curses.init_pair(color, fg, cls.bg)
         window.bkgd(caparams.get_blank_symbol(), curses.color_pair(1))
 
     @classmethod
     def reset_colors(cls):
+        cls.set_bg(-1)
         for color in cls.colors_list():
-            curses.init_pair(color, -1, -1)
+            curses.init_pair(color, -1, cls.bg)
 
     @classmethod
     def pair_for_aging(cls, aging: int) -> int:
@@ -176,7 +180,7 @@ class HslColor():
         return HslColor(h, s, l)
 
     def curses_init_color(self, color_number): self.to_rgb().curses_init_color(color_number)
-    def curses_init_pair(self, color_number: int, bg: int | None = None): 
+    def curses_init_pair(self, color_number: int, bg: int = -1): 
         self.to_rgb().curses_init_pair(color_number, bg)
 
     @classmethod
@@ -230,9 +234,8 @@ class RgbColor():
     def curses_init_color(self, color_number: int): 
         curses.init_color(color_number, self.red, self.green, self.blue)
 
-    def curses_init_pair(self, color_number: int, bg: int | None = None):
+    def curses_init_pair(self, color_number: int, bg: int = -1):
         self.curses_init_color(color_number=color_number)
-        if bg is None: _, bg = curses.pair_content(color_number)
         curses.init_pair(color_number, color_number, bg)
 
     @classmethod
