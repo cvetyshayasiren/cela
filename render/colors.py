@@ -102,6 +102,7 @@ class ColorManager:
                 saturation=Config.BG_SATURATION, 
                 lightness=Config.BG_LIGHTNESS
             ).curses_init_color(0)
+            cls.bg = 0
         else:
             cls.bg = cls.pick_random_color()
         
@@ -125,10 +126,10 @@ class ColorManager:
         if ColorManager.is_not_extended(): return False
         base = cls.get_base_color()
         gradient_step = RandomSeed.rng.uniform(Config.MIN_GRADIENT_STEP, Config.MAX_GRADIENT_STEP)
-        base.curses_init_pair(1)
+        base.curses_init_pair(1, bg = cls.bg)
         
         for color in cls.colors_list()[1:]:
-            base.shift(hue = color+gradient_step).curses_init_pair(color)
+            base.shift(hue = color+gradient_step).curses_init_pair(color, bg = cls.bg)
 
         return True
 
