@@ -50,7 +50,7 @@ class ColorManager:
     def num_necessary_colors(cls) -> int:
         max_aging = Config.MAX_AGING
         num_available_colors = curses.COLORS
-        num_available_pairs = curses.COLOR_PAIRS
+        num_available_pairs = curses.COLOR_PAIRS - 1
         return min(max_aging, num_available_colors, num_available_pairs)
 
     @classmethod
@@ -64,7 +64,7 @@ class ColorManager:
 
     @classmethod
     def pick_random_color(cls) -> int:
-        return int(RandomSeed.rng.integers(1, cls.num_necessary_colors() + 1))
+        return int(RandomSeed.rng.integers(0, curses.COLORS))
 
     @classmethod
     def initialise_random_colors(cls):
@@ -102,13 +102,13 @@ class ColorManager:
                 saturation=Config.BG_SATURATION, 
                 lightness=Config.BG_LIGHTNESS
             ).curses_init_color(0)
-            cls.bg = 0
+            cls.set_bg(0)
         else:
-            cls.bg = cls.pick_random_color()
+            cls.set_bg(cls.pick_random_color())
         
-        for color in cls.colors_list():
-            fg, _ = curses.pair_content(color)
-            curses.init_pair(color, fg, cls.bg)
+        for color_num in cls.colors_list():
+            fg, _ = curses.pair_content(color_num)
+            curses.init_pair(color_num, fg, cls.bg)
         window.bkgd(caparams.get_blank_symbol(), curses.color_pair(1))
 
     @classmethod

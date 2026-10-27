@@ -18,7 +18,7 @@ class Config:
 
     MIN_SATURATION: float = 0.4
     MAX_SATURATION: float = 1.0
-    MIN_LIGHTNESS: float = 0.2
+    MIN_LIGHTNESS: float = 0.4
     MAX_LIGHTNESS: float = 1.0
     BG_SATURATION: float = 0.2
     BG_LIGHTNESS: float = 0.2
