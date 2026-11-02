@@ -207,8 +207,7 @@ def args_to_params(stdscr, args: argparse.Namespace) -> Caparams:
     pause = Pause(paused=args.pause)
     if args.color is not None:
         ColorManager.init_base_color(color = args.color)
-        if ColorManager.is_not_extended():
-            pause.pause(message="custom colors not allowed in this terminal")
+        if ColorManager.is_not_extended(): pause.pause(message=Config.NO_CUSTOM_COLORS)
         
 
     
@@ -216,8 +215,7 @@ def args_to_params(stdscr, args: argparse.Namespace) -> Caparams:
         
     if args.gradient: 
         ColorManager.gradient()
-        if ColorManager.is_not_extended():
-            pause.pause(message="gradients not allowed in this terminal")
+        if ColorManager.is_not_extended(): pause.pause(message=Config.NO_GRADIENTS)
         
     return Caparams(
         stdscr = stdscr,

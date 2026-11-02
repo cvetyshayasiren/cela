@@ -25,3 +25,6 @@ class Config:
 
     MIN_GRADIENT_STEP: float = 0.5 # hue degree
     MAX_GRADIENT_STEP: float = 60.0  # hue degree
+
+    NO_CUSTOM_COLORS: str = "custom colors not allowed in this terminal"
+    NO_GRADIENTS: str = "gradients not allowed in this terminal"

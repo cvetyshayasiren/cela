@@ -32,7 +32,6 @@ class ColorManager:
     @classmethod
     def is_extended(cls) -> bool: return curses.can_change_color()
 
-        
     @classmethod
     def is_not_extended(cls) -> bool: return not curses.can_change_color()
 

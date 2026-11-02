@@ -1,4 +1,5 @@
 from __future__ import annotations
+from render.colors import ColorManager
 from debug import printl
 from alignment.window_calc import Size
 
@@ -78,7 +79,8 @@ class Tips:
 
   def _make_tips_full_lines_list(self) -> list[str]:
     header: str = self._make_tips_mini_string()
-    full_string: str = self._embed_a_string(header)
+    full_string: str = (self._embed_a_string(header) + self._divider() + 
+                        self._embed_a_string(self.colors_info()))
     tips_list: list[str] = [
       f"q - exit",
       "p - pause/resume",
@@ -102,11 +104,13 @@ class Tips:
     size_string = f"{self.caparams.figure.width}x{self.caparams.figure.height}"
     mini_string = (
       f"{self.caparams.pause.pause_string} {size_string} | "
-      f"i - info | delay {self.caparams.delay} ms. {self._rule_string()}"
+      f"i - info | delay {self.caparams.delay} ms. rule {self.caparams.rule.string}"
     )
     return mini_string
 
-  def _rule_string(self) -> str: return f"rule {self.caparams.rule.string}"
+  def colors_info(self) -> str:
+    allowed = "allowed" if ColorManager.is_extended() else "not allowed"
+    return f"custom colors {allowed}\ncolors available: {curses.COLORS}"
 
   def _cut_string(self, string: str) -> str: return string[:self._width_without_box()]
     

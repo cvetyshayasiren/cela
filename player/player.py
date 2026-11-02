@@ -1,3 +1,4 @@
+from config import Config
 import caparams
 from player.history import PlayerHistory
 from parsing.arg_parser import args_to_params
@@ -128,7 +129,10 @@ class Player:
             self.caparams.rule = random_rule(aging_only=False)
 
         elif key == ord('a'):
-            ColorManager.gradient()
+            if ColorManager.is_not_extended():
+                self.caparams.pause.pause(Config.NO_GRADIENTS)
+            else:
+                ColorManager.gradient()
 
         self._draw_if_paused()
         
