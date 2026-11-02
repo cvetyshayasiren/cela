@@ -204,12 +204,20 @@ def args_to_params(stdscr, args: argparse.Namespace) -> Caparams:
         align = cast(Arrangment, args.align)
         offset = align.align(outer_box=outer, inner_box=inner)
 
+    pause = Pause(paused=args.pause)
     if args.color is not None:
         ColorManager.init_base_color(color = args.color)
+        if ColorManager.is_not_extended():
+            pause.pause(message="custom colors not allowed in this terminal")
+        
 
+    
     if args.mono: ColorManager.randomise_colors_mono()
-
-    if args.gradient: ColorManager.gradient()
+        
+    if args.gradient: 
+        ColorManager.gradient()
+        if ColorManager.is_not_extended():
+            pause.pause(message="gradients not allowed in this terminal")
         
     return Caparams(
         stdscr = stdscr,
@@ -221,7 +229,7 @@ def args_to_params(stdscr, args: argparse.Namespace) -> Caparams:
         frame = args.frame,
         offset= offset,
         seed = RandomSeed.seed if args.seed is None else args.seed,
-        pause = Pause(paused=args.pause),
+        pause = pause,
         history_size=args.history_size,
     )
     
