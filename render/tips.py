@@ -44,7 +44,7 @@ class Tips:
     if self.tips_mode == TipsMode.FULL: self._draw_full(win)
 
   def _draw_mini(self, win: curses.window):
-    self.tips_mini_win.addstr(0, 1, self._make_tips_mini_string())
+    self.tips_mini_win.addstr(0, 1, self._cut_string(self._make_tips_mini_string()))
     self.tips_mini_win.noutrefresh()
     
   def _draw_full(self, win: curses.window):
@@ -77,7 +77,7 @@ class Tips:
     
 
   def _make_tips_full_lines_list(self) -> list[str]:
-    header: str = self._rule_string()
+    header: str = self._make_tips_mini_string()
     full_string: str = self._embed_a_string(header)
     tips_list: list[str] = [
       f"q - exit",
@@ -100,13 +100,15 @@ class Tips:
 
   def _make_tips_mini_string(self):
     size_string = f"{self.caparams.figure.width}x{self.caparams.figure.height}"
-    candidate = (
+    mini_string = (
       f"{self.caparams.pause.pause_string} {size_string} | "
       f"i - info | delay {self.caparams.delay} ms. {self._rule_string()}"
     )
-    return candidate[:self._width_without_box()]
+    return mini_string
 
   def _rule_string(self) -> str: return f"rule {self.caparams.rule.string}"
+
+  def _cut_string(self, string: str) -> str: return string[:self._width_without_box()]
     
   def _embed_a_string(self, string: str) -> str:
     width = self._width_without_box()
