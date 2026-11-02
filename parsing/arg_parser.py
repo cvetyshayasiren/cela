@@ -148,6 +148,18 @@ def arg_parser() -> argparse.Namespace:
         help="Color in hex format (#RRGGBB or RRGGBB). Default: random. Only works on supported terminals."
     )
 
+    parser.add_argument(
+        "--mono", action="store_true",
+        help="use a single color (no per-aging colors)"
+    )
+
+    parser.add_argument(
+        "--gradient", action="store_true",
+        help="use color gradient if supported by the terminal"
+    )
+
+    
+
     #other
     parser.add_argument(
         "-S", "--seed", type=int, default=None, dest = "seed",
@@ -194,6 +206,10 @@ def args_to_params(stdscr, args: argparse.Namespace) -> Caparams:
 
     if args.color is not None:
         ColorManager.init_base_color(color = args.color)
+
+    if args.mono: ColorManager.randomise_colors_mono()
+
+    if args.gradient: ColorManager.gradient()
         
     return Caparams(
         stdscr = stdscr,
