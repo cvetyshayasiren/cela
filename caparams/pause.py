@@ -3,14 +3,20 @@ class Pause:
     
     def __init__(self, paused: bool = False, message: str | None = None):
         self.paused: bool = paused
+        self.warning: bool = False
         self.pause_string: str = self._make_pause_string(message)
-
+    
     def pause(self, message: str | None = None): 
         self.paused = True
         self._set_pause_string(message)
+
+    def pause_warning(self, message: str | None = None):
+        self.pause(message=message)
+        self.warning = True
         
     def unpause(self): 
         self.paused = False
+        self.warning = False
         self.pause_string = ""
         
     def pause_toogle(self, value: bool | None = None):
@@ -23,6 +29,7 @@ class Pause:
 
     def is_paused(self) -> bool: return self.paused
     def is_unpaused(self) -> bool: return not self.paused
+    def is_warning(self) -> bool: return self.warning
 
     def clear_pause_message(self): 
         if self.paused: self.pause()

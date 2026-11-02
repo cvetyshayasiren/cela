@@ -33,7 +33,7 @@ class ColorManager:
     def is_extended(cls) -> bool: return curses.can_change_color()
 
     @classmethod
-    def is_not_extended(cls) -> bool: return not curses.can_change_color()
+    def is_not_extended(cls) -> bool: return not cls.is_extended()
 
     @classmethod
     def get_base_color(cls) -> HslColor:

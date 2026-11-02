@@ -130,7 +130,7 @@ class Player:
 
         elif key == ord('a'):
             if ColorManager.is_not_extended():
-                self.caparams.pause.pause(Config.NO_GRADIENTS)
+                self.caparams.pause.pause_warning(Config.NO_GRADIENTS)
             else:
                 ColorManager.gradient()
 
