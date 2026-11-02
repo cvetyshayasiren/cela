@@ -34,5 +34,5 @@ class Pause:
         if not self.paused: return ""
         default = Config.DEFAULT_PAUSE_STRING
         if message is not None:
-            return f"[{message}]{default}"
+            return f"{default}[{message}]"
         return default

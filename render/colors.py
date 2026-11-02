@@ -30,9 +30,8 @@ class ColorManager:
         if cls.is_extended(): cls.base_color = color
         
     @classmethod
-    def is_extended(cls) -> bool: 
-        # return curses.can_change_color()
-        return False
+    def is_extended(cls) -> bool: return curses.can_change_color()
+
         
     @classmethod
     def is_not_extended(cls) -> bool: return not curses.can_change_color()
