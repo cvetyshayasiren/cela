@@ -11,6 +11,8 @@ class ArgBuilder():
       f"python cela.py -b -p -W {caparams.figure.width} -H {caparams.figure.height} -d {caparams.delay}"
       f""" -r {caparams.rule.string} -s "{caparams.get_symbols_string()}" -S {caparams.seed}"""
     )
+    if caparams.frame: args += f" --frame"
+    args += f" --history_size {caparams.history_size}"
     contains = ArgBuilder.figure_to_contains(figure=caparams.figure)
     if contains: args += f" --contain{contains}"
     return args

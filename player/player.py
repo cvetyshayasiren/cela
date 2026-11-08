@@ -134,7 +134,7 @@ class Player:
             else:
                 ColorManager.gradient()
 
-        elif key == ord('r'):
+        elif key == ord('o'):
             self.caparams.full_random(window=self.render.ca_win)
 
         self._draw_if_paused()
