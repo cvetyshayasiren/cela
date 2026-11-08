@@ -12,7 +12,6 @@ import curses
 from randomisation.random_seed import RandomSeed
 
 from config import Config
-from caparams.ca_params import Caparams
 
 
 class ColorManager:
@@ -98,7 +97,7 @@ class ColorManager:
             curses.init_pair(color_num, fg, cls.bg)
 
     @classmethod
-    def random_background(cls, caparams: Caparams, window: curses.window):
+    def random_background(cls, blank_symbol: str, window: curses.window):
         if cls.is_extended():
             HslColor.random(
                 saturation=Config.BG_SATURATION, 
@@ -111,7 +110,7 @@ class ColorManager:
         for color_num in cls.colors_list():
             fg, _ = curses.pair_content(color_num)
             curses.init_pair(color_num, fg, cls.bg)
-        window.bkgd(caparams.get_blank_symbol(), curses.color_pair(1))
+        window.bkgd(blank_symbol, curses.color_pair(1))
 
     @classmethod
     def reset_colors(cls):

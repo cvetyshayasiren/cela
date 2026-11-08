@@ -103,7 +103,7 @@ class Player:
             ColorManager.randomise_colors()
 
         elif key == ord(','):
-            ColorManager.random_background(caparams= self.caparams, window=self.render.ca_win)
+            ColorManager.random_background(blank_symbol= self.caparams.get_blank_symbol(), window=self.render.ca_win)
 
         elif key == ord('/'):
             ColorManager.reset_colors()

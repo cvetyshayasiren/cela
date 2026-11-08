@@ -105,4 +105,4 @@ class Caparams():
             case "mono":
                 ColorManager.randomise_colors_mono()
             case "back":
-                ColorManager.random_background(caparams=self, window=window)
+                ColorManager.random_background(blank_symbol=self.get_blank_symbol(), window=window)
