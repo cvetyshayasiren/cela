@@ -97,7 +97,7 @@ class Player:
             self.caparams.figure.blank_field()
 
         elif key == ord('s'):
-            self.caparams.init_symbols(symbols=random_symbols())
+            self.caparams.random_symbols()
 
         elif key == ord('.'):
             ColorManager.randomise_colors()
@@ -133,6 +133,9 @@ class Player:
                 self.caparams.pause.pause_warning(Config.NO_GRADIENTS)
             else:
                 ColorManager.gradient()
+
+        elif key == ord('r'):
+            self.caparams.full_random(window=self.render.ca_win)
 
         self._draw_if_paused()
         

@@ -45,11 +45,7 @@ class Tips:
     if self.tips_mode == TipsMode.FULL: self._draw_full(win)
 
   def _draw_mini(self, win: curses.window):
-    if self.caparams.pause.is_warning():
-      self.tips_mini_win.addstr(0, 1, self._cut_string(self._make_tips_mini_string()), curses.color_pair(2))
-    else:
-      self.tips_mini_win.addstr(0, 1, self._cut_string(self._make_tips_mini_string()))
-    
+    self.tips_mini_win.addstr(0, 1, self._cut_string(self._make_tips_mini_string()))
     self.tips_mini_win.noutrefresh()
     
   def _draw_full(self, win: curses.window):
@@ -80,7 +76,6 @@ class Tips:
     term_size = self.caparams.getTermSize()
     return curses.newwin(1, term_size.width, term_size.height - 2, 0)
     
-
   def _make_tips_full_lines_list(self) -> list[str]:
     header: str = self._make_tips_mini_string()
     full_string: str = (self._embed_a_string(header) + self._divider() + 

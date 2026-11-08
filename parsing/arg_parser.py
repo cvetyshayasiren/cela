@@ -208,8 +208,6 @@ def args_to_params(stdscr, args: argparse.Namespace) -> Caparams:
     if args.color is not None:
         ColorManager.init_base_color(color = args.color)
         if ColorManager.is_not_extended(): pause.pause_warning(message=Config.NO_CUSTOM_COLORS)
-        
-
     
     if args.mono: ColorManager.randomise_colors_mono()
         

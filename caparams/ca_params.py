@@ -1,4 +1,6 @@
 from __future__ import annotations
+from randomisation.random_seed import RandomSeed
+from render.colors import ColorManager
 from numpy.typing import NDArray
 from caparams.pause import Pause
 from caparams.stuck_behaviour import StuckBehaviour
@@ -13,7 +15,7 @@ import numpy as np
 from cellular_automaton.figure import Figure
 from cellular_automaton.rule import Rule
 from config import Config
-from randomisation.randoms import random_symbols
+from randomisation.randoms import random_symbols, random_rule
 
 
 class Caparams():
@@ -78,3 +80,29 @@ class Caparams():
     
     def _build_symbols_array(self, symbols: str) -> NDArray:
         return np.array(list(symbols) or Config.BASE_SYMBOLS_LIST, dtype="<U1")
+
+    def _symbols_from_array(self) -> str: return "".join(self.symbols_array.tolist())
+
+    def random_symbols(self):
+        self.init_symbols(symbols=random_symbols(exclude=self._symbols_from_array()))
+
+    def full_random(self, window: curses.window):
+        self.rule = random_rule()
+        self.figure.fill_full_random()
+        self.random_symbols()
+
+        if ColorManager.is_extended():
+            if RandomSeed.random_bool():
+                ColorManager.gradient()
+            else: 
+                ColorManager.randomise_colors()
+        else:
+            ColorManager.randomise_colors()
+
+        mode = RandomSeed.rng.choice(["mono", "back"])
+
+        match mode:
+            case "mono":
+                ColorManager.randomise_colors_mono()
+            case "back":
+                ColorManager.random_background(caparams=self, window=window)
