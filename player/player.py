@@ -77,12 +77,18 @@ class Player:
 
         elif key == curses.KEY_DOWN and self.render.is_need_tips_control(): self.render.move_tips_down()
 
-        elif key == curses.KEY_LEFT:
+        elif key == ord(']'): self.caparams.increase_delay(by=2)
+        elif key == ord('['): self.caparams.decrease_delay(by=2)
+
+        elif key == curses.KEY_PPAGE and self.render.is_need_tips_control(): self.render.move_tips_up()
+            elif key == curses.KEY_NPAGE and self.render.is_need_tips_control(): self.render.move_tips_down()
+
+        elif key == curses.KEY_LEFT or key == ord('u'):
             self.caparams.pause.pause(message="UNDO")
             self.caparams.figure.generation = self.history.undo()
             self.caparams.pause.pause(message=f"UNDO ({self.history.remains()})")
 
-        elif key == ord('r'):
+        elif key == ord('-'):
             self.caparams.figure.fill_full_random()
 
         elif ord('0') <= key <= ord('9'): 
@@ -128,13 +134,13 @@ class Player:
         elif key == ord('y'):
             self.caparams.rule = random_rule(aging_only=False)
 
-        elif key == ord('a'):
+        elif key == ord('g'):
             if ColorManager.is_not_extended():
                 self.caparams.pause.pause_warning(Config.NO_GRADIENTS)
             else:
                 ColorManager.gradient()
 
-        elif key == ord('o'):
+        elif key == ord('r'):
             self.caparams.full_random(window=self.render.ca_win)
 
         self._draw_if_paused()
