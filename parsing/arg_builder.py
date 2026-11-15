@@ -10,6 +10,7 @@ class ArgBuilder():
     args = (
       f"python cela.py -b -p -W {caparams.figure.width} -H {caparams.figure.height} -d {caparams.delay}"
       f""" -r {caparams.rule.string} -s "{caparams.get_symbols_string()}" -S {caparams.seed}"""
+      f""" -o {caparams.offset.x}:{caparams.offset.y}"""
     )
     if caparams.frame: args += f" --frame"
     args += f" --history_size {caparams.history_size}"

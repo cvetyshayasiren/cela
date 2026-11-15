@@ -94,7 +94,7 @@ def arg_parser() -> argparse.Namespace:
     #player
     parser.add_argument(
         "-p", "--pause", action="store_true", dest = "pause",
-        help="start paused"
+        help="start/pause"
     )
     parser.add_argument(
         "-d", "--delay", type=CommonParse.player_parse_delay_type, dest="delay", default=100,
@@ -107,10 +107,9 @@ def arg_parser() -> argparse.Namespace:
         default=StuckBehaviour.CONTINUE,
         dest = "behaviour",
         metavar="{pause,continue,stop}",
-        help="action when two consecutive frames are identical "
-            "(deeper cycles are not detected): "
-            "pause, continue (restart with random field), or stop. "
-            "Default: continue"
+        help="action when a cycle is detected in history: "
+         "pause, continue (restart with random field), or stop. "
+         "Default: continue"
     )
     parser.add_argument(
         "-m", "--hs", "--history_size", type=CommonParse.player_parse_history_size_type, 
