@@ -81,7 +81,7 @@ class Player:
         elif key == ord('['): self.caparams.decrease_delay(by=2)
 
         elif key == curses.KEY_PPAGE and self.render.is_need_tips_control(): self.render.move_tips_up()
-            elif key == curses.KEY_NPAGE and self.render.is_need_tips_control(): self.render.move_tips_down()
+        elif key == curses.KEY_NPAGE and self.render.is_need_tips_control(): self.render.move_tips_down()
 
         elif key == curses.KEY_LEFT or key == ord('u'):
             self.caparams.pause.pause(message="UNDO")
