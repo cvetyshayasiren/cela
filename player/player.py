@@ -117,7 +117,7 @@ class Player:
         elif key == ord('m'):
             ColorManager.randomise_colors_mono()
 
-        elif key == ord('i'):
+        elif key == ord('i') or key == ord('t'):
             self.render.tips.toogle_tips()
 
         elif key == ord('`'):
@@ -128,10 +128,10 @@ class Player:
         elif key == ord('f'):
             self.render.frame_toogle()
 
-        elif key == ord('t'):
+        elif key == ord('a'):
             self.caparams.rule = random_rule(aging_only=True)
 
-        elif key == ord('y'):
+        elif key == ord('z'):
             self.caparams.rule = random_rule(aging_only=False)
 
         elif key == ord('g'):
