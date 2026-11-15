@@ -161,7 +161,7 @@ class HslColor():
 
     def to_hex(self) -> str:
         rgb = self.to_rgb()
-        return f"#{round(rgb.red * 255):02X}{round(rgb.green * 255):02X}{round(rgb.blue * 255):02X}"
+        return f"#{round(rgb.red * 255 / 1000):02X}{round(rgb.green * 255 / 1000):02X}{round(rgb.blue * 255 / 1000):02X}"
 
     def copy(
         self,

@@ -144,7 +144,9 @@ def arg_parser() -> argparse.Namespace:
     parser.add_argument(
         "--color", type=CommonParse.render_parse_color_type, default=None, 
         dest= "color", metavar="#RRGGBB",
-        help="Color in hex format (#RRGGBB or RRGGBB). Default: random. Only works on supported terminals."
+        help="color in hex format (#RRGGBB or RRGGBB), e.g. \"#00FF00\". "
+         "Quote it to prevent shell interpretation. Default: random. "
+         "Only works on supported terminals."
     )
 
     parser.add_argument(

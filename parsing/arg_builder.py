@@ -16,7 +16,7 @@ class ArgBuilder():
     if caparams.frame: args += f" --frame"
     args += f" --history_size {caparams.history_size}"
     if ColorManager.base_color is not None:
-      args += f" --color {ColorManager.base_color.to_hex()}"
+      args += f""" --color "{ColorManager.base_color.to_hex()}\""""
     contains = ArgBuilder.figure_to_contains(figure=caparams.figure)
     if contains: args += f" --contain{contains}"
     return args
