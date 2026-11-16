@@ -1,14 +1,8 @@
 from __future__ import annotations
 from alignment.window_calc import Size
 from parsing.utils_parse import UtilsParse
-import string
-import stat
-from numpy.distutils.extension import Extension
 from dataclasses import dataclass
-import dataclasses
-import statistics
 from cellular_automaton.figure import Figure
-from numpy import e
 
 import ast
 import operator

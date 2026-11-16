@@ -1,6 +1,5 @@
 from __future__ import annotations
 from render.colors import ColorManager
-from debug import printl
 from alignment.window_calc import Size
 
 from enum import Enum, auto

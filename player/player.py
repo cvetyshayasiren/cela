@@ -1,14 +1,11 @@
 from config import Config
-import caparams
 from player.history import PlayerHistory
-from parsing.arg_parser import args_to_params
 from parsing.arg_builder import ArgBuilder
 import curses
 import numpy as np
 
 from caparams.ca_params import Caparams
 from caparams.stuck_behaviour import StuckBehaviour
-from debug import printd, printl
 from render.colors import ColorManager
 from render.render import Render
 from randomisation.randoms import random_symbols, random_rule

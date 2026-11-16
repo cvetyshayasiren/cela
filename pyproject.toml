@@ -3,17 +3,35 @@ requires = ["setuptools>=61"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "repl-nix-workspace"
+name = "cela"
 version = "0.1.0"
-description = "Add your description here"
+description = "A colorful cellular automaton that lives in your terminal"
+readme = "README.md"
+license = { file = "LICENSE" }
 requires-python = ">=3.11"
-dependencies = [
-    "numpy>=2.4.6",
+authors = [
+    { name = "cvetyshayasiren" },
 ]
+dependencies = [
+    "numpy>=1.24",
+]
+
+[project.urls]
+Homepage = "https://github.com/cvetyshayasiren/cela"
+Issues = "https://github.com/cvetyshayasiren/cela/issues"
 
 [project.scripts]
 cela = "cela:main"
 
 [tool.setuptools]
 py-modules = ["cela", "config", "debug"]
-packages = ["main", "cellular_automaton", "randomisation"]
+packages = [
+    "alignment",
+    "caparams",
+    "cellular_automaton",
+    "parsing",
+    "player",
+    "randomisation",
+    "render",
+    "utils",
+]

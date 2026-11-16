@@ -165,7 +165,7 @@ wheels = [
 ]
 
 [[package]]
-name = "repl-nix-workspace"
+name = "cela"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
@@ -174,4 +174,4 @@ dependencies = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "numpy", specifier = ">=2.4.6" }]
+requires-dist = [{ name = "numpy", specifier = ">=1.24" }]

@@ -1,7 +1,6 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
 
-from numpy.typing import NDArray
 from collections import deque
 import numpy as np
 

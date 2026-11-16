@@ -5,7 +5,6 @@ from numpy.typing import NDArray
 from caparams.pause import Pause
 from caparams.stuck_behaviour import StuckBehaviour
 from alignment.window_calc import Offset, Size
-from debug import printl
 
 
 import curses

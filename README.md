@@ -65,6 +65,28 @@ cd cela
 pipx install .
 ```
 
+### Termux
+
+Use the system NumPy package. Installing NumPy from PyPI on Android is slow and often fails.
+
+```bash
+pkg update
+pkg install python python-numpy git
+pip install --no-deps git+https://github.com/cvetyshayasiren/cela.git
+```
+
+From a local checkout:
+
+```bash
+pkg update
+pkg install python python-numpy git
+git clone https://github.com/cvetyshayasiren/cela.git
+cd cela
+pip install --no-deps .
+```
+
+`--no-deps` keeps the Termux `python-numpy` package and skips a PyPI NumPy build.
+
 After installation, start the application with:
 
 ```bash
@@ -152,16 +174,12 @@ The aging component is optional and defaults to `1`.
 
 ## 🛠️ Development
 
-Run the existing test script with:
-
-```bash
-python test.py
-```
-
 The project keeps the simulation separated into small modules: 🧩
 
 - `cellular_automaton/` — rules and field evolution
-- `main/` — argument parsing, rendering, colors, and playback
+- `player/` — playback, history, and input
+- `render/` — terminal drawing, colors, and tips
+- `parsing/` — CLI arguments
 - `randomisation/` — random symbols and seeds
 
 ## 📄 License

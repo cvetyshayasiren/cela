@@ -1,7 +1,6 @@
 from render.colors import HslColor, RgbColor
 from parsing.utils_parse import UtilsParse
 from alignment.arrangement import Arrangment
-import alignment
 from alignment.window_calc import Offset
 
 

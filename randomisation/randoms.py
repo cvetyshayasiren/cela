@@ -1,5 +1,3 @@
-from socket import SO_PASSCRED
-from numpy.ma import isMaskedArray
 from parsing.rule_parse import RuleParse
 from config import Config
 import numpy as np

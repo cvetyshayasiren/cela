@@ -1,11 +1,9 @@
 from __future__ import annotations
 from render.tips import Tips, TipsMode
-from alignment.window_calc import Size
 from render.colors import ColorManager
 import curses
 
 import numpy as np
-from enum import Enum, auto
 
 from caparams.ca_params import Caparams
 

@@ -2,7 +2,6 @@ from dataclasses import dataclass, field
 
 
 from config import Config
-import re
 from typing import Set, ClassVar
 
 @dataclass(slots = True)

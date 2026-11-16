@@ -8,7 +8,6 @@ __pycache__/
 venv/
 env/
 ENV/
-.pythonlibs/
 
 # Python tooling
 .pytest_cache/
@@ -34,3 +33,7 @@ Thumbs.db
 .env
 .env.*
 !.env.example
+
+# Replit leftovers
+.replit
+.pythonlibs/

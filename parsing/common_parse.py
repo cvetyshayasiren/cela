@@ -3,7 +3,6 @@ from alignment.arrangement import Arrangment
 from parsing.render_parse import RenderParse
 from alignment.window_calc import Offset
 from parsing.utils_parse import UtilsParse
-import statistics
 from config import Config
 from parsing.rule_parse import RuleParse
 from cellular_automaton.rule import Rule

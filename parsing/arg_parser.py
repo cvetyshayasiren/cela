@@ -2,11 +2,9 @@ from render.colors import ColorManager
 from caparams.pause import Pause
 from config import Config
 from typing import cast
-import alignment.window_calc
 from alignment.window_calc import Offset, Size
 from alignment.arrangement import Arrangment
 from parsing.common_parse import CommonParse
-from debug import printl
 from parsing.rule_parse import RuleParse
 from parsing.figure_parse import FigureParse
 import argparse
